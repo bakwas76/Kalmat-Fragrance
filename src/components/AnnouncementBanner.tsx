@@ -49,7 +49,21 @@ export default function AnnouncementBanner() {
     };
   }, []);
 
-  if (!settings || !settings.enabled || !settings.text.trim()) return null;
+  // if (!settings || !settings.enabled || !settings.text.trim()) return null;
+
+  console.log("Banner Data:", settings);
+
+if (!settings) {
+  return (
+    <div style={{background:"red",color:"white",padding:"10px"}}>
+      Banner not loading
+    </div>
+  );
+}
+
+return <BannerView settings={settings} />;
+
+  
 
   return <BannerView settings={settings} />;
 }
@@ -57,11 +71,4 @@ export default function AnnouncementBanner() {
 export { FALLBACK };
 
 
-const { data, error } = await supabase
-  .from("announcement_banner")
-  .select("*")
-  .eq("id", 1)
-  .maybeSingle();
 
-console.log(data);
-console.log(error);

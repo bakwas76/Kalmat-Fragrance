@@ -25,13 +25,17 @@ export default function AnnouncementBanner() {
   useEffect(() => {
     let mounted = true;
     const load = async () => {
-      const { data } = await supabase
-        .from('announcement_banner')
-        .select('*')
-        .eq('id', 1)
-        .maybeSingle();
-      if (mounted) setSettings((data as BannerSettings) || null);
-    };
+  const { data, error } = await supabase
+    .from("announcement_banner")
+    .select("*")
+    .eq("id", 1)
+    .maybeSingle();
+
+  console.log("DATA:", data);
+  console.log("ERROR:", error);
+
+  if (mounted) setSettings((data as BannerSettings) || null);
+};
     load();
 
     const channel = supabase

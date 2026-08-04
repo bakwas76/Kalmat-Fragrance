@@ -88,7 +88,7 @@ export default function AdminAnnouncementBanner() {
     setSettings((prev) => ({ ...prev, [key]: value }));
   };
 
-  const save = async () => {
+  {/* const save = async () => {
     setSaving(true);
     const payload = { ...settings, id: 1 };
     delete (payload as Partial<AnnouncementBanner>).updated_at;
@@ -103,8 +103,43 @@ export default function AdminAnnouncementBanner() {
     }
     toast('Announcement banner saved');
     load();
+  }; */}
+
+const save = async () => {
+  setSaving(true);
+
+  const payload = {
+    id: 1,
+    enabled: settings.enabled,
+    text: settings.text,
+    bg_color: settings.bg_color,
+    text_color: settings.text_color,
+    font_size: settings.font_size,
+    font_weight: settings.font_weight,
+    height: settings.height,
+    padding: settings.padding,
+    animation: settings.animation,
+    speed: settings.speed,
+    text_align: settings.text_align,
   };
 
+  const { error } = await supabase
+    .from('announcement_banner')
+    .update(payload)
+    .eq('id', 1);
+
+  setSaving(false);
+
+  if (error) {
+    console.error(error);
+    toast(error.message, 'error');
+    return;
+  }
+
+  toast('Announcement banner saved');
+  load();
+};
+    
   const reset = () => {
     setSettings((prev) => ({ ...EMPTY, enabled: prev.enabled }));
   };

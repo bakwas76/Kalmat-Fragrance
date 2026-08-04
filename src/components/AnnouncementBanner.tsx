@@ -55,3 +55,13 @@ export default function AnnouncementBanner() {
 }
 
 export { FALLBACK };
+
+
+const { data, error } = await supabase
+  .from("announcement_banner")
+  .select("*")
+  .eq("id", 1)
+  .maybeSingle();
+
+console.log(data);
+console.log(error);

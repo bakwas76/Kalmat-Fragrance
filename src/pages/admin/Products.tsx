@@ -280,27 +280,27 @@ export default function AdminProducts() {
       await supabase.from('product_variants').delete().in('id', toDelete);
     }
 
-    for (let i = 0; i < validVariants.length; i++) {
-      const v = validVariants[i];
-      const vPayload = {
-        product_id: productId,
-        size_label: v.size_label.trim(),
-        volume_ml: parseInt(v.volume_ml, 10) || 0,
-        price: parseFloat(v.price) || 0,
-        compare_at_price: v.compare_at_price ? parseFloat(v.compare_at_price) : null,
-        stock: parseInt(v.stock, 10) || 0,
-        sku: v.sku.trim() || null,
-        weight: v.weight.trim() || null,
-        sort_order: i,
-        is_default: v.is_default,
-      };
+    if (existingVariantIds.includes(v.id)) {
+  const { error } = await supabase
+    .from('product_variants')
+    .update(vPayload)
+    .eq('id', v.id);
 
-      if (existingVariantIds.includes(v.id)) {
-        await supabase.from('product_variants').update(vPayload).eq('id', v.id);
-      } else {
-        await supabase.from('product_variants').insert(vPayload);
-      }
-    }
+  console.log("UPDATE ERROR:", error);
+
+} else {
+  const { data, error } = await supabase
+    .from('product_variants')
+    .insert(vPayload)
+    .select();
+
+  console.log("INSERT DATA:", data);
+  console.log("INSERT ERROR:", error);
+
+  if (error) {
+    toast(error.message, "error");
+  }
+}
 
     setSaving(false);
     toast(editing ? 'Product updated' : 'Product created');

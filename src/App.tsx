@@ -64,6 +64,22 @@ function RequireAuth({ children }: { children: ReactNode }) {
   return <>{children}</>;
 }
 
+function RequireAdmin({ children }: { children: ReactNode }) {
+  const { user, loading, isAdmin } = useAuth();
+
+  if (loading) return <PageLoader />;
+
+  if (!user) {
+    return <Navigate to="/login?redirect=/admin" replace />;
+  }
+
+  if (!isAdmin) {
+    return <Navigate to="/" replace />;
+  }
+
+  return <>{children}</>;
+}
+
 export default function App() {
   return (
     <BrowserRouter>
@@ -101,7 +117,7 @@ export default function App() {
                   </Route>
 
                   {/* Admin */}
-                  <Route path="/admin" element={<AdminLayout />}>
+                  <Route path="/admin" element={<RequireAdmin> <AdminLayout /> </RequireAdmin>}>
                     <Route index element={<AdminDashboard />} />
                     <Route path="products" element={<AdminProducts />} />
                     <Route path="categories" element={<AdminCategories />} />

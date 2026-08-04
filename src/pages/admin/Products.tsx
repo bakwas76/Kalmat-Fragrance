@@ -274,31 +274,59 @@ export default function AdminProducts() {
     }
 
     // Sync variants
-    const incomingIds = validVariants.map((v) => v.id);
-    const toDelete = existingVariantIds.filter((id) => !incomingIds.includes(id));
-    if (toDelete.length > 0) {
-      await supabase.from('product_variants').delete().in('id', toDelete);
+
+const incomingIds = validVariants.map((v) => v.id);
+
+// Delete removed variants
+const toDelete = existingVariantIds.filter((id) => !incomingIds.includes(id));
+
+if (toDelete.length > 0) {
+  await supabase
+    .from("product_variants")
+    .delete()
+    .in("id", toDelete);
+}
+
+// Insert / Update variants
+for (let i = 0; i < validVariants.length; i++) {
+  const v = validVariants[i];
+
+  const vPayload = {
+    product_id: productId,
+    size_label: v.size_label,
+    volume_ml: parseInt(v.volume_ml) || 0,
+    price: parseFloat(v.price) || 0,
+    compare_at_price: v.compare_at_price
+      ? parseFloat(v.compare_at_price)
+      : null,
+    stock: parseInt(v.stock) || 0,
+    sku: v.sku || null,
+    weight: v.weight || null,
+    sort_order: i,
+    is_default: v.is_default,
+  };
+
+  if (existingVariantIds.includes(v.id)) {
+    const { error } = await supabase
+      .from("product_variants")
+      .update(vPayload)
+      .eq("id", v.id);
+
+    if (error) {
+      toast(error.message, "error");
+      setSaving(false);
+      return;
     }
+  } else {
+    const { error } = await supabase
+      .from("product_variants")
+      .insert(vPayload);
 
-    if (existingVariantIds.includes(v.id)) {
-  const { error } = await supabase
-    .from('product_variants')
-    .update(vPayload)
-    .eq('id', v.id);
-
-  console.log("UPDATE ERROR:", error);
-
-} else {
-  const { data, error } = await supabase
-    .from('product_variants')
-    .insert(vPayload)
-    .select();
-
-  console.log("INSERT DATA:", data);
-  console.log("INSERT ERROR:", error);
-
-  if (error) {
-    toast(error.message, "error");
+    if (error) {
+      toast(error.message, "error");
+      setSaving(false);
+      return;
+    }
   }
 }
 

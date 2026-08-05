@@ -18,13 +18,6 @@ const NOTES = [
   { name: 'Base', desc: 'The lasting memory — warm woods, amber, and musk that linger on skin.', examples: 'Sandalwood · Amber · Leather' },
 ];
 
-const { data, error } = await supabase
-  .from('products')
-  .select(`*,variants:product_variants(*)`)
-  .eq('best_seller', true);
-
-console.log("DATA:", data);
-console.log("ERROR:", error);
 
 export default function Home() {
   const [featured, setFeatured] = useState<Product[]>([]);
@@ -51,9 +44,11 @@ export default function Home() {
       // setBestSellers((best.data as Product[]) || []);
       // setNewArrivals((fresh.data as Product[]) || []);
       setFeatured((feat.data as any) || []);
-      console.log(feat.data);
       setBestSellers((best.data as any) || []);
       setNewArrivals((fresh.data as any) || []);
+      console.log("Featured:", feat.data);
+      console.log("Best:", best.data);
+      console.log("New:", fresh.data);
       setCategories((cats.data as Category[]) || []);
       setCollections((cols.data as Collection[]) || []);
       setReviews((revs.data as Review[]) || []);

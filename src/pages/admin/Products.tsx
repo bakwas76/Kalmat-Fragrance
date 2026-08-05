@@ -19,9 +19,9 @@ interface ProductForm {
   brand: string;
   gender: Gender;
   volume_ml: string;
-  featured: boolean;
-  is_new: boolean;
-  best_seller: boolean;
+
+  home_section: 'none' | 'featured' | 'best' | 'new';
+
   top_notes: string;
   middle_notes: string;
   base_notes: string;

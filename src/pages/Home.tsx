@@ -33,8 +33,8 @@ export default function Home() {
     (async () => {
       const [feat, best, fresh, cats, cols, revs] = await Promise.all([
         supabase.from('products').select(`*,product_variants(*)`).eq('featured', true).limit(4),
-        supabase.from('products').select('*').eq('best_seller', true).limit(8),
-        supabase.from('products').select('*').eq('is_new', true).limit(4),
+        supabase.from('products').select(`*,product_variants(*)`).eq('best_seller', true).limit(8),
+        supabase.from('products').select(`*,product_variants(*)`).eq('is_new', true).limit(4),
         supabase.from('categories').select('*').limit(6),
         supabase.from('collections').select('*').limit(3),
         supabase.from('product_reviews').select('*').order('created_at', { ascending: false }).limit(3),

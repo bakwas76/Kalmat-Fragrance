@@ -1,7 +1,6 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { createClient } from "npm:@supabase/supabase-js@2.57.4";
-// import nodemailer from "npm:nodemailer@6.9.16";
-// import { Buffer } from "node:buffer";
+import { Resend } from "npm:resend";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -18,8 +17,7 @@ const PAYMENT_LABELS: Record<string, string> = {
 };
 
 // Gmail SMTP credentials from environment variables
-const GMAIL_USER = Deno.env.get("GMAIL_USER") || "";
-const GMAIL_APP_PASSWORD = Deno.env.get("GMAIL_APP_PASSWORD") || "";
+const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
 
 // WhatsApp Business API credentials (Meta Cloud API)
 const ADMIN_WHATSAPP_NUMBER = "923219247773"; // 03219247773 in international format
@@ -134,20 +132,48 @@ Deno.serve(async (req: Request) => {
       `Payment: ${body.payment_method === "cod" ? "Cash on Delivery" : PAYMENT_LABELS[body.payment_method] || body.payment_method}${body.payment_receipt_url ? " (Receipt attached)" : ""}\n\n` +
       `Shipping Address:\n${(body.shipping_address as { address_line?: string }).address_line || ""}, ${(body.shipping_address as { city?: string }).city || ""}`;
 
-    // ---- 3. Send emails via Gmail SMTP (owner + customer) ----
-    let ownerEmailSent = false;
-    let customerEmailSent = false;
-    let emailError: string | null = null;
+    // ---- 3. Send emails using Resend ----
+let ownerEmailSent = false;
+let customerEmailSent = false;
+let emailError: string | null = null;
 
-    if (GMAIL_USER && GMAIL_APP_PASSWORD && body.pdf_base64) {
-      try {
-        const transporter = nodemailer.createTransport({
-          service: "gmail",
-          auth: {
-            user: GMAIL_USER,
-            pass: GMAIL_APP_PASSWORD,
-          },
-        });
+try {
+  if (body.pdf_base64) {
+
+    await resend.emails.send({
+      from: "Kalmat Fragrance <onboarding@resend.dev>",
+      to: ADMIN_EMAIL,
+      subject: `New Order Received - Order #${body.order_number}`,
+      html: buildOwnerEmailHtml(body),
+      attachments: [
+        {
+          filename: `invoice-${body.order_number}.pdf`,
+          content: body.pdf_base64,
+        },
+      ],
+    });
+
+    ownerEmailSent = true;
+
+    await resend.emails.send({
+      from: "Kalmat Fragrance <onboarding@resend.dev>",
+      to: body.email,
+      subject: `Order Confirmation - Order #${body.order_number}`,
+      html: buildCustomerEmailHtml(body),
+      attachments: [
+        {
+          filename: `invoice-${body.order_number}.pdf`,
+          content: body.pdf_base64,
+        },
+      ],
+    });
+
+    customerEmailSent = true;
+  }
+} catch (err) {
+  emailError = err instanceof Error ? err.message : String(err);
+  console.error("RESEND_ERROR:", emailError);
+}
 
         const pdfBuffer = Buffer.from(body.pdf_base64, "base64");
         const attachment = {

@@ -1,7 +1,7 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { createClient } from "npm:@supabase/supabase-js@2.57.4";
 import { Resend } from "npm:resend";
-console.log("RESEND KEY:", Deno.env.get("RESEND_API_KEY"));
+console.log("RESEND EXISTS:", !!Deno.env.get("RESEND_API_KEY"));
 const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
 
 if (!RESEND_API_KEY) {

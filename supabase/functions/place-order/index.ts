@@ -1,6 +1,7 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { createClient } from "npm:@supabase/supabase-js@2.57.4";
 import { Resend } from "npm:resend";
+const resend = new Resend(Deno.env.get("RESEND_API_KEY")!);
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",

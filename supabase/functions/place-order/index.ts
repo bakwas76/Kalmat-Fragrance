@@ -2,7 +2,13 @@ import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { createClient } from "npm:@supabase/supabase-js@2.57.4";
 import { Resend } from "npm:resend";
 console.log("RESEND KEY:", Deno.env.get("RESEND_API_KEY"));
-const resend = new Resend(Deno.env.get("RESEND_API_KEY")!);
+const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
+
+if (!RESEND_API_KEY) {
+  throw new Error("RESEND_API_KEY is missing");
+}
+
+const resend = new Resend(RESEND_API_KEY);
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",

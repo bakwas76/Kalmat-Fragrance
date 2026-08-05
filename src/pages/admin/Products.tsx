@@ -608,6 +608,7 @@ for (let i = 0; i < validVariants.length; i++) {
 </label>
 
 </div>
+              </div>
 
               {/* Variants section */}
               <div className="mt-8 border-t border-ink-800 pt-6">

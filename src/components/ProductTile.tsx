@@ -100,11 +100,32 @@ export default function ProductTile({ product, index = 0 }: ProductTileProps) {
             <RatingMeter rating={product.rating} count={product.reviews_count} size={12} />
           </div>
           <div className="flex items-baseline gap-3 pt-1">
-            <span className="font-display text-lg text-charcoal">{formatPrice(product.price)}</span>
-            {product.compare_at_price && product.compare_at_price > product.price && (
-              <span className="text-sm text-ink-mute line-through">{formatPrice(product.compare_at_price)}</span>
-            )}
-          </div>
+  <span className="font-display text-lg text-charcoal">
+    {formatPrice(
+      product.variants?.find(v => v.is_default)?.price ?? product.price
+    )}
+  </span>
+
+  {(
+    product.variants?.find(v => v.is_default)?.compare_at_price ??
+    product.compare_at_price
+  ) &&
+    (
+      product.variants?.find(v => v.is_default)?.compare_at_price ??
+      product.compare_at_price
+    )! >
+      (
+        product.variants?.find(v => v.is_default)?.price ??
+        product.price
+      ) && (
+      <span className="text-sm text-ink-mute line-through">
+        {formatPrice(
+          product.variants?.find(v => v.is_default)?.compare_at_price ??
+          product.compare_at_price
+        )}
+      </span>
+    )}
+</div>
           <p className="text-[11px] font-light text-ink-mute">{product.volume_ml}ml · {product.gender}</p>
         </div>
       </Link>

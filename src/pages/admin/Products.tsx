@@ -91,7 +91,13 @@ export default function AdminProducts() {
   const [variants, setVariants] = useState<VariantDraft[]>([]);
   const [existingVariantIds, setExistingVariantIds] = useState<string[]>([]);
 
-  const { register, handleSubmit, reset, formState: { errors } } = useForm<ProductForm>();
+  const {
+  register,
+  handleSubmit,
+  reset,
+  watch,
+  formState: { errors },
+} = useForm<ProductForm>();
 
   const load = async () => {
     setLoading(true);
@@ -150,6 +156,7 @@ export default function AdminProducts() {
   };
 
   const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const productName = watch("name");
     const file = e.target.files?.[0];
     if (!file) return;
     if (!file.type.startsWith('image/')) {
@@ -162,7 +169,7 @@ export default function AdminProducts() {
     }
     setUploading(true);
     const ext = file.name.split('.').pop() || 'jpg';
-    const fileName = `${slugify(name || editing?.name || 'product')}-${Date.now()}.${ext}`;
+    const fileName = `${slugify(productName || editing?.name || "product")}-${Date.now()}.${ext}`;
     const { error: upErr } = await supabase.storage
       .from('product-images')
       .upload(fileName, file, { cacheControl: '3600', upsert: true });

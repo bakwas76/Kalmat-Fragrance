@@ -43,6 +43,7 @@ export default function Home() {
       // setBestSellers((best.data as Product[]) || []);
       // setNewArrivals((fresh.data as Product[]) || []);
       setFeatured((feat.data as any) || []);
+      console.log(feat.data);
       setBestSellers((best.data as any) || []);
       setNewArrivals((fresh.data as any) || []);
       setCategories((cats.data as Category[]) || []);

@@ -18,6 +18,14 @@ const NOTES = [
   { name: 'Base', desc: 'The lasting memory — warm woods, amber, and musk that linger on skin.', examples: 'Sandalwood · Amber · Leather' },
 ];
 
+const { data, error } = await supabase
+  .from('products')
+  .select(`*,variants:product_variants(*)`)
+  .eq('best_seller', true);
+
+console.log("DATA:", data);
+console.log("ERROR:", error);
+
 export default function Home() {
   const [featured, setFeatured] = useState<Product[]>([]);
   const [bestSellers, setBestSellers] = useState<Product[]>([]);

@@ -64,13 +64,13 @@ export interface Product {
   sku: string | null;
   image_url: string | null;
   created_at: string;
-  variants?: ProductVariant[];
+  product_variants?: ProductVariant[];
 }
 
 export interface ProductWithRelations extends Product {
   category?: Category | null;
   collection?: Collection | null;
-  variants?: ProductVariant[];
+  product_variants?: ProductVariant[];
 }
 
 export type ReviewStatus = 'pending' | 'approved' | 'rejected';

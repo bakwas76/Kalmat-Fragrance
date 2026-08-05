@@ -19,9 +19,9 @@ interface ProductForm {
   brand: string;
   gender: Gender;
   volume_ml: string;
-
-  home_section: string;
-
+  featured: boolean;
+  best_seller: boolean;
+  is_new: boolean;
   top_notes: string;
   middle_notes: string;
   base_notes: string;
@@ -116,7 +116,7 @@ export default function AdminProducts() {
     reset({
       name: '', description: '', category_id: '', collection_id: '',
       brand: 'Kalmat Fragrance', gender: 'unisex', volume_ml: '100',
-      home_section: 'none',
+      featured:false, best_seller:false, is_new:false,
       top_notes: '', middle_notes: '', base_notes: '', ingredients: '',
       bottle_shape: 'classic', bottle_glass: '#1a1a2e', bottle_cap: '#C9A227', bottle_label: '#C9A227', sku: '',
     });
@@ -130,14 +130,9 @@ export default function AdminProducts() {
       name: p.name, description: p.description,
       category_id: p.category_id || '', collection_id: p.collection_id || '',
       brand: p.brand, gender: p.gender, volume_ml: String(p.volume_ml),
-      home_section:
-  p.featured
-    ? 'featured'
-    : p.best_seller
-    ? 'best'
-    : p.is_new
-    ? 'new'
-    : 'none',
+      featured:p.featured,
+      best_seller:p.best_seller,
+      is_new:p.is_new,
       top_notes: p.top_notes.join(', '), middle_notes: p.middle_notes.join(', '), base_notes: p.base_notes.join(', '),
       ingredients: p.ingredients || '',
       bottle_shape: p.bottle_shape, bottle_glass: p.bottle_glass, bottle_cap: p.bottle_cap, bottle_label: p.bottle_label,
@@ -246,9 +241,9 @@ export default function AdminProducts() {
       gender: data.gender,
       volume_ml: parseInt(data.volume_ml, 10),
       stock: validVariants.reduce((sum, v) => sum + (parseInt(v.stock, 10) || 0), 0),
-      featured: data.home_section === "featured",
-      best_seller: data.home_section === "best",
-      is_new: data.home_section === "new",
+      featured: data.featured,
+      best_seller: data.best_seller,
+      is_new: data.is_new,
       top_notes: data.top_notes.split(',').map((s) => s.trim()).filter(Boolean),
       middle_notes: data.middle_notes.split(',').map((s) => s.trim()).filter(Boolean),
       base_notes: data.base_notes.split(',').map((s) => s.trim()).filter(Boolean),
@@ -576,20 +571,36 @@ for (let i = 0; i < validVariants.length; i++) {
                   <label className="label-luxe">Label Color</label>
                   <input type="color" {...register('bottle_label')} className="h-10 w-full border border-ink-700 bg-transparent" />
                 </div>
-                <div className="sm:col-span-2">
-  <label className="label-luxe">Home Section</label>
+                <div className="sm:col-span-2 flex flex-wrap gap-5">
 
-  <select
-    {...register("home_section")}
-    className="input-luxe"
-  >
-    <option value="none">None</option>
-    <option value="featured">Featured</option>
-    <option value="best">Best Seller</option>
-    <option value="new">New Arrival</option>
-  </select>
+<label className="flex items-center gap-2">
+  <input
+    type="checkbox"
+    {...register("featured")}
+    className="accent-gold"
+  />
+  Featured
+</label>
+
+<label className="flex items-center gap-2">
+  <input
+    type="checkbox"
+    {...register("best_seller")}
+    className="accent-gold"
+  />
+  Best Seller
+</label>
+
+<label className="flex items-center gap-2">
+  <input
+    type="checkbox"
+    {...register("is_new")}
+    className="accent-gold"
+  />
+  New Arrival
+</label>
+
 </div>
-              </div>
 
               {/* Variants section */}
               <div className="mt-8 border-t border-ink-800 pt-6">

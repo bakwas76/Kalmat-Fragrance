@@ -18,8 +18,7 @@ const PAYMENT_LABELS: Record<string, string> = {
   manual: "Manual Payment",
 };
 
-// Gmail SMTP credentials from environment variables
-const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
+
 
 // WhatsApp Business API credentials (Meta Cloud API)
 const ADMIN_WHATSAPP_NUMBER = "923219247773"; // 03219247773 in international format

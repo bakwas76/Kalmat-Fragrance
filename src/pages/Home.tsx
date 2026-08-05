@@ -49,6 +49,9 @@ export default function Home() {
       console.log("Featured:", feat.data);
       console.log("Best:", best.data);
       console.log("New:", fresh.data);
+      console.log("Featured Error:", feat.error);
+      console.log("Best Error:", best.error);
+      console.log("New Error:", fresh.error);
       setCategories((cats.data as Category[]) || []);
       setCollections((cols.data as Collection[]) || []);
       setReviews((revs.data as Review[]) || []);

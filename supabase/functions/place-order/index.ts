@@ -182,55 +182,7 @@ try {
   console.error("RESEND_ERROR:", emailError);
 }
 
-        const pdfBuffer = Buffer.from(body.pdf_base64, "base64");
-        const attachment = {
-          filename: `invoice-${body.order_number}.pdf`,
-          content: pdfBuffer,
-          contentType: "application/pdf",
-        };
-
-        // --- Email 1: To store owner ---
-        try {
-          await transporter.sendMail({
-            from: `${BRAND_NAME} <${GMAIL_USER}>`,
-            to: ADMIN_EMAIL,
-            subject: `New Order Received - Order #${body.order_number}`,
-            html: buildOwnerEmailHtml(body),
-            attachments: [attachment],
-          });
-          ownerEmailSent = true;
-          console.log("OWNER_EMAIL_SENT", { to: ADMIN_EMAIL, order: body.order_number });
-        } catch (err) {
-          console.error("OWNER_EMAIL_ERROR", err instanceof Error ? err.message : String(err));
-        }
-
-        // --- Email 2: To customer ---
-        try {
-          await transporter.sendMail({
-            from: `${BRAND_NAME} <${GMAIL_USER}>`,
-            to: body.email,
-            subject: `Order Confirmation - Order #${body.order_number}`,
-            html: buildCustomerEmailHtml(body),
-            attachments: [attachment],
-          });
-          customerEmailSent = true;
-          console.log("CUSTOMER_EMAIL_SENT", { to: body.email, order: body.order_number });
-        } catch (err) {
-          console.error("CUSTOMER_EMAIL_ERROR", err instanceof Error ? err.message : String(err));
-        }
-      } catch (err) {
-        emailError = err instanceof Error ? err.message : String(err);
-        console.error("SMTP_SETUP_ERROR", emailError);
-      }
-    } else {
-      const missing: string[] = [];
-      if (!GMAIL_USER) missing.push("GMAIL_USER");
-      if (!GMAIL_APP_PASSWORD) missing.push("GMAIL_APP_PASSWORD");
-      if (!body.pdf_base64) missing.push("pdf_base64");
-      emailError = `Missing: ${missing.join(", ")}`;
-      console.log("EMAIL_SKIPPED", { missing });
-    }
-
+        
     // ---- 4. Send WhatsApp Business API notification to admin ----
     let whatsappAdminSent = false;
     let whatsappAdminError: string | null = null;

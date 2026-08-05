@@ -32,16 +32,19 @@ export default function Home() {
   useEffect(() => {
     (async () => {
       const [feat, best, fresh, cats, cols, revs] = await Promise.all([
-        supabase.from('products').select(`*,product_variants(*)`).eq('featured', true).limit(4),
-        supabase.from('products').select(`*,product_variants(*)`).eq('best_seller', true).limit(8),
-        supabase.from('products').select(`*,product_variants(*)`).eq('is_new', true).limit(4),
+        supabase.from('products').select(`*,variants:product_variants(*)`).eq('featured', true).limit(4),
+        supabase.from('products').select(`*,variants:product_variants(*)`).eq('best_seller', true).limit(8),
+        supabase.from('products').select(`*,variants:product_variants(*)`).eq('is_new', true).limit(4),
         supabase.from('categories').select('*').limit(6),
         supabase.from('collections').select('*').limit(3),
         supabase.from('product_reviews').select('*').order('created_at', { ascending: false }).limit(3),
       ]);
-      setFeatured((feat.data as Product[]) || []);
-      setBestSellers((best.data as Product[]) || []);
-      setNewArrivals((fresh.data as Product[]) || []);
+      // setFeatured((feat.data as Product[]) || []);
+      // setBestSellers((best.data as Product[]) || []);
+      // setNewArrivals((fresh.data as Product[]) || []);
+      setFeatured((feat.data as any) || []);
+      setBestSellers((best.data as any) || []);
+      setNewArrivals((fresh.data as any) || []);
       setCategories((cats.data as Category[]) || []);
       setCollections((cols.data as Collection[]) || []);
       setReviews((revs.data as Review[]) || []);

@@ -101,17 +101,24 @@ export default function ProductDetails() {
   }
 
   const selectedVariant = variants.find((v) => v.id === selectedVariantId) || null;
-  console.log("selectedVariantId:", selectedVariantId);
+
+const displayPrice = selectedVariant ? selectedVariant.price : product.price;
+const displayCompareAt = selectedVariant
+  ? selectedVariant.compare_at_price
+  : product.compare_at_price;
+
+const displayStock = selectedVariant ? selectedVariant.stock : product.stock;
+const displayVolume = selectedVariant ? selectedVariant.volume_ml : product.volume_ml;
+
+const activeImage = selectedVariant?.image_url || product.image_url;
+
+console.log("selectedVariantId:", selectedVariantId);
 console.log("selectedVariant:", selectedVariant);
 console.log("activeImage:", activeImage);
-  const displayPrice = selectedVariant ? selectedVariant.price : product.price;
-  const displayCompareAt = selectedVariant ? selectedVariant.compare_at_price : product.compare_at_price;
-  const displayStock = selectedVariant ? selectedVariant.stock : product.stock;
-  const displayVolume = selectedVariant ? selectedVariant.volume_ml : product.volume_ml;
-  const activeImage = selectedVariant?.image_url || product.image_url;
-  const outOfStock = displayStock <= 0;
-  const discount = discountPercent(displayPrice, displayCompareAt);
-  const wished = isWishlisted(product.id);
+
+const outOfStock = displayStock <= 0;
+const discount = discountPercent(displayPrice, displayCompareAt);
+const wished = isWishlisted(product.id);
 
   const onAddToCart = () => {
     addItem(product, qty, selectedVariant);

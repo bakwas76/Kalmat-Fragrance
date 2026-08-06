@@ -5,7 +5,7 @@ export const BRAND = {
   tagline: 'The Art of Luxury Perfumery',
   email: 'concierge@kalmatfragrance.com',
   phone: '+92 321 9247773',
-  whatsapp: '03219247773',
+  whatsapp: '923219247773',
   address: 'Garden West, Karachi, Sindh, Pakistan',
   instagram: 'https://instagram.com',
   facebook: 'https://facebook.com',

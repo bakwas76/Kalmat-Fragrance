@@ -47,7 +47,7 @@ export default function AdminDashboard() {
       const approvedReviews = allReviews.filter((r) => r.status === 'approved');
 
       setData({
-        revenue: allOrders.filter((o) => o.order_status !== 'cancelled' && o.order_status !== 'declined' && o.order_status !== 'refunded').reduce((s, o) => s + Number(o.total), 0),
+        revenue: allOrders.filter((o) => o.order_status !== 'cancelled' && o.order_status !== 'declined' && o.order_status !== 'refund').reduce((s, o) => s + Number(o.total), 0),
         orderCount: allOrders.length,
         productCount: allProducts.length,
         userCount: allUsers.length,

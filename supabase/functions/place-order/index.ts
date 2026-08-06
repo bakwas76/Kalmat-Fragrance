@@ -1,4 +1,5 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
+throw new Error("VERSION_999");
 import { createClient } from "npm:@supabase/supabase-js@2.57.4";
 import { Resend } from "npm:resend";
 console.log("RESEND EXISTS:", !!Deno.env.get("RESEND_API_KEY"));

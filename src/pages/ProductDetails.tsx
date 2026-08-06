@@ -108,6 +108,7 @@ console.log("activeImage:", activeImage);
   const displayCompareAt = selectedVariant ? selectedVariant.compare_at_price : product.compare_at_price;
   const displayStock = selectedVariant ? selectedVariant.stock : product.stock;
   const displayVolume = selectedVariant ? selectedVariant.volume_ml : product.volume_ml;
+  const activeImage = selectedVariant?.image_url || product.image_url;
   const outOfStock = displayStock <= 0;
   const discount = discountPercent(displayPrice, displayCompareAt);
   const wished = isWishlisted(product.id);
@@ -208,7 +209,6 @@ console.log("activeImage:", activeImage);
               onMouseLeave={() => setZoomed(false)}
               onMouseMove={onZoomMove}
             >
-              const activeImage = selectedVariant?.image_url || product.image_url;
 
 {activeImage ? (
   <img

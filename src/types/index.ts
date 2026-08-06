@@ -30,6 +30,7 @@ export interface ProductVariant {
   stock: number;
   sku: string | null;
   weight: string | null;
+  image_url: string | null;
   sort_order: number;
   is_default: boolean;
   created_at: string;

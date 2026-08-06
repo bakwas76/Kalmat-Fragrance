@@ -205,18 +205,32 @@ export default function ProductDetails() {
               onMouseLeave={() => setZoomed(false)}
               onMouseMove={onZoomMove}
             >
-              {product.image_url ? (
-                <img
-                  src={product.image_url}
-                  alt={product.name}
-                  className="h-full w-full object-cover transition-transform duration-300"
-                  style={zoomed ? { transform: `scale(2)`, transformOrigin: `${zoomPos.x}% ${zoomPos.y}%` } : undefined}
-                />
-              ) : (
-                <div className="grid h-full w-full place-items-center" style={{ background: 'linear-gradient(160deg,#F3ECE0,#E6DCCB)' }}>
-                  <span className="font-display text-8xl italic text-gold/20">{product.brand?.charAt(0) || 'K'}</span>
-                </div>
-              )}
+              const activeImage = selectedVariant?.image_url || product.image_url;
+
+{activeImage ? (
+  <img
+    src={activeImage}
+    alt={product.name}
+    className="h-full w-full object-cover transition-transform duration-300"
+    style={
+      zoomed
+        ? {
+            transform: `scale(2)`,
+            transformOrigin: `${zoomPos.x}% ${zoomPos.y}%`,
+          }
+        : undefined
+    }
+  />
+) : (
+  <div
+    className="grid h-full w-full place-items-center"
+    style={{ background: "linear-gradient(160deg,#F3ECE0,#E6DCCB)" }}
+  >
+    <span className="font-display text-8xl italic text-gold/20">
+      {product.brand?.charAt(0) || "K"}
+    </span>
+  </div>
+)}
               {discount > 0 && <span className="kx-badge-sale absolute left-4 top-4">−{discount}%</span>}
             </div>
             {product.image_url && (

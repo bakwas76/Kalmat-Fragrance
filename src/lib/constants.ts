@@ -4,9 +4,9 @@ export const BRAND = {
   name: 'Kalmat Fragrance',
   tagline: 'The Art of Luxury Perfumery',
   email: 'concierge@kalmatfragrance.com',
-  phone: '+92 300 1234567',
-  whatsapp: '923001234567',
-  address: 'Gulberg III, Lahore, Punjab, Pakistan',
+  phone: '+92 321 9247773',
+  whatsapp: '03219247773',
+  address: 'Garden West, Karachi, Sindh, Pakistan',
   instagram: 'https://instagram.com',
   facebook: 'https://facebook.com',
   twitter: 'https://twitter.com',
@@ -34,57 +34,50 @@ export const ORDER_STATUS_FLOW: OrderStatus[] = [
   'confirmed',
   'processing',
   'packed',
-  'shipped',
   'out_for_delivery',
   'delivered',
 ];
 
 export const ORDER_STATUS_LABELS: Record<OrderStatus, string> = {
   pending: 'Pending',
-  pending_verification: 'Pending Verification',
   confirmed: 'Confirmed',
   processing: 'Processing',
   packed: 'Packed',
-  shipped: 'Shipped',
   out_for_delivery: 'Out for Delivery',
   delivered: 'Delivered',
   cancelled: 'Cancelled',
   declined: 'Declined',
-  refunded: 'Refunded',
+  refund: 'Refund',
 };
 
 export const ORDER_STATUS_COLORS: Record<OrderStatus, string> = {
   pending: 'bg-amber-500/15 text-amber-700 border-amber-500/30',
-  pending_verification: 'bg-amber-500/15 text-amber-700 border-amber-500/30',
   confirmed: 'bg-sky-500/15 text-sky-700 border-sky-500/30',
   processing: 'bg-violet-500/15 text-violet-700 border-violet-500/30',
   packed: 'bg-indigo-500/15 text-indigo-700 border-indigo-500/30',
-  shipped: 'bg-cyan-500/15 text-cyan-700 border-cyan-500/30',
   out_for_delivery: 'bg-orange-500/15 text-orange-700 border-orange-500/30',
   delivered: 'bg-emerald-500/15 text-emerald-700 border-emerald-500/30',
   cancelled: 'bg-rose-500/15 text-rose-700 border-rose-500/30',
   declined: 'bg-red-500/15 text-red-700 border-red-500/30',
-  refunded: 'bg-gray-500/15 text-gray-700 border-gray-500/30',
+  refund: 'bg-gray-500/15 text-gray-700 border-gray-500/30',
 };
 
 export const ALL_ORDER_STATUSES: OrderStatus[] = [
   'pending',
-  'pending_verification',
   'confirmed',
   'processing',
   'packed',
-  'shipped',
   'out_for_delivery',
   'delivered',
   'cancelled',
   'declined',
-  'refunded',
+  'refund',
 ];
 
 export const NON_PROGRESSIVE_STATUSES: OrderStatus[] = [
   'cancelled',
   'declined',
-  'refunded',
+  'refund',
 ];
 
 export const PAYMENT_METHOD_LABELS: Record<string, string> = {

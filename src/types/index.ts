@@ -115,16 +115,14 @@ export interface Coupon {
 
 export type OrderStatus =
   | 'pending'
-  | 'pending_verification'
   | 'confirmed'
   | 'processing'
   | 'packed'
-  | 'shipped'
   | 'out_for_delivery'
   | 'delivered'
   | 'cancelled'
   | 'declined'
-  | 'refunded';
+  | 'refund';
 
 export type PaymentMethod = 'cod' | 'manual';
 export type PaymentStatus = 'pending' | 'pending_verification' | 'verified' | 'rejected' | 'paid' | 'failed' | 'refunded';

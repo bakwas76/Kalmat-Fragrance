@@ -54,14 +54,32 @@ export default function AdminReviews() {
   useEffect(() => { load(); }, []);
 
   const updateStatus = async (review: ReviewWithProduct, status: ReviewStatus) => {
-    const { error } = await supabase
-      .from('product_reviews')
-      .update({ status, updated_at: new Date().toISOString() })
-      .eq('id', review.id);
-    if (error) { toast(error.message, 'error'); return; }
-    toast(`Review ${status}`);
-    load();
-  };
+  const { data, error } = await supabase
+    .from('product_reviews')
+    .update({
+      status,
+      updated_at: new Date().toISOString(),
+    })
+    .eq('id', review.id)
+    .select('id, status')
+    .single();
+
+  if (error) {
+    console.error('UPDATE REVIEW ERROR:', error);
+    toast(error.message, 'error');
+    return;
+  }
+
+  console.log('UPDATED REVIEW:', data);
+
+  if (data?.status !== status) {
+    toast('Review update nahi hui', 'error');
+    return;
+  }
+
+  toast(`Review ${status}`);
+  await load();
+};
 
   const submitReply = async () => {
     if (!replyTarget) return;

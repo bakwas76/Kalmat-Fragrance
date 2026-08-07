@@ -44,7 +44,11 @@ export default function OrderHistory() {
         ) : (
           <div className="mt-12 space-y-4">
             {orders.map((o) => (
-              <Link key={o.id} to="/track-order" className="group block border border-line bg-white p-6 transition-all duration-300 hover:border-gold/30 hover:shadow-elevate">
+              <Link
+  key={o.id}
+  to={`/track-order?order=${encodeURIComponent(o.order_number)}&email=${encodeURIComponent(o.email)}`}
+  className="group block border border-line bg-white p-6 transition-all duration-300 hover:border-gold/30 hover:shadow-elevate"
+>
                 <div className="flex flex-wrap items-center justify-between gap-4">
                   <div className="flex items-center gap-5">
                     <div className="grid h-12 w-12 place-items-center border border-line bg-ivory-2"><Package size={18} className="text-gold" /></div>

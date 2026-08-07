@@ -72,7 +72,7 @@ const updateStatus = async (review: ReviewWithProduct, status: ReviewStatus) => 
   }
 
   if (!data || data.length === 0) {
-    toast('Review update nahi hui — admin RLS policy check karo', 'error');
+    toast('pls check RLS policy', 'error');
     return;
   }
 

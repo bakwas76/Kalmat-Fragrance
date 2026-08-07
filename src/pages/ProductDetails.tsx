@@ -190,6 +190,7 @@ const wished = isWishlisted(product.id);
           product_id: product.id,
           user_id: user.id,
           author_name: reviewForm.author_name || user.email || 'Anonymous',
+          email: user.email || null,
           rating: reviewForm.rating,
           title: reviewForm.title || null,
           comment: reviewForm.comment,

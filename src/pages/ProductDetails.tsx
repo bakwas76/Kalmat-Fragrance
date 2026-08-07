@@ -174,11 +174,20 @@ const wished = isWishlisted(product.id);
           verified_purchase: hasPurchased, status: 'pending',
         });
         if (error) {
-          if (error.code === '23505') toast('You have already reviewed this fragrance', 'error');
-          else toast('Could not submit review', 'error');
-          setSubmittingReview(false);
-          return;
-        }
+          // if (error.code === '23505') toast('You have already reviewed this fragrance', 'error');
+          // else toast('Could not submit review', 'error');
+          if (error) {
+  console.error('REVIEW INSERT ERROR:', error);
+
+  if (error.code === '23505') {
+    toast('You have already reviewed this fragrance', 'error');
+  } else {
+    toast(error.message, 'error');
+  }
+
+  setSubmittingReview(false);
+  return;
+}
         toast('Review submitted — pending approval');
       }
       const { data: myRev } = await supabase.from('product_reviews').select('*').eq('product_id', product.id).eq('user_id', user.id).maybeSingle();

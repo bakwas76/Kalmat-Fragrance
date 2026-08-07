@@ -82,15 +82,97 @@ export default function AdminOrders() {
     };
   }, [load]);
 
-  const updateStatus = async (id: string, status: OrderStatus) => {
-    setUpdatingId(id);
-    const { error } = await supabase.from('orders').update({ order_status: status }).eq('id', id);
-    setUpdatingId(null);
-    if (error) { toast(error.message, 'error'); return; }
+const updateStatus = async (id: string, status: OrderStatus) => {
+  setUpdatingId(id);
+
+  try {
+    const currentOrder = orders.find((o) => o.id === id);
+
+    if (!currentOrder) {
+      toast('Order not found', 'error');
+      return;
+    }
+
+    const previousStatus = currentOrder.order_status;
+
+    // Stock sirf pehli dafa "processing" par jane par minus hoga
+    const shouldDeductStock =
+      status === 'processing' &&
+      previousStatus !== 'processing' &&
+      previousStatus !== 'packed' &&
+      previousStatus !== 'shipped' &&
+      previousStatus !== 'out_for_delivery' &&
+      previousStatus !== 'delivered';
+
+    if (shouldDeductStock) {
+      for (const item of currentOrder.items) {
+        if (!item.variant_id) continue;
+
+        const { data: variant, error: variantError } = await supabase
+          .from('product_variants')
+          .select('id, stock')
+          .eq('id', item.variant_id)
+          .single();
+
+        if (variantError || !variant) {
+          throw new Error(
+            `Variant not found for ${item.name} (${item.variant_label || `${item.volume_ml}ml`})`
+          );
+        }
+
+        const newStock = Math.max(
+          0,
+          Number(variant.stock) - Number(item.quantity)
+        );
+
+        const { error: stockError } = await supabase
+          .from('product_variants')
+          .update({ stock: newStock })
+          .eq('id', item.variant_id);
+
+        if (stockError) {
+          throw new Error(
+            `Stock update failed for ${item.name}: ${stockError.message}`
+          );
+        }
+      }
+    }
+
+    // Order status update
+    const { error } = await supabase
+      .from('orders')
+      .update({ order_status: status })
+      .eq('id', id);
+
+    if (error) {
+      throw error;
+    }
+
     toast(`Order status updated to ${ORDER_STATUS_LABELS[status]}`);
-    setOrders((prev) => prev.map((o) => o.id === id ? { ...o, order_status: status } : o));
-    if (viewing?.id === id) setViewing({ ...viewing, order_status: status });
-  };
+
+    const updatedOrder = {
+      ...currentOrder,
+      order_status: status,
+    };
+
+    setOrders((prev) =>
+      prev.map((o) => (o.id === id ? updatedOrder : o))
+    );
+
+    if (viewing?.id === id) {
+      setViewing(updatedOrder);
+    }
+  } catch (error) {
+    const message =
+      error instanceof Error
+        ? error.message
+        : 'Something went wrong';
+
+    toast(message, 'error');
+  } finally {
+    setUpdatingId(null);
+  }
+};
 
   const updatePaymentStatus = async (id: string, status: string) => {
     const { error } = await supabase.from('orders').update({ payment_status: status }).eq('id', id);

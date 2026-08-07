@@ -14,12 +14,23 @@ export default function TrackOrder() {
   const [searchParams] = useSearchParams();
   const [orderNumber, setOrderNumber] = useState(searchParams.get('order') || '');
   const [email, setEmail] = useState(() => {
-    try {
-      const raw = sessionStorage.getItem('last_order');
-      if (raw) return (JSON.parse(raw) as { email?: string }).email || '';
-    } catch { /* ignore */ }
-    return '';
-  });
+  const emailFromUrl = searchParams.get('email');
+
+  if (emailFromUrl) {
+    return emailFromUrl;
+  }
+
+  try {
+    const raw = sessionStorage.getItem('last_order');
+    if (raw) {
+      return (JSON.parse(raw) as { email?: string }).email || '';
+    }
+  } catch {
+    // ignore
+  }
+
+  return '';
+});
   const [loading, setLoading] = useState(false);
   const [order, setOrder] = useState<Order | null>(null);
   const [searched, setSearched] = useState(false);

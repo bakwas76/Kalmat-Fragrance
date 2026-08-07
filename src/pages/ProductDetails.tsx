@@ -18,7 +18,6 @@ interface ReviewFormState { rating: number; title: string; comment: string; auth
 
 export default function ProductDetails() {
   const { slug } = useParams();
-  const navigate = useNavigate();
   const { toast } = useToast();
   const { addItem } = useCart();
   const { isWishlisted, toggle } = useWishlist();
@@ -152,53 +151,100 @@ const wished = isWishlisted(product.id);
     if (prod.data) setProduct(prod.data as Product);
   };
 
-  const submitReview = async () => {
-    if (!user || !product) return;
-    if (!reviewForm.comment.trim()) { toast('Please write a review', 'error'); return; }
-    setSubmittingReview(true);
-    try {
-      if (editingReview) {
-        const { error } = await supabase.from('product_reviews').update({
-          rating: reviewForm.rating, title: reviewForm.title || null, comment: reviewForm.comment,
-          author_name: reviewForm.author_name || user.email || 'Anonymous', verified_purchase: hasPurchased,
-          updated_at: new Date().toISOString(),
-        }).eq('id', editingReview.id);
-        if (error) throw error;
-        toast('Review updated — pending approval');
-        setEditingReview(null);
-      } else {
-        const { error } = await supabase.from('product_reviews').insert({
-          product_id: product.id, user_id: user.id,
-          author_name: reviewForm.author_name || user.email || 'Anonymous', email: user.email || null,
-          rating: reviewForm.rating, title: reviewForm.title || null, comment: reviewForm.comment,
-          verified_purchase: hasPurchased, status: 'pending',
-        });
-        if (error) {
-          // if (error.code === '23505') toast('You have already reviewed this fragrance', 'error');
-          // else toast('Could not submit review', 'error');
-          if (error) {
-  console.error('REVIEW INSERT ERROR:', error);
+ const submitReview = async () => {
+  if (!user || !product) return;
 
-  if (error.code === '23505') {
-    toast('You have already reviewed this fragrance', 'error');
-  } else {
-    toast(error.message, 'error');
+  if (!reviewForm.comment.trim()) {
+    toast('Please write a review', 'error');
+    return;
   }
 
-  setSubmittingReview(false);
-  return;
-}
-        toast('Review submitted — pending approval');
+  setSubmittingReview(true);
+
+  try {
+    if (editingReview) {
+      const { error } = await supabase
+        .from('product_reviews')
+        .update({
+          rating: reviewForm.rating,
+          title: reviewForm.title || null,
+          comment: reviewForm.comment,
+          author_name: reviewForm.author_name || user.email || 'Anonymous',
+          verified_purchase: hasPurchased,
+          updated_at: new Date().toISOString(),
+        })
+        .eq('id', editingReview.id);
+
+      if (error) {
+        console.error('REVIEW UPDATE ERROR:', error);
+        toast(error.message, 'error');
+        return;
       }
-      const { data: myRev } = await supabase.from('product_reviews').select('*').eq('product_id', product.id).eq('user_id', user.id).maybeSingle();
-      setUserExistingReview((myRev as Review) || null);
-      setReviewForm({ rating: 5, title: '', comment: '', author_name: '' });
-      await refreshReviews();
-    } catch {
-      toast('Could not submit review', 'error');
+
+      toast('Review updated — pending approval');
+      setEditingReview(null);
+    } else {
+      const { error } = await supabase
+        .from('product_reviews')
+        .insert({
+          product_id: product.id,
+          user_id: user.id,
+          author_name: reviewForm.author_name || user.email || 'Anonymous',
+          email: user.email || null,
+          rating: reviewForm.rating,
+          title: reviewForm.title || null,
+          comment: reviewForm.comment,
+          verified_purchase: hasPurchased,
+          status: 'pending',
+        });
+
+      if (error) {
+        console.error('REVIEW INSERT ERROR:', error);
+
+        if (error.code === '23505') {
+          toast('You have already reviewed this fragrance', 'error');
+        } else {
+          toast(error.message, 'error');
+        }
+
+        return;
+      }
+
+      toast('Review submitted — pending approval');
     }
+
+    const { data: myRev, error: myRevError } = await supabase
+      .from('product_reviews')
+      .select('*')
+      .eq('product_id', product.id)
+      .eq('user_id', user.id)
+      .maybeSingle();
+
+    if (myRevError) {
+      console.error('FETCH REVIEW ERROR:', myRevError);
+    }
+
+    setUserExistingReview((myRev as Review) || null);
+
+    setReviewForm({
+      rating: 5,
+      title: '',
+      comment: '',
+      author_name: '',
+    });
+
+    await refreshReviews();
+  } catch (err) {
+    console.error('REVIEW ERROR:', err);
+
+    toast(
+      err instanceof Error ? err.message : 'Could not submit review',
+      'error'
+    );
+  } finally {
     setSubmittingReview(false);
-  };
+  }
+};
 
   return (
     <>

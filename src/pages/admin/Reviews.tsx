@@ -53,7 +53,7 @@ export default function AdminReviews() {
 
   useEffect(() => { load(); }, []);
 
-  const updateStatus = async (review: ReviewWithProduct, status: ReviewStatus) => {
+const updateStatus = async (review: ReviewWithProduct, status: ReviewStatus) => {
   const { data, error } = await supabase
     .from('product_reviews')
     .update({
@@ -61,8 +61,9 @@ export default function AdminReviews() {
       updated_at: new Date().toISOString(),
     })
     .eq('id', review.id)
-    .select('id, status')
-    .single();
+    .select('id, status');
+
+  console.log('UPDATE RESULT:', { data, error });
 
   if (error) {
     console.error('UPDATE REVIEW ERROR:', error);
@@ -70,10 +71,8 @@ export default function AdminReviews() {
     return;
   }
 
-  console.log('UPDATED REVIEW:', data);
-
-  if (data?.status !== status) {
-    toast('Review update nahi hui', 'error');
+  if (!data || data.length === 0) {
+    toast('Review update nahi hui — admin RLS policy check karo', 'error');
     return;
   }
 

@@ -18,7 +18,7 @@ export default function About() {
   const valuesRef = useReveal<HTMLDivElement>();
 
   return (
-    <>
+    <div className="w-full max-w-full overflow-x-hidden">
       <Seo title="About" description="The story behind Kalmat Fragrance — the art of luxury perfumery." />
 
       {/* Hero */}
@@ -85,6 +85,6 @@ export default function About() {
           <Link to="/contact" className="kx-btn-solid mt-10">Contact Us <ArrowRight size={14} /></Link>
         </div>
       </section>
-    </>
+    </div>
   );
 }

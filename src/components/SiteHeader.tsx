@@ -141,7 +141,8 @@ export default function SiteHeader() {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -8 }}
                     transition={{ duration: 0.22, ease: [0.16,1,0.3,1] }}
-                    className="absolute right-0 top-12 w-60 border border-line bg-white shadow-elevate"
+                    {/* className="absolute right-0 top-12 w-60 border border-line bg-white shadow-elevate" */}
+                    className="absolute right-0 top-12 z-50 hidden w-60 border border-line bg-white shadow-elevate lg:block"
                   >
                     <div className="border-b border-line-soft bg-ivory-2 px-5 py-4">
                       <p className="font-display text-lg text-charcoal">{profile?.full_name || 'Member'}</p>

@@ -25,7 +25,7 @@ export default function AdminHeroSlider() {
       const { data } = await supabase
         .from('hero_banner')
         .select('*')
-        .eq('id', 1)
+        .limit(1)
         .maybeSingle();
       const b = data as HeroBanner | null;
       if (b) {
@@ -70,24 +70,68 @@ export default function AdminHeroSlider() {
     if (file) uploadImage(file, which);
   };
 
-  const save = async () => {
-    setSaving(true);
-    const { error } = await supabase
+const save = async () => {
+  setSaving(true);
+
+  try {
+    // Pehle existing hero banner record check karo
+    const { data: existing, error: fetchError } = await supabase
       .from('hero_banner')
-      .upsert({
-        id: 1,
-        desktop_image_url: desktopUrl,
-        mobile_image_url: mobileUrl,
-        overlay_opacity: overlay,
-        banner_height: height,
-      });
-    setSaving(false);
+      .select('id')
+      .limit(1)
+      .maybeSingle();
+
+    if (fetchError) {
+      console.error('FETCH HERO ERROR:', fetchError);
+      toast(fetchError.message, 'error');
+      return;
+    }
+
+    const bannerData = {
+      desktop_image_url: desktopUrl,
+      mobile_image_url: mobileUrl,
+      overlay_opacity: overlay / 100,
+      banner_height: `${height}vh`,
+      updated_at: new Date().toISOString(),
+    };
+
+    let error;
+
+    if (existing?.id) {
+      // Existing row update karo
+      const result = await supabase
+        .from('hero_banner')
+        .update(bannerData)
+        .eq('id', existing.id);
+
+      error = result.error;
+    } else {
+      // Agar row nahi hai to new row create karo
+      const result = await supabase
+        .from('hero_banner')
+        .insert(bannerData);
+
+      error = result.error;
+    }
+
     if (error) {
+      console.error('SAVE HERO ERROR:', error);
       toast(error.message, 'error');
       return;
     }
-    toast('Hero banner saved');
-  };
+
+    toast('Hero banner saved successfully');
+  } catch (err) {
+    console.error('SAVE HERO ERROR:', err);
+
+    toast(
+      err instanceof Error ? err.message : 'Could not save hero banner',
+      'error'
+    );
+  } finally {
+    setSaving(false);
+  }
+};
 
   if (loading) {
     return (

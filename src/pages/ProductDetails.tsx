@@ -41,6 +41,9 @@ export default function ProductDetails() {
   const [userExistingReview, setUserExistingReview] = useState<Review | null>(null);
   const [editingReview, setEditingReview] = useState<Review | null>(null);
   const [hasPurchased, setHasPurchased] = useState(false);
+  const [reviewImages, setReviewImages] = useState<File[]>([]);
+  const [reviewImagePreviews, setReviewImagePreviews] = useState<string[]>([]);
+  const [uploadingReviewImages, setUploadingReviewImages] = useState(false);
 
   useEffect(() => {
     setLoading(true);
@@ -150,6 +153,41 @@ const wished = isWishlisted(product.id);
     setReviews((revs.data as Review[]) || []);
     if (prod.data) setProduct(prod.data as Product);
   };
+
+  const handleReviewImages = (files: FileList | null) => {
+  if (!files) return;
+
+  const selectedFiles = Array.from(files).filter((file) =>
+    file.type.startsWith('image/')
+  );
+
+  const remaining = 5 - reviewImages.length;
+  const filesToAdd = selectedFiles.slice(0, remaining);
+
+  if (filesToAdd.length === 0) return;
+
+  setReviewImages((prev) => [...prev, ...filesToAdd]);
+
+  setReviewImagePreviews((prev) => [
+    ...prev,
+    ...filesToAdd.map((file) => URL.createObjectURL(file)),
+  ]);
+};
+
+const removeReviewImage = (index: number) => {
+  setReviewImages((prev) => prev.filter((_, i) => i !== index));
+
+  setReviewImagePreviews((prev) => {
+    const updated = [...prev];
+
+    if (updated[index]) {
+      URL.revokeObjectURL(updated[index]);
+    }
+
+    updated.splice(index, 1);
+    return updated;
+  });
+};
 
  const submitReview = async () => {
   if (!user || !product) return;
@@ -513,6 +551,78 @@ const wished = isWishlisted(product.id);
                         <p className="kx-field-label">Your Review</p>
                         <textarea rows={4} value={reviewForm.comment} onChange={(e) => setReviewForm((f) => ({ ...f, comment: e.target.value }))} className="kx-textarea" placeholder="Describe the scent, longevity, and your impression" />
                       </div>
+
+                      <div className="mt-5">
+  <p className="kx-field-label">Photos (optional)</p>
+
+  <div className="mt-3 flex flex-wrap gap-3">
+    {/* Gallery */}
+    <label className="flex h-24 w-24 cursor-pointer flex-col items-center justify-center border border-line bg-ivory-2 text-ink-mute transition hover:border-gold hover:text-gold">
+      <span className="text-xl">🖼️</span>
+      <span className="mt-1 text-[10px] uppercase tracking-wider">
+        Photos
+      </span>
+
+      <input
+        type="file"
+        accept="image/*"
+        multiple
+        className="hidden"
+        onChange={(e) => {
+          handleReviewImages(e.target.files);
+          e.currentTarget.value = '';
+        }}
+      />
+    </label>
+
+    {/* Camera */}
+    <label className="flex h-24 w-24 cursor-pointer flex-col items-center justify-center border border-line bg-ivory-2 text-ink-mute transition hover:border-gold hover:text-gold">
+      <span className="text-xl">📷</span>
+      <span className="mt-1 text-[10px] uppercase tracking-wider">
+        Camera
+      </span>
+
+      <input
+        type="file"
+        accept="image/*"
+        capture="environment"
+        className="hidden"
+        onChange={(e) => {
+          handleReviewImages(e.target.files);
+          e.currentTarget.value = '';
+        }}
+      />
+    </label>
+
+    {/* Previews */}
+    {reviewImagePreviews.map((src, index) => (
+      <div
+        key={src}
+        className="relative h-24 w-24 overflow-hidden border border-line"
+      >
+        <img
+          src={src}
+          alt={`Review photo ${index + 1}`}
+          className="h-full w-full object-cover"
+        />
+
+        <button
+          type="button"
+          onClick={() => removeReviewImage(index)}
+          className="absolute right-1 top-1 grid h-6 w-6 place-items-center rounded-full bg-black/70 text-white"
+          aria-label="Remove photo"
+        >
+          <X size={13} />
+        </button>
+      </div>
+    ))}
+  </div>
+
+  <p className="mt-2 text-[10px] text-ink-mute">
+    Up to 5 photos. Choose multiple photos or take a photo with your camera.
+  </p>
+</div>
+                      
                       <button onClick={submitReview} disabled={submittingReview} className="kx-btn-solid mt-6 w-full">
                         {submittingReview ? 'Submitting...' : editingReview ? 'Update Review' : 'Submit Review'}
                       </button>

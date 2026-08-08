@@ -128,7 +128,18 @@ export default function SiteHeader() {
 
               <div className="relative" ref={accountRef}>
                 <button
-                  onClick={() => (user ? setAccountOpen((o) => !o) : navigate('/login'))}
+                  onClick={() => {
+  if (!user) {
+    navigate('/login');
+    return;
+  }
+
+  if (window.innerWidth < 1024) {
+    setMobileOpen(true);
+  } else {
+    setAccountOpen((o) => !o);
+  }
+}}
                   className={`grid h-10 w-10 place-items-center ${iconCls} transition-all duration-300 hover:scale-105`}
                   aria-label="Account"
                 >

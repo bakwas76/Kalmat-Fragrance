@@ -20,23 +20,39 @@ export default function AdminHeroSlider() {
   const [overlay, setOverlay] = useState(40);
   const [height, setHeight] = useState(90);
 
-  useEffect(() => {
-    (async () => {
-      const { data } = await supabase
-        .from('hero_banner')
-        .select('*')
-        .limit(1)
-        .maybeSingle();
-      const b = data as HeroBanner | null;
-      if (b) {
-        setDesktopUrl(b.desktop_image_url);
-        setMobileUrl(b.mobile_image_url);
-        setOverlay(b.overlay_opacity);
-        setHeight(b.banner_height);
-      }
+useEffect(() => {
+  (async () => {
+    const { data, error } = await supabase
+      .from('hero_banner')
+      .select('*')
+      .limit(1)
+      .maybeSingle();
+
+    if (error) {
+      console.error('LOAD HERO ERROR:', error);
       setLoading(false);
-    })();
-  }, []);
+      return;
+    }
+
+    const b = data as HeroBanner | null;
+
+    if (b) {
+      setDesktopUrl(b.desktop_image_url);
+      setMobileUrl(b.mobile_image_url);
+
+      // DB 0.4 => UI 40
+      setOverlay(Number(b.overlay_opacity ?? 0.4) * 100);
+
+      // "90vh" => 90
+      const heightValue = String(b.banner_height || '90vh')
+        .replace(/vh+$/i, '');
+
+      setHeight(Number(heightValue) || 90);
+    }
+
+    setLoading(false);
+  })();
+}, []);
 
   const uploadImage = async (file: File, which: 'desktop' | 'mobile') => {
     if (!file.type.startsWith('image/')) {
@@ -74,7 +90,19 @@ const save = async () => {
   setSaving(true);
 
   try {
-    // Pehle existing hero banner record check karo
+    const payload = {
+      desktop_image_url: desktopUrl,
+      mobile_image_url: mobileUrl,
+      overlay_opacity: overlay / 100,
+      banner_height: `${height}vh`,
+      is_active: true,
+      updated_at: new Date().toISOString(),
+    };
+
+    let query;
+
+    // Existing banner hai to UPDATE
+    // Nahi hai to INSERT
     const { data: existing, error: fetchError } = await supabase
       .from('hero_banner')
       .select('id')
@@ -82,50 +110,35 @@ const save = async () => {
       .maybeSingle();
 
     if (fetchError) {
-      console.error('FETCH HERO ERROR:', fetchError);
-      toast(fetchError.message, 'error');
-      return;
+      throw fetchError;
     }
-
-    const bannerData = {
-      desktop_image_url: desktopUrl,
-      mobile_image_url: mobileUrl,
-      overlay_opacity: overlay / 100,
-      banner_height: `${height}vh`,
-      updated_at: new Date().toISOString(),
-    };
-
-    let error;
 
     if (existing?.id) {
-      // Existing row update karo
-      const result = await supabase
+      query = supabase
         .from('hero_banner')
-        .update(bannerData)
+        .update(payload)
         .eq('id', existing.id);
-
-      error = result.error;
     } else {
-      // Agar row nahi hai to new row create karo
-      const result = await supabase
+      query = supabase
         .from('hero_banner')
-        .insert(bannerData);
-
-      error = result.error;
+        .insert(payload);
     }
+
+    const { error } = await query;
 
     if (error) {
       console.error('SAVE HERO ERROR:', error);
-      toast(error.message, 'error');
-      return;
+      throw error;
     }
 
     toast('Hero banner saved successfully');
-  } catch (err) {
-    console.error('SAVE HERO ERROR:', err);
+  } catch (error) {
+    console.error('HERO SAVE ERROR:', error);
 
     toast(
-      err instanceof Error ? err.message : 'Could not save hero banner',
+      error instanceof Error
+        ? error.message
+        : 'Could not save hero banner',
       'error'
     );
   } finally {

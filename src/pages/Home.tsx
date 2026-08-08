@@ -144,7 +144,7 @@ export default function Home() {
               {Array.from({ length: 4 }).map((_, i) => <div key={i} className="aspect-[4/5] animate-pulse bg-ivory-3" />)}
             </div>
           ) : (
-            <div className="mt-14 grid grid-cols-2 gap-5 sm:gap-6 lg:grid-cols-4 lg:gap-7">
+            <div className="mt-14 grid grid-cols-1 gap-5 sm:gap-6 lg:grid-cols-4 lg:gap-7">
               {bestSellers.slice(0, 4).map((p, i) => <ProductTile key={p.id} product={p} index={i} />)}
             </div>
           )}
@@ -199,7 +199,7 @@ export default function Home() {
               {Array.from({ length: 4 }).map((_, i) => <div key={i} className="aspect-[4/5] animate-pulse bg-charcoal-2" />)}
             </div>
           ) : (
-            <div className="mt-14 grid grid-cols-2 gap-5 sm:gap-6 lg:grid-cols-4 lg:gap-7">
+            <div className="mt-14 grid grid-cols-1 gap-5 sm:gap-6 lg:grid-cols-4 lg:gap-7">
               {(newArrivals.length > 0 ? newArrivals : featured.slice(0, 4)).map((p, i) => <ProductTile key={p.id} product={p} index={i} />)}
             </div>
           )}
@@ -339,7 +339,7 @@ export default function Home() {
               <SectionTitle eyebrow="Signature Pieces" title="Featured Fragrances" align="left" />
               <Link to="/shop" className="kx-arrow-link hidden sm:inline-flex">Shop All <ArrowRight size={14} /></Link>
             </div>
-            <div className="mt-14 grid grid-cols-2 gap-5 sm:gap-6 lg:grid-cols-4 lg:gap-7">
+            <div className="mt-14 grid grid-cols-1 gap-5 sm:gap-6 lg:grid-cols-4 lg:gap-7">
               {featured.map((p, i) => <ProductTile key={p.id} product={p} index={i} />)}
             </div>
           </div>

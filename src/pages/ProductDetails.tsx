@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Heart, ShoppingBag, Minus, Plus, Truck, ShieldCheck, RefreshCw, Share2, Star, ChevronRight, MessageSquare } from 'lucide-react';
+import {   Heart,   ShoppingBag,   Minus,   Plus,   Truck,   ShieldCheck,   RefreshCw,   Share2,   Star,   ChevronRight,   MessageSquare,   X, } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import type { Product, Category, Collection, Review, ProductVariant } from '@/types';
 import { useCart } from '@/contexts/CartContext';
@@ -189,7 +189,7 @@ const removeReviewImage = (index: number) => {
   });
 };
 
- const submitReview = async () => {
+const submitReview = async () => {
   if (!user || !product) return;
 
   if (!reviewForm.comment.trim()) {
@@ -198,8 +198,49 @@ const removeReviewImage = (index: number) => {
   }
 
   setSubmittingReview(true);
+  setUploadingReviewImages(true);
 
   try {
+    let uploadedImageUrls: string[] = [];
+
+    // =========================
+    // 1. Upload review images
+    // =========================
+    if (reviewImages.length > 0) {
+      for (const file of reviewImages) {
+        const fileExt = file.name.split('.').pop() || 'jpg';
+
+        const filePath = `${user.id}/${product.id}/${crypto.randomUUID()}.${fileExt}`;
+
+        const { error: uploadError } = await supabase.storage
+          .from('review-images')
+          .upload(filePath, file, {
+            cacheControl: '3600',
+            upsert: false,
+            contentType: file.type,
+          });
+
+        if (uploadError) {
+          console.error('REVIEW IMAGE UPLOAD ERROR:', uploadError);
+          toast(`Image upload failed: ${uploadError.message}`, 'error');
+          return;
+        }
+
+        const { data: publicUrlData } = supabase.storage
+          .from('review-images')
+          .getPublicUrl(filePath);
+
+        if (publicUrlData?.publicUrl) {
+          uploadedImageUrls.push(publicUrlData.publicUrl);
+        }
+      }
+    }
+
+    setUploadingReviewImages(false);
+
+    // =========================
+    // 2. EDIT EXISTING REVIEW
+    // =========================
     if (editingReview) {
       const { error } = await supabase
         .from('product_reviews')
@@ -207,11 +248,15 @@ const removeReviewImage = (index: number) => {
           rating: reviewForm.rating,
           title: reviewForm.title || null,
           comment: reviewForm.comment,
-          author_name: reviewForm.author_name || user.email || 'Anonymous',
+          author_name:
+            reviewForm.author_name || user.email || 'Anonymous',
           verified_purchase: hasPurchased,
+          image_urls: uploadedImageUrls,
+          status: 'pending',
           updated_at: new Date().toISOString(),
         })
-        .eq('id', editingReview.id);
+        .eq('id', editingReview.id)
+        .eq('user_id', user.id);
 
       if (error) {
         console.error('REVIEW UPDATE ERROR:', error);
@@ -220,27 +265,38 @@ const removeReviewImage = (index: number) => {
       }
 
       toast('Review updated — pending approval');
+
       setEditingReview(null);
-    } else {
+    }
+
+    // =========================
+    // 3. CREATE NEW REVIEW
+    // =========================
+    else {
       const { error } = await supabase
         .from('product_reviews')
         .insert({
           product_id: product.id,
           user_id: user.id,
-          author_name: reviewForm.author_name || user.email || 'Anonymous',
+          author_name:
+            reviewForm.author_name || user.email || 'Anonymous',
           email: user.email || null,
           rating: reviewForm.rating,
           title: reviewForm.title || null,
           comment: reviewForm.comment,
           verified_purchase: hasPurchased,
           status: 'pending',
+          image_urls: uploadedImageUrls,
         });
 
       if (error) {
         console.error('REVIEW INSERT ERROR:', error);
 
         if (error.code === '23505') {
-          toast('You have already reviewed this fragrance', 'error');
+          toast(
+            'You have already reviewed this fragrance',
+            'error'
+          );
         } else {
           toast(error.message, 'error');
         }
@@ -251,6 +307,9 @@ const removeReviewImage = (index: number) => {
       toast('Review submitted — pending approval');
     }
 
+    // =========================
+    // 4. Get user's review
+    // =========================
     const { data: myRev, error: myRevError } = await supabase
       .from('product_reviews')
       .select('*')
@@ -264,6 +323,9 @@ const removeReviewImage = (index: number) => {
 
     setUserExistingReview((myRev as Review) || null);
 
+    // =========================
+    // 5. Reset form
+    // =========================
     setReviewForm({
       rating: 5,
       title: '',
@@ -271,15 +333,30 @@ const removeReviewImage = (index: number) => {
       author_name: '',
     });
 
+    // Clear image previews
+    reviewImagePreviews.forEach((url) => {
+      URL.revokeObjectURL(url);
+    });
+
+    setReviewImages([]);
+    setReviewImagePreviews([]);
+
+    // =========================
+    // 6. Refresh approved reviews
+    // =========================
     await refreshReviews();
+
   } catch (err) {
     console.error('REVIEW ERROR:', err);
 
     toast(
-      err instanceof Error ? err.message : 'Could not submit review',
+      err instanceof Error
+        ? err.message
+        : 'Could not submit review',
       'error'
     );
   } finally {
+    setUploadingReviewImages(false);
     setSubmittingReview(false);
   }
 };

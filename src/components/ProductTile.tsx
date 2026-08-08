@@ -95,7 +95,7 @@ export default function ProductTile({ product, index = 0 }: ProductTileProps) {
         {/* Info */}
         <div className="mt-5 space-y-2">
           <p className="text-[10px] font-medium uppercase text-ink-mute" style={{ letterSpacing: '0.24em' }}>{product.brand}</p>
-          <h3 className="font-display text-xl font-normal leading-tight text-charcoal transition-colors duration-300 group-hover:text-gold-deep">{product.name}</h3>
+          <h3 className="font-display text-xl font-normal leading-tight text-white transition-colors duration-300 group-hover:text-gold-light"> {product.name} </h3>
           <div className="flex items-center gap-3">
             <RatingMeter rating={product.rating} count={product.reviews_count} size={12} />
           </div>

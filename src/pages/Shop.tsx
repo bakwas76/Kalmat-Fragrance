@@ -196,7 +196,7 @@ export default function Shop() {
             </div>
 
             {loading ? (
-              <div className="grid grid-cols-2 gap-5 sm:gap-6 lg:grid-cols-3 lg:gap-7">
+              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3 lg:gap-7">
                 {Array.from({ length: 6 }).map((_, i) => <div key={i} className="aspect-[4/5] animate-pulse bg-ivory-2" />)}
               </div>
             ) : paged.length === 0 ? (
@@ -206,7 +206,7 @@ export default function Shop() {
                 <button onClick={clearFilters} className="kx-btn-ghost mt-8">Clear All Filters</button>
               </div>
             ) : (
-              <div className="grid grid-cols-2 gap-5 sm:gap-6 lg:grid-cols-3 lg:gap-7">
+              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3 lg:gap-7">
                 {paged.map((p, i) => <ProductTile key={p.id} product={p} index={i} />)}
               </div>
             )}

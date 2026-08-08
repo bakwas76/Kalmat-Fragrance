@@ -60,7 +60,7 @@ export default function Home() {
   }, []);
 
   return (
-    <>
+    <div className="w-full max-w-full overflow-x-hidden">
       <Seo />
       <HeroSection />
 
@@ -345,6 +345,6 @@ export default function Home() {
           </div>
         </section>
       )}
-    </>
+    </div>
   );
 }

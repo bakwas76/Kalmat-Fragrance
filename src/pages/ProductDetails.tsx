@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import {   Heart,   ShoppingBag,   Minus,   Plus,   Truck,   ShieldCheck,   RefreshCw,   Share2,   Star,   ChevronRight,   MessageSquare,   X, } from 'lucide-react';
+import { Heart, ShoppingBag, Minus, Plus, Truck, ShieldCheck, RefreshCw, Share2, Star, ChevronRight, MessageSquare, Image as ImageIcon, Camera, X,} from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import type { Product, Category, Collection, Review, ProductVariant } from '@/types';
 import { useCart } from '@/contexts/CartContext';
@@ -571,6 +571,25 @@ const submitReview = async () => {
                           </div>
                           {rev.title && <h4 className="mt-3 font-display text-xl text-charcoal">{rev.title}</h4>}
                           <p className="mt-2 text-sm font-light leading-relaxed text-ink-soft">{rev.comment}</p>
+                          {rev.image_urls && rev.image_urls.length > 0 && (
+  <div className="mt-5 flex flex-wrap gap-2">
+    {rev.image_urls.map((url, index) => (
+      <a
+        key={`${url}-${index}`}
+        href={url}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="h-20 w-20 overflow-hidden border border-line bg-ivory-2 sm:h-24 sm:w-24"
+      >
+        <img
+          src={url}
+          alt={`Review photo ${index + 1}`}
+          className="h-full w-full object-cover transition-transform duration-300 hover:scale-105"
+        />
+      </a>
+    ))}
+  </div>
+)}
                           <div className="mt-5 flex items-center gap-3 border-t border-line-soft pt-4">
                             <div className="grid h-9 w-9 place-items-center rounded-full border border-gold/25 bg-gold/5 font-display italic text-gold">{rev.author_name.charAt(0)}</div>
                             <div>
@@ -629,53 +648,78 @@ const submitReview = async () => {
                         <textarea rows={4} value={reviewForm.comment} onChange={(e) => setReviewForm((f) => ({ ...f, comment: e.target.value }))} className="kx-textarea" placeholder="Describe the scent, longevity, and your impression" />
                       </div>
 
-                      <div className="mt-5">
-  <p className="kx-field-label">Photos (optional)</p>
+                      <div className="mt-6">
+  <div className="flex items-center justify-between">
+    <div>
+      <p className="kx-field-label">Add Photos</p>
+      <p className="mt-1 text-[11px] text-ink-mute">
+        Show others what your experience looks like
+      </p>
+    </div>
 
-  <div className="mt-3 flex flex-wrap gap-3">
-    {/* Gallery */}
-    <label className="flex h-24 w-24 cursor-pointer flex-col items-center justify-center border border-line bg-ivory-2 text-ink-mute transition hover:border-gold hover:text-gold">
-      <span className="text-xl">🖼️</span>
-      <span className="mt-1 text-[10px] uppercase tracking-wider">
-        Photos
-      </span>
+    <span className="text-[10px] uppercase tracking-[0.18em] text-ink-mute">
+      {reviewImages.length}/5
+    </span>
+  </div>
 
-      <input
-        type="file"
-        accept="image/*"
-        multiple
-        className="hidden"
-        onChange={(e) => {
-          handleReviewImages(e.target.files);
-          e.currentTarget.value = '';
-        }}
-      />
-    </label>
+  <div className="mt-4 grid grid-cols-3 gap-3 sm:grid-cols-5">
+    {/* Upload photos */}
+    {reviewImages.length < 5 && (
+      <>
+        <label className="group flex aspect-square cursor-pointer flex-col items-center justify-center border border-dashed border-line bg-ivory-2 transition-all hover:border-gold hover:bg-gold/5">
+          <ImageIcon
+            size={21}
+            strokeWidth={1.4}
+            className="text-ink-mute transition-colors group-hover:text-gold"
+          />
 
-    {/* Camera */}
-    <label className="flex h-24 w-24 cursor-pointer flex-col items-center justify-center border border-line bg-ivory-2 text-ink-mute transition hover:border-gold hover:text-gold">
-      <span className="text-xl">📷</span>
-      <span className="mt-1 text-[10px] uppercase tracking-wider">
-        Camera
-      </span>
+          <span className="mt-2 text-[9px] uppercase tracking-[0.15em] text-ink-mute group-hover:text-gold-deep">
+            Gallery
+          </span>
 
-      <input
-        type="file"
-        accept="image/*"
-        capture="environment"
-        className="hidden"
-        onChange={(e) => {
-          handleReviewImages(e.target.files);
-          e.currentTarget.value = '';
-        }}
-      />
-    </label>
+          <input
+            type="file"
+            accept="image/*"
+            multiple
+            className="hidden"
+            onChange={(e) => {
+              handleReviewImages(e.target.files);
+              e.currentTarget.value = '';
+            }}
+          />
+        </label>
 
-    {/* Previews */}
+        {/* Camera */}
+        <label className="group flex aspect-square cursor-pointer flex-col items-center justify-center border border-dashed border-line bg-ivory-2 transition-all hover:border-gold hover:bg-gold/5">
+          <Camera
+            size={21}
+            strokeWidth={1.4}
+            className="text-ink-mute transition-colors group-hover:text-gold"
+          />
+
+          <span className="mt-2 text-[9px] uppercase tracking-[0.15em] text-ink-mute group-hover:text-gold-deep">
+            Camera
+          </span>
+
+          <input
+            type="file"
+            accept="image/*"
+            capture="environment"
+            className="hidden"
+            onChange={(e) => {
+              handleReviewImages(e.target.files);
+              e.currentTarget.value = '';
+            }}
+          />
+        </label>
+      </>
+    )}
+
+    {/* Preview images */}
     {reviewImagePreviews.map((src, index) => (
       <div
         key={src}
-        className="relative h-24 w-24 overflow-hidden border border-line"
+        className="group relative aspect-square overflow-hidden border border-line bg-ivory-2"
       >
         <img
           src={src}
@@ -686,17 +730,23 @@ const submitReview = async () => {
         <button
           type="button"
           onClick={() => removeReviewImage(index)}
-          className="absolute right-1 top-1 grid h-6 w-6 place-items-center rounded-full bg-black/70 text-white"
+          className="absolute right-1.5 top-1.5 grid h-6 w-6 place-items-center rounded-full bg-black/75 text-white opacity-0 transition-opacity group-hover:opacity-100"
           aria-label="Remove photo"
         >
           <X size={13} />
         </button>
+
+        <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/60 to-transparent px-2 pb-1.5 pt-5">
+          <span className="text-[9px] text-white">
+            Photo {index + 1}
+          </span>
+        </div>
       </div>
     ))}
   </div>
 
-  <p className="mt-2 text-[10px] text-ink-mute">
-    Up to 5 photos. Choose multiple photos or take a photo with your camera.
+  <p className="mt-3 text-[10px] text-ink-mute">
+    Up to 5 photos · JPG, PNG or HEIC
   </p>
 </div>
                       

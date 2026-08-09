@@ -41,6 +41,9 @@ export default function Profile() {
   const uploadAvatar = async (file: File) => {
   if (!user) return;
 
+    console.log('Current user:', user);
+console.log('Current user id:', user.id);
+
   setUploadingAvatar(true);
 
   const fileExt = file.name.split('.').pop();

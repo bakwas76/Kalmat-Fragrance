@@ -311,13 +311,22 @@ setLoading(false);
                   {rev.title && <h3 className="mt-4 font-display text-xl text-charcoal">{rev.title}</h3>}
                   <p className="mt-3 text-sm font-light leading-relaxed text-ink-soft">"{rev.comment}"</p>
                   <div className="mt-7 flex items-center gap-3 border-t border-line-soft pt-5">
-                    <div className="grid h-10 w-10 place-items-center rounded-full border border-gold/25 bg-gold/5 font-display italic text-gold transition-all duration-500 group-hover:border-gold/50">
-                      {(
-  rev.user_id && reviewers[rev.user_id]
-    ? reviewers[rev.user_id]
-    : rev.author_name
-).charAt(0)}
-                    </div>
+                    <div className="h-10 w-10 overflow-hidden rounded-full border border-gold/25 bg-gold/5">
+  {rev.user_id && reviewers[rev.user_id]?.avatar_url ? (
+    <img
+      src={reviewers[rev.user_id].avatar_url}
+      alt="Customer"
+      className="h-full w-full object-cover"
+    />
+  ) : (
+    <div className="grid h-full w-full place-items-center font-display italic text-gold">
+      {(rev.user_id && reviewers[rev.user_id]?.full_name
+        ? reviewers[rev.user_id].full_name
+        : rev.author_name || 'C'
+      ).charAt(0).toUpperCase()}
+    </div>
+  )}
+</div>
                     <div>
                       <p className="text-sm font-medium text-charcoal">
   {rev.user_id && reviewers[rev.user_id]

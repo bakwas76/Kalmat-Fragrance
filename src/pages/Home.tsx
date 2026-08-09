@@ -26,7 +26,10 @@ export default function Home() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [collections, setCollections] = useState<Collection[]>([]);
   const [reviews, setReviews] = useState<Review[]>([]);
-  const [reviewers, setReviewers] = useState<Record<string, string>>({});
+  const [reviewers, setReviewers] = useState<Record<string, { full_name: string; avatar_url: string | null }>>({});
+  const [reviewers, setReviewers] = useState<
+  Record<string, { full_name: string; avatar_url: string | null }>
+>({});
   const [loading, setLoading] = useState(true);
 
   const storyRef = useReveal<HTMLDivElement>();
@@ -65,16 +68,20 @@ const userIds = reviewList
 if (userIds.length > 0) {
   const { data: profiles } = await supabase
     .from('profiles')
-    .select('id, full_name')
+    .select('id, full_name, avatar_url')
     .in('id', userIds);
 
-  const map: Record<string, string> = {};
+  const map: Record<
+  string,
+  { full_name: string; avatar_url: string | null }
+> = {};
 
   (profiles || []).forEach((profile) => {
-    if (profile.full_name) {
-      map[profile.id] = profile.full_name;
-    }
-  });
+  map[profile.id] = {
+    full_name: profile.full_name || '',
+    avatar_url: profile.avatar_url || null,
+  };
+});
 
   setReviewers(map);
 }
@@ -312,31 +319,30 @@ setLoading(false);
                   <p className="mt-3 text-sm font-light leading-relaxed text-ink-soft">"{rev.comment}"</p>
                   <div className="mt-7 flex items-center gap-3 border-t border-line-soft pt-5">
                     <div className="h-10 w-10 overflow-hidden rounded-full border border-gold/25 bg-gold/5">
-  {rev.user_id && reviewers[rev.user_id]?.avatar_url ? (
-    <img
-      src={reviewers[rev.user_id].avatar_url}
-      alt="Customer"
-      className="h-full w-full object-cover"
-    />
-  ) : (
-    <div className="grid h-full w-full place-items-center font-display italic text-gold">
-      {(rev.user_id && reviewers[rev.user_id]?.full_name
-        ? reviewers[rev.user_id].full_name
-        : rev.author_name || 'C'
-      ).charAt(0).toUpperCase()}
-    </div>
-  )}
+
+                      {rev.user_id && reviewers[rev.user_id]?.avatar_url ? (
+  <img
+    src={reviewers[rev.user_id].avatar_url!}
+    alt="Customer"
+    className="h-full w-full object-cover"
+  />
+) : (
+  <div className="grid h-full w-full place-items-center font-display italic text-gold">
+    {(rev.author_name || 'C').charAt(0).toUpperCase()}
+  </div>
+)}
 </div>
+
                     <div>
-                      <p className="text-sm font-medium text-charcoal">
-  {rev.user_id && reviewers[rev.user_id]
-    ? reviewers[rev.user_id]
-    : rev.author_name?.includes('@')
-      ? 'Customer'
+  <p className="text-sm font-medium text-charcoal">
+    {rev.user_id && reviewers[rev.user_id]?.full_name
+      ? reviewers[rev.user_id].full_name
       : rev.author_name}
-</p>
-                      <p className="text-[11px] text-ink-mute">Verified Buyer</p>
-                    </div>
+  </p>
+
+  <p className="text-[11px] text-ink-mute">Verified Buyer</p>
+</div>
+                    
                   </div>
                 </motion.div>
               ))}

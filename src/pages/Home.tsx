@@ -26,6 +26,7 @@ export default function Home() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [collections, setCollections] = useState<Collection[]>([]);
   const [reviews, setReviews] = useState<Review[]>([]);
+  const [reviewers, setReviewers] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(true);
 
   const storyRef = useReveal<HTMLDivElement>();
@@ -54,8 +55,31 @@ export default function Home() {
       console.log("New Error:", fresh.error);
       setCategories((cats.data as Category[]) || []);
       setCollections((cols.data as Collection[]) || []);
-      setReviews((revs.data as Review[]) || []);
-      setLoading(false);
+      const reviewList = (revs.data as Review[]) || [];
+setReviews(reviewList);
+
+const userIds = reviewList
+  .map((rev) => rev.user_id)
+  .filter(Boolean);
+
+if (userIds.length > 0) {
+  const { data: profiles } = await supabase
+    .from('profiles')
+    .select('id, full_name')
+    .in('id', userIds);
+
+  const map: Record<string, string> = {};
+
+  (profiles || []).forEach((profile) => {
+    if (profile.full_name) {
+      map[profile.id] = profile.full_name;
+    }
+  });
+
+  setReviewers(map);
+}
+
+setLoading(false);
     })();
   }, []);
 
@@ -288,10 +312,20 @@ export default function Home() {
                   <p className="mt-3 text-sm font-light leading-relaxed text-ink-soft">"{rev.comment}"</p>
                   <div className="mt-7 flex items-center gap-3 border-t border-line-soft pt-5">
                     <div className="grid h-10 w-10 place-items-center rounded-full border border-gold/25 bg-gold/5 font-display italic text-gold transition-all duration-500 group-hover:border-gold/50">
-                      {rev.author_name.charAt(0)}
+                      {(
+  rev.user_id && reviewers[rev.user_id]
+    ? reviewers[rev.user_id]
+    : rev.author_name
+).charAt(0)}
                     </div>
                     <div>
-                      <p className="text-sm font-medium text-charcoal">{rev.author_name}</p>
+                      <p className="text-sm font-medium text-charcoal">
+  {rev.user_id && reviewers[rev.user_id]
+    ? reviewers[rev.user_id]
+    : rev.author_name?.includes('@')
+      ? 'Customer'
+      : rev.author_name}
+</p>
                       <p className="text-[11px] text-ink-mute">Verified Buyer</p>
                     </div>
                   </div>

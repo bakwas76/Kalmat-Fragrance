@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { User, MapPin, Plus, Trash2, Check, Loader2, Star, Phone, Mail } from 'lucide-react';
+import { User, MapPin, Plus, Trash2, Check, Loader2, Star, Phone, Mail, Camera } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/contexts/ToastContext';
@@ -12,6 +12,7 @@ interface ProfileForm { full_name: string; phone: string; }
 interface AddressForm { label: string; full_name: string; phone: string; address_line: string; city: string; postal_code: string; is_default: boolean; }
 
 export default function Profile() {
+  const [uploadingAvatar, setUploadingAvatar] = useState(false);
   const { user, profile, refreshProfile } = useAuth();
   const { toast } = useToast();
   const [addresses, setAddresses] = useState<SavedAddress[]>([]);
@@ -36,6 +37,52 @@ export default function Profile() {
   }, [user]);
 
   if (!user) return null;
+
+  const uploadAvatar = async (file: File) => {
+  if (!user) return;
+
+  setUploadingAvatar(true);
+
+  const fileExt = file.name.split('.').pop();
+  const filePath = `${user.id}/avatar.${fileExt}`;
+
+  const { error: uploadError } = await supabase.storage
+    .from('avatars')
+    .upload(filePath, file, {
+      upsert: true,
+      contentType: file.type,
+    });
+
+  if (uploadError) {
+    console.error(uploadError);
+    toast('Could not upload profile picture', 'error');
+    setUploadingAvatar(false);
+    return;
+  }
+
+  const { data } = supabase.storage
+    .from('avatars')
+    .getPublicUrl(filePath);
+
+  const avatarUrl = `${data.publicUrl}?t=${Date.now()}`;
+
+  const { error: updateError } = await supabase
+    .from('profiles')
+    .update({ avatar_url: avatarUrl })
+    .eq('id', user.id);
+
+  if (updateError) {
+    console.error(updateError);
+    toast('Could not save profile picture', 'error');
+    setUploadingAvatar(false);
+    return;
+  }
+
+  await refreshProfile();
+
+  toast('Profile picture updated');
+  setUploadingAvatar(false);
+};
 
   const onProfileSubmit = async (data: ProfileForm) => {
     setSavingProfile(true);
@@ -104,6 +151,38 @@ export default function Profile() {
           {/* Profile */}
           <div>
             <div className="flex items-center gap-3"><User className="h-5 w-5 text-gold" /><h2 className="font-display text-2xl text-charcoal">Personal Information</h2></div>
+            <div className="mt-6 flex items-center gap-5">
+  <div className="h-20 w-20 overflow-hidden rounded-full border border-gold/30 bg-ivory-2">
+    {profile?.avatar_url ? (
+      <img
+        src={profile.avatar_url}
+        alt={profile.full_name || 'Profile'}
+        className="h-full w-full object-cover"
+      />
+    ) : (
+      <div className="grid h-full w-full place-items-center font-display text-2xl text-gold">
+        {(profile?.full_name || user.email || 'K').charAt(0).toUpperCase()}
+      </div>
+    )}
+  </div>
+
+  <label className="kx-btn-ghost cursor-pointer">
+    <Camera size={14} />
+    {uploadingAvatar ? 'Uploading...' : 'Change Photo'}
+
+    <input
+      type="file"
+      accept="image/*"
+      className="hidden"
+      disabled={uploadingAvatar}
+      onChange={(e) => {
+        const file = e.target.files?.[0];
+        if (file) uploadAvatar(file);
+        e.currentTarget.value = '';
+      }}
+    />
+  </label>
+</div>
             <form onSubmit={profileForm.handleSubmit(onProfileSubmit)} className="mt-6 space-y-5">
               <div><p className="kx-field-label">Full Name</p><input {...profileForm.register('full_name')} className="kx-input" /></div>
               <div><p className="kx-field-label">Phone</p><input {...profileForm.register('phone')} className="kx-input" placeholder="03XX-XXXXXXX" /></div>

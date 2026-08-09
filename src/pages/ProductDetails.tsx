@@ -27,6 +27,7 @@ export default function ProductDetails() {
   const [category, setCategory] = useState<Category | null>(null);
   const [collection, setCollection] = useState<Collection | null>(null);
   const [reviews, setReviews] = useState<Review[]>([]);
+  const [reviewers, setReviewers] = useState<Record<string, string>>({});
   const [related, setRelated] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [qty, setQty] = useState(1);
@@ -53,12 +54,14 @@ export default function ProductDetails() {
       const p = prod as Product;
       setProduct(p);
 
-      const [cat, col, revs, rel, varRes] = await Promise.all([
+      // const [cat, col, revs, rel, varRes] = await Promise.all([
+      const [cat, col, revs, rel, varRes, profiles] = await Promise.all([
         p.category_id ? supabase.from('categories').select('*').eq('id', p.category_id).maybeSingle() : Promise.resolve({ data: null }),
         p.collection_id ? supabase.from('collections').select('*').eq('id', p.collection_id).maybeSingle() : Promise.resolve({ data: null }),
         supabase.from('product_reviews').select('*').eq('product_id', p.id).eq('status', 'approved').order('created_at', { ascending: false }),
         supabase.from('products').select('*').neq('id', p.id).limit(4),
         supabase.from('product_variants').select('*').eq('product_id', p.id).order('sort_order', { ascending: true }),
+        supabase.from('profiles').select('id, full_name'),
       ]);
       const vList = (varRes.data as ProductVariant[]) || [];
       setVariants(vList);
@@ -67,6 +70,17 @@ export default function ProductDetails() {
       setCategory((cat.data as Category) || null);
       setCollection((col.data as Collection) || null);
       setReviews((revs.data as Review[]) || []);
+
+      const profileMap: Record<string, string> = {};
+
+((profiles.data as { id: string; full_name: string | null }[]) || []).forEach((profile) => {
+  if (profile.full_name) {
+    profileMap[profile.id] = profile.full_name;
+  }
+});
+
+setReviewers(profileMap);
+      
       let relProducts = (rel.data as Product[]) || [];
       if (p.category_id) {
         const { data: catRel } = await supabase.from('products').select('*').eq('category_id', p.category_id).neq('id', p.id).limit(4);
@@ -249,7 +263,7 @@ const submitReview = async () => {
           title: reviewForm.title || null,
           comment: reviewForm.comment,
           author_name:
-            reviewForm.author_name || user.email || 'Anonymous',
+          reviewForm.author_name || user.user_metadata?.username || user.user_metadata?.name || 'Anonymous',
           verified_purchase: hasPurchased,
           image_urls: uploadedImageUrls,
           status: 'pending',
@@ -279,7 +293,7 @@ const submitReview = async () => {
           product_id: product.id,
           user_id: user.id,
           author_name:
-            reviewForm.author_name || user.email || 'Anonymous',
+          reviewForm.author_name || user.user_metadata?.username || user.user_metadata?.name || 'Anonymous',
           email: user.email || null,
           rating: reviewForm.rating,
           title: reviewForm.title || null,
@@ -593,7 +607,13 @@ const submitReview = async () => {
                           <div className="mt-5 flex items-center gap-3 border-t border-line-soft pt-4">
                             <div className="grid h-9 w-9 place-items-center rounded-full border border-gold/25 bg-gold/5 font-display italic text-gold">{rev.author_name.charAt(0)}</div>
                             <div>
-                              <p className="text-sm font-medium text-charcoal">{rev.author_name}</p>
+                              <p className="text-sm font-medium text-charcoal">
+                                {rev.user_id && reviewers[rev.user_id]
+                                    ? reviewers[rev.user_id]
+                                    : rev.author_name?.includes('@')
+                                    ? 'Customer'
+                                    : rev.author_name}
+                              </p>
                               <p className="text-[11px] text-ink-mute">{new Date(rev.created_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</p>
                             </div>
                           </div>

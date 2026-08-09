@@ -30,6 +30,12 @@ export default function Profile() {
 
   useEffect(() => {
     if (!user) return;
+
+    const { data: sessionData } = await supabase.auth.getSession();
+
+console.log('Browser session:', sessionData.session);
+console.log('Session user:', sessionData.session?.user?.id);
+    
     (async () => {
       const { data } = await supabase.from('addresses').select('*').eq('user_id', user.id).order('created_at', { ascending: false });
       setAddresses((data as SavedAddress[]) || []);

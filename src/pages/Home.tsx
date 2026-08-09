@@ -26,7 +26,6 @@ export default function Home() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [collections, setCollections] = useState<Collection[]>([]);
   const [reviews, setReviews] = useState<Review[]>([]);
-  const [reviewers, setReviewers] = useState<Record<string, { full_name: string; avatar_url: string | null }>>({});
   const [reviewers, setReviewers] = useState<
   Record<string, { full_name: string; avatar_url: string | null }>
 >({});

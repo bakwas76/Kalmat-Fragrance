@@ -49,6 +49,8 @@ console.log('Current user id:', user.id);
   const fileExt = file.name.split('.').pop();
   const filePath = `${user.id}/avatar.${fileExt}`;
 
+    console.log('Avatar upload path:', filePath);
+
   const { error: uploadError } = await supabase.storage
     .from('avatars')
     .upload(filePath, file, {

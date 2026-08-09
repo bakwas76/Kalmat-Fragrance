@@ -27,7 +27,9 @@ export default function ProductDetails() {
   const [category, setCategory] = useState<Category | null>(null);
   const [collection, setCollection] = useState<Collection | null>(null);
   const [reviews, setReviews] = useState<Review[]>([]);
-  const [reviewers, setReviewers] = useState<Record<string, string>>({});
+  const [reviewers, setReviewers] = useState<
+  Record<string, { full_name: string; avatar_url: string | null }>
+>({});
   const [related, setRelated] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [qty, setQty] = useState(1);
@@ -61,7 +63,7 @@ export default function ProductDetails() {
         supabase.from('product_reviews').select('*').eq('product_id', p.id).eq('status', 'approved').order('created_at', { ascending: false }),
         supabase.from('products').select('*').neq('id', p.id).limit(4),
         supabase.from('product_variants').select('*').eq('product_id', p.id).order('sort_order', { ascending: true }),
-        supabase.from('profiles').select('id, full_name'),
+        supabase.from('profiles').select('id, full_name, avatar_url'),
       ]);
       const vList = (varRes.data as ProductVariant[]) || [];
       setVariants(vList);
@@ -71,13 +73,25 @@ export default function ProductDetails() {
       setCollection((col.data as Collection) || null);
       setReviews((revs.data as Review[]) || []);
 
-      const profileMap: Record<string, string> = {};
+      const profileMap: Record<
+  string,
+  { full_name: string; avatar_url: string | null }
+> = {};
 
-((profiles.data as { id: string; full_name: string | null }[]) || []).forEach((profile) => {
-  if (profile.full_name) {
-    profileMap[profile.id] = profile.full_name;
-  }
+(
+  (profiles.data as {
+    id: string;
+    full_name: string | null;
+    avatar_url: string | null;
+  }[]) || []
+).forEach((profile) => {
+  profileMap[profile.id] = {
+    full_name: profile.full_name || 'Customer',
+    avatar_url: profile.avatar_url || null,
+  };
 });
+
+setReviewers(profileMap);
 
 setReviewers(profileMap);
       
@@ -605,14 +619,29 @@ const submitReview = async () => {
   </div>
 )}
                           <div className="mt-5 flex items-center gap-3 border-t border-line-soft pt-4">
-                            <div className="grid h-9 w-9 place-items-center rounded-full border border-gold/25 bg-gold/5 font-display italic text-gold">{rev.author_name.charAt(0)}</div>
+                            <div className="h-9 w-9 overflow-hidden rounded-full border border-gold/25 bg-gold/5">
+  {rev.user_id && reviewers[rev.user_id]?.avatar_url ? (
+    <img
+      src={reviewers[rev.user_id].avatar_url}
+      alt={reviewers[rev.user_id].full_name || 'Customer'}
+      className="h-full w-full object-cover"
+    />
+  ) : (
+    <div className="grid h-full w-full place-items-center font-display italic text-gold">
+      {(rev.user_id && reviewers[rev.user_id]?.full_name
+        ? reviewers[rev.user_id].full_name
+        : rev.author_name || 'C'
+      ).charAt(0).toUpperCase()}
+    </div>
+  )}
+</div>
                             <div>
                               <p className="text-sm font-medium text-charcoal">
                                 {rev.user_id && reviewers[rev.user_id]
-                                    ? reviewers[rev.user_id]
-                                    : rev.author_name?.includes('@')
-                                    ? 'Customer'
-                                    : rev.author_name}
+                                 ? reviewers[rev.user_id].full_name
+                                 : rev.author_name?.includes('@')
+                                 ? 'Customer'
+                                 : rev.author_name}
                               </p>
                               <p className="text-[11px] text-ink-mute">{new Date(rev.created_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</p>
                             </div>

@@ -128,6 +128,28 @@ setReviewers(profileMap);
     })();
   }, [product, user]);
 
+  useEffect(() => {
+  if (!product) return;
+
+  const sessionId =
+    sessionStorage.getItem('product-viewer-session') ||
+    crypto.randomUUID();
+
+  sessionStorage.setItem('product-viewer-session', sessionId);
+  sessionIdRef.current = sessionId;
+
+  supabase.from('product_viewers').upsert(
+    {
+      product_id: product.id,
+      session_id: sessionId,
+      last_seen: new Date().toISOString(),
+    },
+    {
+      onConflict: 'product_id,session_id',
+    }
+  );
+}, [product]);
+
   if (loading) {
     return <div className="flex min-h-[60vh] items-center justify-center"><div className="h-10 w-10 animate-spin rounded-full border border-line border-t-gold" /></div>;
   }
@@ -182,28 +204,7 @@ const outOfStock = displayStock <= 0;
 const discount = discountPercent(displayPrice, displayCompareAt);
 const wished = isWishlisted(product.id);
 
-  useEffect(() => {
-  if (!product) return;
-
-  const sessionId =
-    sessionStorage.getItem('product-viewer-session') ||
-    crypto.randomUUID();
-
-  sessionStorage.setItem('product-viewer-session', sessionId);
-  sessionIdRef.current = sessionId;
-
-  supabase.from('product_viewers').upsert(
-    {
-      product_id: product.id,
-      session_id: sessionId,
-      last_seen: new Date().toISOString(),
-    },
-    {
-      onConflict: 'product_id,session_id',
-    }
-  );
-}, [product]);
-
+  
   const onAddToCart = () => {
     addItem(product, qty, selectedVariant);
     const sizeLabel = selectedVariant ? selectedVariant.size_label : `${product.volume_ml}ml`;

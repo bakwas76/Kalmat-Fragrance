@@ -182,6 +182,49 @@ const outOfStock = displayStock <= 0;
 const discount = discountPercent(displayPrice, displayCompareAt);
 const wished = isWishlisted(product.id);
 
+  useEffect(() => {
+  if (!product) return;
+
+  const sessionId =
+    sessionStorage.getItem('product-viewer-session') ||
+    crypto.randomUUID();
+
+  sessionStorage.setItem('product-viewer-session', sessionId);
+  sessionIdRef.current = sessionId;
+
+  supabase.from('product_viewers').upsert(
+    {
+      product_id: product.id,
+      session_id: sessionId,
+      last_seen: new Date().toISOString(),
+    },
+    {
+      onConflict: 'product_id,session_id',
+    }
+  );
+}, [product]);
+
+
+  useEffect(() => {
+  if (!product) return;
+
+  const updateViewerCount = async () => {
+    const { count } = await supabase
+      .from('product_viewers')
+      .select('*', { count: 'exact', head: true })
+      .eq('product_id', product.id);
+
+    setViewerCount(count || 1);
+  };
+
+  updateViewerCount();
+
+  const interval = setInterval(updateViewerCount, 10000);
+
+  return () => clearInterval(interval);
+}, [product]);
+  
+
   const onAddToCart = () => {
     addItem(product, qty, selectedVariant);
     const sizeLabel = selectedVariant ? selectedVariant.size_label : `${product.volume_ml}ml`;
@@ -516,6 +559,9 @@ const submitReview = async () => {
             </div>
             <div className="kx-gold-line mt-6" />
             <p className="mt-6 text-base font-light leading-relaxed text-ink-soft">{product.description}</p>
+            <p className="mt-3 text-xs text-ink-mute">
+            {viewerCount} {viewerCount === 1 ? 'person is' : 'people are'} viewing this product right now
+            </p>
 
             <div className="mt-8 flex items-baseline gap-4">
               <span className="font-display text-3xl text-charcoal">{formatPrice(displayPrice)}</span>

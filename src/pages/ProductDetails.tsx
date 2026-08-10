@@ -416,7 +416,6 @@ const submitReview = async () => {
               onMouseMove={onZoomMove}
             >
 
-{activeImage ? (
 
   {activeImage ? (
   <AnimatePresence initial={false} custom={direction} mode="wait">

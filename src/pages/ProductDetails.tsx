@@ -204,27 +204,6 @@ const wished = isWishlisted(product.id);
   );
 }, [product]);
 
-
-  useEffect(() => {
-  if (!product) return;
-
-  const updateViewerCount = async () => {
-    const { count } = await supabase
-      .from('product_viewers')
-      .select('*', { count: 'exact', head: true })
-      .eq('product_id', product.id);
-
-    setViewerCount(count || 1);
-  };
-
-  updateViewerCount();
-
-  const interval = setInterval(updateViewerCount, 10000);
-
-  return () => clearInterval(interval);
-}, [product]);
-  
-
   const onAddToCart = () => {
     addItem(product, qty, selectedVariant);
     const sizeLabel = selectedVariant ? selectedVariant.size_label : `${product.volume_ml}ml`;

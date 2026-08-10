@@ -143,6 +143,28 @@ const displayVolume = selectedVariant ? selectedVariant.volume_ml : product.volu
 
 const activeImage = selectedVariant?.image_url || product.image_url;
 
+  const handleNext = () => {
+  const currentIndex = variants.findIndex(
+    (v) => v.id === selectedVariantId
+  );
+
+  const nextIndex =
+    currentIndex === variants.length - 1 ? 0 : currentIndex + 1;
+
+  setSelectedVariantId(variants[nextIndex]?.id || null);
+};
+
+const handlePrev = () => {
+  const currentIndex = variants.findIndex(
+    (v) => v.id === selectedVariantId
+  );
+
+  const prevIndex =
+    currentIndex <= 0 ? variants.length - 1 : currentIndex - 1;
+
+  setSelectedVariantId(variants[prevIndex]?.id || null);
+};
+
 console.log("selectedVariantId:", selectedVariantId);
 console.log("selectedVariant:", selectedVariant);
 console.log("activeImage:", activeImage);

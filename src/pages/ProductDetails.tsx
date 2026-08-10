@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Heart, ShoppingBag, Minus, Plus, Truck, ShieldCheck, RefreshCw, Share2, Star, ChevronRight, MessageSquare, Image as ImageIcon, Camera, X,} from 'lucide-react';
@@ -39,6 +39,15 @@ export default function ProductDetails() {
   const [zoomed, setZoomed] = useState(false);
   const [zoomPos, setZoomPos] = useState({ x: 50, y: 50 });
   const [direction, setDirection] = useState(1);
+  const [viewerCount, setViewerCount] = useState(1);
+
+const sessionIdRef = useRef(
+  sessionStorage.getItem('viewer_session_id') || crypto.randomUUID()
+);
+
+useEffect(() => {
+  sessionStorage.setItem('viewer_session_id', sessionIdRef.current);
+}, []);
 
   const [reviewForm, setReviewForm] = useState<ReviewFormState>({ rating: 5, title: '', comment: '', author_name: '' });
   const [submittingReview, setSubmittingReview] = useState(false);

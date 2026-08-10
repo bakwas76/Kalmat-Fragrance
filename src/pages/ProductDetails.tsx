@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import { Heart, ShoppingBag, Minus, Plus, Truck, ShieldCheck, RefreshCw, Share2, Star, ChevronRight, MessageSquare, Image as ImageIcon, Camera, X,} from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import type { Product, Category, Collection, Review, ProductVariant } from '@/types';
@@ -38,6 +38,7 @@ export default function ProductDetails() {
   const [activeTab, setActiveTab] = useState<'notes' | 'ingredients' | 'reviews'>('notes');
   const [zoomed, setZoomed] = useState(false);
   const [zoomPos, setZoomPos] = useState({ x: 50, y: 50 });
+  const [direction, setDirection] = useState(1);
 
   const [reviewForm, setReviewForm] = useState<ReviewFormState>({ rating: 5, title: '', comment: '', author_name: '' });
   const [submittingReview, setSubmittingReview] = useState(false);
@@ -409,27 +410,54 @@ const submitReview = async () => {
           {/* Gallery */}
           <div>
             <div
-              className="kx-img-frame relative aspect-[4/5] cursor-crosshair border border-line bg-ivory-2"
+              className="kx-img-frame relative aspect-[4/5] cursor-grab overflow-hidden border border-line bg-ivory-2"
               onMouseEnter={() => setZoomed(true)}
               onMouseLeave={() => setZoomed(false)}
               onMouseMove={onZoomMove}
             >
 
 {activeImage ? (
-  <img
-    src={activeImage}
-    alt={product.name}
-    className="h-full w-full object-cover transition-transform duration-300"
-    style={
-      zoomed
-        ? {
-            transform: `scale(2)`,
-            transformOrigin: `${zoomPos.x}% ${zoomPos.y}%`,
-          }
-        : undefined
-    }
-  />
+
+  {activeImage ? (
+  <AnimatePresence initial={false} custom={direction} mode="wait">
+    <motion.img
+      key={activeImage}
+      src={activeImage}
+      alt={product.name}
+      custom={direction}
+      initial={{ x: direction > 0 ? '100%' : '-100%', opacity: 0 }}
+      animate={{
+        x: 0,
+        opacity: 1,
+        scale: zoomed ? 2 : 1,
+      }}
+      exit={{
+        x: direction > 0 ? '-100%' : '100%',
+        opacity: 0,
+      }}
+      transition={{
+        x: { duration: 0.45, ease: 'easeInOut' },
+        opacity: { duration: 0.25 },
+        scale: { duration: 0.3 },
+      }}
+      drag="x"
+      dragConstraints={{ left: 0, right: 0 }}
+      dragElastic={0.8}
+      onDragEnd={(_, info) => {
+        if (info.offset.x < -80) {
+          setDirection(1);
+        } else if (info.offset.x > 80) {
+          setDirection(-1);
+        }
+      }}
+      className="absolute inset-0 h-full w-full cursor-grab object-cover active:cursor-grabbing"
+      style={{
+        transformOrigin: `${zoomPos.x}% ${zoomPos.y}%`,
+      }}
+    />
+  </AnimatePresence>
 ) : (
+  
   <div
     className="grid h-full w-full place-items-center"
     style={{ background: "linear-gradient(160deg,#F3ECE0,#E6DCCB)" }}

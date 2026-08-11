@@ -39,7 +39,7 @@ export default function ProductDetails() {
   const [zoomed, setZoomed] = useState(false);
   const [zoomPos, setZoomPos] = useState({ x: 50, y: 50 });
   const [direction, setDirection] = useState(1);
-  const [viewerCount, setViewerCount] = useState(1);
+  const [viewerCount, setViewerCount] = useState(0);
 
   useEffect(() => {
   if (!product) return;

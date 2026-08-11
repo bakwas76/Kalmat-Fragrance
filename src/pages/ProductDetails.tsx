@@ -174,26 +174,7 @@ setReviewers(profileMap);
   );
 }, [product]);
 
-  const refreshViewer = async () => {
-  await supabase
-    .from('product_viewers')
-    .upsert(
-      {
-        product_id: product.id,
-        session_id: sessionIdRef.current,
-        last_seen: new Date().toISOString(),
-      },
-      {
-        onConflict: 'product_id,session_id',
-      }
-    );
-};
 
-refreshViewer();
-
-const interval = setInterval(refreshViewer, 30000);
-
-return () => clearInterval(interval);
 
   if (loading) {
     return <div className="flex min-h-[60vh] items-center justify-center"><div className="h-10 w-10 animate-spin rounded-full border border-line border-t-gold" /></div>;

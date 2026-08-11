@@ -41,6 +41,30 @@ export default function ProductDetails() {
   const [direction, setDirection] = useState(1);
   const [viewerCount, setViewerCount] = useState(1);
 
+  useEffect(() => {
+  if (!product) return;
+
+  const loadViewerCount = async () => {
+    const cutoff = new Date(Date.now() - 2 * 60 * 1000).toISOString();
+
+    const { count, error } = await supabase
+      .from('product_viewers')
+      .select('*', { count: 'exact', head: true })
+      .eq('product_id', product.id)
+      .gte('last_seen', cutoff);
+
+    if (!error) {
+      setViewerCount(count || 1);
+    }
+  };
+
+  loadViewerCount();
+
+  const interval = setInterval(loadViewerCount, 30000);
+
+  return () => clearInterval(interval);
+}, [product]);
+
 const sessionIdRef = useRef(
   sessionStorage.getItem('viewer_session_id') || crypto.randomUUID()
 );

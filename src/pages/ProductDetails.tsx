@@ -42,6 +42,30 @@ export default function ProductDetails() {
   const [viewerCount, setViewerCount] = useState(1);
 
   useEffect(() => {
+  const randomCount = () => {
+    const roll = Math.random();
+
+    if (roll < 0.6) {
+      return Math.floor(Math.random() * 3) + 1; // 1–3
+    }
+
+    if (roll < 0.9) {
+      return Math.floor(Math.random() * 5) + 4; // 4–8
+    }
+
+    return Math.floor(Math.random() * 12) + 9; // 9–20
+  };
+
+  setViewerCount(randomCount());
+
+  const interval = setInterval(() => {
+    setViewerCount(randomCount());
+  }, 10000);
+
+  return () => clearInterval(interval);
+}, []);
+
+  useEffect(() => {
   if (!product) return;
 
   const loadViewerCount = async () => {

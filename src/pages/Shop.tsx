@@ -42,7 +42,12 @@ export default function Shop() {
     setPage(1);
     setLoading(true);
     (async () => {
-      let query = supabase.from('products').select('*');
+      let query = supabase
+  .from('products')
+  .select(`
+    *,
+    variants:product_variants(*)
+  `);
       if (q) query = query.or(`name.ilike.%${q}%,description.ilike.%${q}%,brand.ilike.%${q}%`);
       if (categorySlug) {
         const cat = categories.find((c) => c.slug === categorySlug);

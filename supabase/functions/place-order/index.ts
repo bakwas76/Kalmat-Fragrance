@@ -149,7 +149,7 @@ try {
   if (body.pdf_base64) {
 
     await resend.emails.send({
-      from: "onboarding@resend.dev",
+      from: "orders@kalmatfragrance.store",
       to: "idpes5504@gmail.com",
       subject: `New Order Received - Order #${body.order_number}`,
       html: buildOwnerEmailHtml(body),
@@ -164,7 +164,7 @@ try {
     ownerEmailSent = true;
 
     await resend.emails.send({
-      from: "onboarding@resend.dev",
+      from: "orders@kalmatfragrance.store",
       to: body.email ,
       subject: `Order Confirmation - Order #${body.order_number}`,
       html: buildCustomerEmailHtml(body),

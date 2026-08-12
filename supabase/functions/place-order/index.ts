@@ -361,17 +361,7 @@ function buildCustomerEmailHtml(body: PlaceOrderBody): string {
           <div style="text-align:center;margin-top:24px">
   <a
     href="https://www.kalmatfragrance.store/track-order?order=${encodeURIComponent(body.order_number)}&email=${encodeURIComponent(body.email)}"
-    style="
-      display:inline-block;
-      background:#C9A227;
-      color:#0F0F0F;
-      text-decoration:none;
-      padding:14px 28px;
-      border-radius:6px;
-      font-family:Arial,sans-serif;
-      font-size:14px;
-      font-weight:bold;
-    "
+    style="display:inline-block;background:#C9A227;color:#0F0F0F;text-decoration:none;padding:14px 28px;border-radius:6px;font-size:14px;font-weight:bold;letter-spacing:1px"
   >
     Track Your Order
   </a>

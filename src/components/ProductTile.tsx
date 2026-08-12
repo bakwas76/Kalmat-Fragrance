@@ -23,6 +23,7 @@ export default function ProductTile({ product, index = 0 }: ProductTileProps) {
 
   const wished = isWishlisted(product.id);
   const outOfStock = product.stock <= 0;
+  console.log("PRODUCT STOCK:", product.name, product.stock);
   const discount = discountPercent(product.price, product.compare_at_price);
 
   const onAdd = (e: React.MouseEvent) => {

@@ -87,7 +87,17 @@ export default function ProductTile({ product, index = 0 }: ProductTileProps) {
               className="flex w-full items-center justify-center gap-2.5 bg-charcoal py-3.5 text-[10px] font-medium uppercase text-ivory transition-all duration-300 hover:bg-gold-deep disabled:cursor-not-allowed disabled:opacity-50"
               style={{ letterSpacing: '0.28em' }}
             >
-              {added ? (<><Check size={15} /> Added</>) : (<><Plus size={15} /> Add to Bag</>)}
+              {outOfStock ? (
+  <>Sold Out</>
+) : added ? (
+  <>
+    <Check size={15} /> Added
+  </>
+) : (
+  <>
+    <Plus size={15} /> Add to Bag
+  </>
+)}
             </button>
           </div>
         </div>

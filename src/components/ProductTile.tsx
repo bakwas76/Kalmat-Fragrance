@@ -22,7 +22,10 @@ export default function ProductTile({ product, index = 0 }: ProductTileProps) {
   const [toggling, setToggling] = useState(false);
 
   const wished = isWishlisted(product.id);
-  const outOfStock = product.stock <= 0;
+  const outOfStock =
+  product.variants && product.variants.length > 0
+    ? product.variants.every((variant) => Number(variant.stock) <= 0)
+    : Number(product.stock) <= 0;
   console.log("PRODUCT STOCK:", product.name, product.stock);
   const discount = discountPercent(product.price, product.compare_at_price);
 

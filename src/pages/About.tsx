@@ -48,9 +48,13 @@ export default function About() {
             <div className="relative">
               <div className="absolute -inset-6 bg-gold/5 blur-3xl" />
               <div className="kx-img-frame relative aspect-[4/5] border border-line">
-                <div className="grid h-full w-full place-items-center" style={{ background: 'linear-gradient(160deg,#F3ECE0,#E6DCCB)' }}>
-                  <div className="text-center"><span className="font-display text-8xl italic text-gold/25">K</span><p className="mt-3 text-[10px] uppercase text-gold/40" style={{ letterSpacing: '0.4em' }}>The Atelier</p></div>
-                </div>
+                <div className="kx-img-frame relative aspect-[4/5] overflow-hidden border border-line">
+  <img
+    src="/atelier.png"
+    alt="Kalmat Fragrance Atelier"
+    className="h-full w-full object-cover"
+  />
+</div>
               </div>
               <div className="absolute -bottom-5 -left-5 grid h-24 w-24 place-items-center border border-gold/30 bg-ivory shadow-elevate"><span className="font-display text-4xl italic text-gold">K</span></div>
             </div>

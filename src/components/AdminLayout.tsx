@@ -12,6 +12,7 @@ const ADMIN_NAV = [
   { label: 'Products', to: '/admin/products', icon: Package },
   { label: 'Inventory', to: '/admin/inventory', icon: ClipboardList },
   { label: 'Categories', to: '/admin/categories', icon: FolderTree },
+  { label: 'Collections', to: '/admin/collections', icon: FolderTree },
   { label: 'Orders', to: '/admin/orders', icon: ShoppingBag },
   { label: 'Users', to: '/admin/users', icon: Users },
   { label: 'Reviews', to: '/admin/reviews', icon: Star },

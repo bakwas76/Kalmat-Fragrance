@@ -43,6 +43,7 @@ const AdminReviews = lazy(() => import('@/pages/admin/Reviews'));
 const AdminMessages = lazy(() => import('@/pages/admin/Messages'));
 const AdminNewsletter = lazy(() => import('@/pages/admin/Newsletter'));
 const AdminInventory = lazy(() => import('@/pages/admin/Inventory'));
+const AdminCollections = lazy(() => import('@/pages/admin/Collections'));
 const AdminAnnouncementBanner = lazy(() => import('@/pages/admin/AnnouncementBanner'));
 const AdminHeroSlider = lazy(() => import('@/pages/admin/HeroSlider'));
 
@@ -121,6 +122,7 @@ export default function App() {
                     <Route index element={<AdminDashboard />} />
                     <Route path="products" element={<AdminProducts />} />
                     <Route path="categories" element={<AdminCategories />} />
+                    <Route path="collections" element={<AdminCollections />} />
                     <Route path="orders" element={<AdminOrders />} />
                     <Route path="users" element={<AdminUsers />} />
                     <Route path="coupons" element={<AdminCoupons />} />

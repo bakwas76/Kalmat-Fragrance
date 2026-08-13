@@ -150,8 +150,6 @@ useEffect(() => {
 });
 
 setReviewers(profileMap);
-
-setReviewers(profileMap);
       
       let relProducts = (rel.data as Product[]) || [];
       if (p.category_id) {
@@ -225,25 +223,35 @@ const displayVolume = selectedVariant ? selectedVariant.volume_ml : product.volu
 const activeImage = selectedVariant?.image_url || product.image_url;
 
   const handleNext = () => {
+  if (variants.length === 0) return;
+
   const currentIndex = variants.findIndex(
     (v) => v.id === selectedVariantId
   );
 
   const nextIndex =
-    currentIndex === variants.length - 1 ? 0 : currentIndex + 1;
+    currentIndex < 0 || currentIndex === variants.length - 1
+      ? 0
+      : currentIndex + 1;
 
-  setSelectedVariantId(variants[nextIndex]?.id || null);
+  setDirection(1);
+  setSelectedVariantId(variants[nextIndex].id);
 };
 
 const handlePrev = () => {
+  if (variants.length === 0) return;
+
   const currentIndex = variants.findIndex(
     (v) => v.id === selectedVariantId
   );
 
   const prevIndex =
-    currentIndex <= 0 ? variants.length - 1 : currentIndex - 1;
+    currentIndex <= 0
+      ? variants.length - 1
+      : currentIndex - 1;
 
-  setSelectedVariantId(variants[prevIndex]?.id || null);
+  setDirection(-1);
+  setSelectedVariantId(variants[prevIndex].id);
 };
 
 console.log("selectedVariantId:", selectedVariantId);
@@ -547,12 +555,14 @@ const submitReview = async () => {
       dragConstraints={{ left: 0, right: 0 }}
       dragElastic={0.8}
       onDragEnd={(_, info) => {
-        if (info.offset.x < -80) {
-          setDirection(1);
-        } else if (info.offset.x > 80) {
-          setDirection(-1);
-        }
-      }}
+  const swipeThreshold = 60;
+
+  if (info.offset.x < -swipeThreshold) {
+    handleNext();
+  } else if (info.offset.x > swipeThreshold) {
+    handlePrev();
+  }
+}}
       className="absolute inset-0 h-full w-full cursor-grab object-cover active:cursor-grabbing"
       style={{
         transformOrigin: `${zoomPos.x}% ${zoomPos.y}%`,

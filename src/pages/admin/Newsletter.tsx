@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Mail, Trash2, Download, AlertCircle } from 'lucide-react';
+import { Mail, Trash2, Download, AlertCircle, Send } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import type { NewsletterSubscriber } from '@/types';
 import { formatDate } from '@/lib/format';
@@ -10,6 +10,7 @@ export default function AdminNewsletter() {
   const [subscribers, setSubscribers] = useState<NewsletterSubscriber[]>([]);
   const [loading, setLoading] = useState(true);
   const [confirmDelete, setConfirmDelete] = useState<NewsletterSubscriber | null>(null);
+  const [sending, setSending] = useState(false);
 
   const load = async () => {
     setLoading(true);
@@ -41,6 +42,45 @@ export default function AdminNewsletter() {
     toast('Subscriber list exported');
   };
 
+  const sendNewsletter = async () => {
+  if (subscribers.length === 0) {
+    toast('No subscribers to send to', 'error');
+    return;
+  }
+
+  const confirmed = window.confirm(
+    `Send newsletter to ${subscribers.length} subscriber${subscribers.length !== 1 ? 's' : ''}?`
+  );
+
+  if (!confirmed) return;
+
+  setSending(true);
+
+  try {
+    const { data, error } = await supabase.functions.invoke('send-newsletter', {
+      body: {
+        subject: 'New Launch — Kalmat Fragrance',
+        title: 'Something New Has Arrived',
+        message:
+          'Discover our latest fragrance launch from Kalmat Fragrance.',
+        subscribers: subscribers.map((s) => s.email),
+      },
+    });
+
+    if (error) throw error;
+
+    toast(`Newsletter sent to ${data?.sent ?? subscribers.length} subscriber${subscribers.length !== 1 ? 's' : ''}`);
+  } catch (error) {
+    console.error('NEWSLETTER_ERROR:', error);
+    toast(
+      error instanceof Error ? error.message : 'Failed to send newsletter',
+      'error'
+    );
+  } finally {
+    setSending(false);
+  }
+};
+  
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -48,6 +88,14 @@ export default function AdminNewsletter() {
           <h1 className="font-serif text-3xl text-white">Newsletter</h1>
           <p className="mt-1 text-sm text-ink-400">{subscribers.length} subscribers</p>
         </div>
+        <button
+  onClick={sendNewsletter}
+  disabled={sending || subscribers.length === 0}
+  className="btn-outline"
+>
+  <Send size={14} />
+  {sending ? 'Sending...' : 'Send Newsletter'}
+</button>
         {subscribers.length > 0 && (
           <button onClick={exportCsv} className="btn-outline"><Download size={14} /> Export CSV</button>
         )}

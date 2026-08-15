@@ -24,6 +24,7 @@ export default function ProductDetails() {
   const { user } = useAuth();
 
   const [product, setProduct] = useState<Product | null>(null);
+  const [productImages, setProductImages] = useState<string[]>([]);
   const [category, setCategory] = useState<Category | null>(null);
   const [collection, setCollection] = useState<Collection | null>(null);
   const [reviews, setReviews] = useState<Review[]>([]);
@@ -35,6 +36,7 @@ export default function ProductDetails() {
   const [qty, setQty] = useState(1);
   const [variants, setVariants] = useState<ProductVariant[]>([]);
   const [selectedVariantId, setSelectedVariantId] = useState<string | null>(null);
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [activeTab, setActiveTab] = useState<'notes' | 'ingredients' | 'reviews'>('notes');
   const [zoomed, setZoomed] = useState(false);
   const [zoomPos, setZoomPos] = useState({ x: 50, y: 50 });
@@ -122,6 +124,7 @@ useEffect(() => {
         supabase.from('products').select('*').neq('id', p.id).limit(4),
         supabase.from('product_variants').select('*').eq('product_id', p.id).order('sort_order', { ascending: true }),
         supabase.from('profiles').select('id, full_name, avatar_url'),
+        supabase.from('product_images').select('*').eq('product_id', p.id).order('sort_order', { ascending: true }),
       ]);
       const vList = (varRes.data as ProductVariant[]) || [];
       setVariants(vList);
@@ -130,6 +133,12 @@ useEffect(() => {
       setCategory((cat.data as Category) || null);
       setCollection((col.data as Collection) || null);
       setReviews((revs.data as Review[]) || []);
+      const imageList = (imagesRes.data || []) as {
+  image_url: string;
+  sort_order: number;
+}[];
+
+setProductImages(imageList.map((img) => img.image_url));
 
       const profileMap: Record<
   string,
@@ -220,7 +229,17 @@ const displayCompareAt = selectedVariant
 const displayStock = selectedVariant ? selectedVariant.stock : product.stock;
 const displayVolume = selectedVariant ? selectedVariant.volume_ml : product.volume_ml;
 
-const activeImage = selectedVariant?.image_url || product.image_url;
+const galleryImages = [
+  ...(selectedVariant?.image_url ? [selectedVariant.image_url] : []),
+  ...(productImages.length > 0
+    ? productImages
+    : product.image_url
+      ? [product.image_url]
+      : []),
+].filter((url, index, arr) => arr.indexOf(url) === index);
+
+const activeImage =
+  galleryImages[selectedImageIndex] || galleryImages[0] || null;
 
   const handleNext = () => {
   if (variants.length === 0) return;
@@ -236,6 +255,7 @@ const activeImage = selectedVariant?.image_url || product.image_url;
 
   setDirection(1);
   setSelectedVariantId(variants[nextIndex].id);
+    setSelectedImageIndex(0);
 };
 
 const handlePrev = () => {
@@ -252,6 +272,7 @@ const handlePrev = () => {
 
   setDirection(-1);
   setSelectedVariantId(variants[prevIndex].id);
+  setSelectedImageIndex(0);
 };
 
 console.log("selectedVariantId:", selectedVariantId);
@@ -520,7 +541,30 @@ const submitReview = async () => {
       <section className="kx-container py-10 lg:py-16">
         <div className="grid gap-10 lg:grid-cols-2 lg:gap-16">
           {/* Gallery */}
-          <div>
+          <div className="relative pl-0 lg:pl-24">
+            {/* Thumbnails */}
+{galleryImages.length > 1 && (
+  <div className="mb-4 flex gap-3 overflow-x-auto lg:absolute lg:left-0 lg:top-0 lg:mb-0 lg:w-20 lg:flex-col lg:overflow-visible">
+    {galleryImages.map((image, index) => (
+      <button
+        key={`${image}-${index}`}
+        type="button"
+        onClick={() => setSelectedImageIndex(index)}
+        className={`h-20 w-16 shrink-0 overflow-hidden border transition-all ${
+          selectedImageIndex === index
+            ? 'border-gold'
+            : 'border-line opacity-60 hover:border-gold/50 hover:opacity-100'
+        }`}
+      >
+        <img
+          src={image}
+          alt={`${product.name} ${index + 1}`}
+          className="h-full w-full object-cover"
+        />
+      </button>
+    ))}
+  </div>
+)}
             <div
               className="kx-img-frame relative aspect-[4/5] cursor-grab overflow-hidden border border-line bg-ivory-2"
               onMouseEnter={() => setZoomed(true)}

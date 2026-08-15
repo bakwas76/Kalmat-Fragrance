@@ -542,29 +542,7 @@ const submitReview = async () => {
         <div className="grid gap-10 lg:grid-cols-2 lg:gap-16">
           {/* Gallery */}
           <div className="relative pl-0 lg:pl-24">
-            {/* Thumbnails */}
-{galleryImages.length > 1 && (
-  <div className="mb-4 flex gap-3 overflow-x-auto lg:absolute lg:left-0 lg:top-0 lg:mb-0 lg:w-20 lg:flex-col lg:overflow-visible">
-    {galleryImages.map((image, index) => (
-      <button
-        key={`${image}-${index}`}
-        type="button"
-        onClick={() => setSelectedImageIndex(index)}
-        className={`h-20 w-16 shrink-0 overflow-hidden border transition-all ${
-          selectedImageIndex === index
-            ? 'border-gold'
-            : 'border-line opacity-60 hover:border-gold/50 hover:opacity-100'
-        }`}
-      >
-        <img
-          src={image}
-          alt={`${product.name} ${index + 1}`}
-          className="h-full w-full object-cover"
-        />
-      </button>
-    ))}
-  </div>
-)}
+
             <div
               className="kx-img-frame relative aspect-[4/5] cursor-grab overflow-hidden border border-line bg-ivory-2"
               onMouseEnter={() => setZoomed(true)}
@@ -626,6 +604,28 @@ const submitReview = async () => {
 )}
               {discount > 0 && <span className="kx-badge-sale absolute left-4 top-4">−{discount}%</span>}
             </div>
+            {galleryImages.length > 1 && (
+  <div className="mt-4 flex gap-3 overflow-x-auto lg:absolute lg:left-0 lg:top-0 lg:mt-0 lg:w-20 lg:flex-col lg:overflow-visible">
+    {galleryImages.map((image, index) => (
+      <button
+        key={`${image}-${index}`}
+        type="button"
+        onClick={() => setSelectedImageIndex(index)}
+        className={`h-20 w-16 shrink-0 overflow-hidden border transition-all ${
+          selectedImageIndex === index
+            ? 'border-gold'
+            : 'border-line opacity-60 hover:border-gold/50 hover:opacity-100'
+        }`}
+      >
+        <img
+          src={image}
+          alt={`${product.name} ${index + 1}`}
+          className="h-full w-full object-cover"
+        />
+      </button>
+    ))}
+  </div>
+)}
             {product.image_url && (
               <p className="mt-4 text-center text-[10px] uppercase text-ink-mute" style={{ letterSpacing: '0.3em' }}>Hover to zoom</p>
             )}

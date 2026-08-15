@@ -88,6 +88,7 @@ export default function AdminProducts() {
   const [confirmDelete, setConfirmDelete] = useState<Product | null>(null);
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [galleryImages, setGalleryImages] = useState<string[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -553,24 +554,33 @@ for (let i = 0; i < validVariants.length; i++) {
               <div className="mb-5">
                 <label className="label-luxe">Product Image</label>
                 <div className="mt-2 flex items-center gap-4">
+
+
                   <div className="h-24 w-24 shrink-0 overflow-hidden border border-ink-700 bg-black-soft">
-                    {imageUrl ? (
-                      <img src={imageUrl} alt="Preview" className="h-full w-full object-cover" />
-                    ) : (
-          
-                      <div className="grid h-full w-full place-items-center text-ink-600">
-                        <ImageIcon size={28} />
-                      </div>
-                    )}
-                    {galleryImages.length > 0 && (
-  <div className="mt-3 flex gap-2 overflow-x-auto">
+  {imageUrl ? (
+    <img
+      src={imageUrl}
+      alt="Preview"
+      className="h-full w-full object-cover"
+    />
+  ) : (
+    <div className="grid h-full w-full place-items-center text-ink-600">
+      <ImageIcon size={28} />
+    </div>
+  )}
+</div>
+
+{galleryImages.length > 0 && (
+  <div className="flex gap-2 overflow-x-auto">
     {galleryImages.map((url, index) => (
       <button
         key={url}
         type="button"
         onClick={() => setImageUrl(url)}
         className={`h-16 w-16 shrink-0 overflow-hidden border ${
-          imageUrl === url ? "border-gold" : "border-ink-700"
+          imageUrl === url
+            ? "border-gold"
+            : "border-ink-700"
         }`}
       >
         <img
@@ -582,7 +592,8 @@ for (let i = 0; i < validVariants.length; i++) {
     ))}
   </div>
 )}
-                  </div>
+                  
+                  
                   <div className="flex flex-col gap-2">
                     <input
                       ref={fileInputRef}

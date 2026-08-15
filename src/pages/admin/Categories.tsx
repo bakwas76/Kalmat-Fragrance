@@ -39,6 +39,9 @@ export default function AdminCategories() {
   const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
+    const { data: { user } } = await supabase.auth.getUser();
+
+console.log('UPLOAD USER:', user);
     if (!file.type.startsWith('image/')) {
       toast('Please select an image file', 'error');
       return;

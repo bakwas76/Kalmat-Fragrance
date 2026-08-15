@@ -160,7 +160,7 @@ export default function AdminProducts() {
 
   const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const productName = watch("name");
-    const file = e.target.files?.[0];
+    const files = Array.from(e.target.files || []);
     if (!file) return;
     if (!file.type.startsWith('image/')) {
       toast('Please select an image file', 'error');
@@ -192,43 +192,6 @@ export default function AdminProducts() {
     if (fileInputRef.current) fileInputRef.current.value = '';
   };
 
-  const uploadVariantImage = async (
-  variantId: string,
-  file: File
-) => {
-  if (!file) return;
-
-  const productName = watch("name");
-
-  const ext = file.name.split(".").pop() || "jpg";
-  const fileName = `${slugify(productName)}-${variantId}-${Date.now()}.${ext}`;
-
-  const { error } = await supabase.storage
-    .from("product-images")
-    .upload(fileName, file, {
-      cacheControl: "3600",
-      upsert: true,
-    });
-
-  if (error) {
-    toast(error.message, "error");
-    return;
-  }
-
-  const { data } = supabase.storage
-    .from("product-images")
-    .getPublicUrl(fileName);
-
-  setVariants((prev) =>
-    prev.map((v) =>
-      v.id === variantId
-        ? { ...v, image_url: data.publicUrl }
-        : v
-    )
-  );
-
-  toast("Variant image uploaded");
-};
 
   // Variant helpers
   const addVariant = () => {
@@ -747,25 +710,6 @@ for (let i = 0; i < validVariants.length; i++) {
                           placeholder="Weight (optional)"
                           className="w-full border border-ink-700 bg-black-deep px-3 py-2 text-sm text-white focus:border-gold focus:outline-none"
                         />
-                        <div className="mt-3 flex items-center gap-3">
-  {v.image_url && (
-    <img
-      src={v.image_url}
-      alt="Variant"
-      className="h-14 w-14 rounded border object-cover"
-    />
-  )}
-
-  <button
-    type="button"
-    className="btn-outline text-xs"
-    onClick={() => {
-      // upload next step
-    }}
-  >
-    Upload Variant Image
-  </button>
-</div>
                       </div>
                       <div className="mt-2 hidden sm:block">
                         <input
@@ -775,31 +719,7 @@ for (let i = 0; i < validVariants.length; i++) {
   className="w-full max-w-xs border border-ink-700 bg-black-deep px-3 py-2 text-sm text-white focus:border-gold focus:outline-none"
 />
 
-<div className="mt-3 flex items-center gap-3">
-  {v.image_url && (
-    <img
-      src={v.image_url}
-      alt="Variant"
-      className="h-14 w-14 rounded border object-cover"
-    />
-  )}
 
-  <label className="btn-outline text-xs cursor-pointer">
-  Upload Variant Image
-
-  <input
-    type="file"
-    accept="image/*"
-    className="hidden"
-    onChange={async (e) => {
-      const file = e.target.files?.[0];
-      if (!file) return;
-
-      await uploadVariantImage(v.id, file);
-    }}
-  />
-</label>
-</div>
                       </div>
                     </div>
                   ))}

@@ -553,43 +553,33 @@ const submitReview = async () => {
 
   {activeImage ? (
   <AnimatePresence initial={false} custom={direction} mode="wait">
-    <motion.img
-      key={activeImage}
-      src={activeImage}
-      alt={product.name}
-      custom={direction}
-      initial={{ x: direction > 0 ? '100%' : '-100%', opacity: 0 }}
-      animate={{
-        x: 0,
-        opacity: 1,
-        scale: zoomed ? 2 : 1,
-      }}
-      exit={{
-        x: direction > 0 ? '-100%' : '100%',
-        opacity: 0,
-      }}
-      transition={{
-        x: { duration: 0.45, ease: 'easeInOut' },
-        opacity: { duration: 0.25 },
-        scale: { duration: 0.3 },
-      }}
-      drag="x"
-      dragConstraints={{ left: 0, right: 0 }}
-      dragElastic={0.8}
-      onDragEnd={(_, info) => {
-  const swipeThreshold = 60;
+   <motion.img
+  key={activeImage}
+  src={activeImage}
+  alt={product.name}
+  animate={{
+    scale: zoomed ? 2 : 1,
+  }}
+  transition={{
+    scale: { duration: 0.3 },
+  }}
+  drag="x"
+  dragConstraints={{ left: 0, right: 0 }}
+  dragElastic={0.8}
+  onDragEnd={(_, info) => {
+    const swipeThreshold = 60;
 
-  if (info.offset.x < -swipeThreshold) {
-    handleNext();
-  } else if (info.offset.x > swipeThreshold) {
-    handlePrev();
-  }
-}}
-      className="absolute inset-0 h-full w-full cursor-grab object-cover active:cursor-grabbing"
-      style={{
-        transformOrigin: `${zoomPos.x}% ${zoomPos.y}%`,
-      }}
-    />
+    if (info.offset.x < -swipeThreshold) {
+      handleNext();
+    } else if (info.offset.x > swipeThreshold) {
+      handlePrev();
+    }
+  }}
+  className="absolute inset-0 h-full w-full cursor-grab object-cover active:cursor-grabbing"
+  style={{
+    transformOrigin: `${zoomPos.x}% ${zoomPos.y}%`,
+  }}
+/>
   </AnimatePresence>
 ) : (
   

@@ -117,7 +117,7 @@ useEffect(() => {
       setProduct(p);
 
       // const [cat, col, revs, rel, varRes] = await Promise.all([
-      const [cat, col, revs, rel, varRes, profiles] = await Promise.all([
+      const [cat, col, revs, rel, varRes, profiles, imagesRes] = await Promise.all([
         p.category_id ? supabase.from('categories').select('*').eq('id', p.category_id).maybeSingle() : Promise.resolve({ data: null }),
         p.collection_id ? supabase.from('collections').select('*').eq('id', p.collection_id).maybeSingle() : Promise.resolve({ data: null }),
         supabase.from('product_reviews').select('*').eq('product_id', p.id).eq('status', 'approved').order('created_at', { ascending: false }),
@@ -126,6 +126,12 @@ useEffect(() => {
         supabase.from('profiles').select('id, full_name, avatar_url'),
         supabase.from('product_images').select('*').eq('product_id', p.id).order('sort_order', { ascending: true }),
       ]);
+      const imageList = (imagesRes.data || []) as {
+  image_url: string;
+  sort_order: number;
+}[];
+
+setProductImages(imageList.map((img) => img.image_url));
       const vList = (varRes.data as ProductVariant[]) || [];
       setVariants(vList);
       const def = vList.find((v) => v.is_default) || vList[0];
@@ -133,13 +139,7 @@ useEffect(() => {
       setCategory((cat.data as Category) || null);
       setCollection((col.data as Collection) || null);
       setReviews((revs.data as Review[]) || []);
-      const imageList = (imagesRes.data || []) as {
-  image_url: string;
-  sort_order: number;
-}[];
-
-setProductImages(imageList.map((img) => img.image_url));
-
+      
       const profileMap: Record<
   string,
   { full_name: string; avatar_url: string | null }

@@ -556,10 +556,7 @@ for (let i = 0; i < validVariants.length; i++) {
                 <div className="mt-2 flex items-center gap-4">
 
 
-                  <div
-  className="h-12 w-12 shrink-0 overflow-hidden border border-ink-700 bg-black-soft"
-  style={{ width: "48px", height: "48px" }}
->
+                <divclassName="h-8 w-8 shrink-0 overflow-hidden border border-ink-700 bg-black-soft" style={{ width: "48px", height: "48px" }}>
   {imageUrl ? (
     <img
       src={imageUrl}

@@ -87,8 +87,8 @@ export default function AdminProducts() {
   const [editing, setEditing] = useState<Product | null>(null);
   const [confirmDelete, setConfirmDelete] = useState<Product | null>(null);
   const [saving, setSaving] = useState(false);
-  const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
+  const [galleryImages, setGalleryImages] = useState<string[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [variants, setVariants] = useState<VariantDraft[]>([]);
@@ -120,6 +120,7 @@ export default function AdminProducts() {
   const openCreate = () => {
     setEditing(null);
     setImageUrl(null);
+    setGalleryImages([]);
     setVariants([emptyVariant(0, true)]);
     setExistingVariantIds([]);
     reset({
@@ -135,6 +136,7 @@ export default function AdminProducts() {
   const openEdit = async (p: Product) => {
     setEditing(p);
     setImageUrl(p.image_url);
+    // setGalleryImages(p.image_url ? [p.image_url] : []);
     reset({
       name: p.name, description: p.description,
       category_id: p.category_id || '', collection_id: p.collection_id || '',
@@ -147,6 +149,25 @@ export default function AdminProducts() {
       bottle_shape: p.bottle_shape, bottle_glass: p.bottle_glass, bottle_cap: p.bottle_cap, bottle_label: p.bottle_label,
       sku: p.sku || '',
     });
+
+    const { data: galleryData } = await supabase
+  .from('product_images')
+  .select('image_url')
+  .eq('product_id', p.id)
+  .order('sort_order', { ascending: true });
+
+const savedGallery = (galleryData || []).map(
+  (img) => img.image_url
+);
+
+setGalleryImages(
+  savedGallery.length > 0
+    ? savedGallery
+    : p.image_url
+      ? [p.image_url]
+      : []
+);
+    
     const { data: vData } = await supabase
       .from('product_variants')
       .select('*')
@@ -158,34 +179,76 @@ export default function AdminProducts() {
     setShowForm(true);
   };
 
-  const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const productName = watch("name");
-    const files = Array.from(e.target.files || []);
-    if (!file) return;
-    if (!file.type.startsWith('image/')) {
-      toast('Please select an image file', 'error');
+const handleFileSelect = async (
+  e: React.ChangeEvent<HTMLInputElement>
+) => {
+  const productName = watch("name");
+  const files = Array.from(e.target.files || []);
+
+  if (files.length === 0) return;
+
+  // Check all selected files
+  for (const file of files) {
+    if (!file.type.startsWith("image/")) {
+      toast("Please select image files only", "error");
       return;
     }
+
     if (file.size > 5 * 1024 * 1024) {
-      toast('Image must be under 5MB', 'error');
+      toast("Each image must be under 5MB", "error");
       return;
     }
-    setUploading(true);
-    const ext = file.name.split('.').pop() || 'jpg';
-    const fileName = `${slugify(productName || editing?.name || "product")}-${Date.now()}.${ext}`;
-    const { error: upErr } = await supabase.storage
-      .from('product-images')
-      .upload(fileName, file, { cacheControl: '3600', upsert: true });
-    if (upErr) {
-      setUploading(false);
-      toast(`Upload failed: ${upErr.message}`, 'error');
-      return;
+  }
+
+  setUploading(true);
+
+  try {
+    const uploadedUrls: string[] = [];
+
+    for (const file of files) {
+      const ext = file.name.split(".").pop() || "jpg";
+
+      const fileName = `${slugify(
+        productName || editing?.name || "product"
+      )}-${Date.now()}-${Math.random()
+        .toString(36)
+        .slice(2, 8)}.${ext}`;
+
+      const { error: upErr } = await supabase.storage
+        .from("product-images")
+        .upload(fileName, file, {
+          cacheControl: "3600",
+          upsert: true,
+        });
+
+      if (upErr) {
+        toast(`Upload failed: ${upErr.message}`, "error");
+        continue;
+      }
+
+      const { data: pub } = supabase.storage
+        .from("product-images")
+        .getPublicUrl(fileName);
+
+      uploadedUrls.push(pub.publicUrl);
     }
-    const { data: pub } = supabase.storage.from('product-images').getPublicUrl(fileName);
+
+    if (uploadedUrls.length > 0) {
+  setGalleryImages((prev) => [...prev, ...uploadedUrls]);
+
+  // First image = main product image
+  setImageUrl((prev) => prev || uploadedUrls[0]);
+
+  toast(`${uploadedUrls.length} image(s) uploaded`);
+}
+  } finally {
     setUploading(false);
-    setImageUrl(pub.publicUrl);
-    toast('Image uploaded');
-  };
+
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+  }
+};
 
   const removeImage = () => {
     setImageUrl(null);
@@ -285,6 +348,30 @@ export default function AdminProducts() {
       }
       productId = (created as Product).id;
     }
+
+    // Save product gallery images
+if (galleryImages.length > 0) {
+  await supabase
+    .from('product_images')
+    .delete()
+    .eq('product_id', productId);
+
+  const galleryRows = galleryImages.map((url, index) => ({
+    product_id: productId,
+    image_url: url,
+    sort_order: index,
+  }));
+
+  const { error: galleryError } = await supabase
+    .from('product_images')
+    .insert(galleryRows);
+
+  if (galleryError) {
+    toast(galleryError.message, 'error');
+    setSaving(false);
+    return;
+  }
+}
 
     // Sync variants
 
@@ -470,6 +557,26 @@ for (let i = 0; i < validVariants.length; i++) {
                     {imageUrl ? (
                       <img src={imageUrl} alt="Preview" className="h-full w-full object-cover" />
                     ) : (
+          {galleryImages.length > 0 && (
+  <div className="mt-3 flex gap-2 overflow-x-auto">
+    {galleryImages.map((url, index) => (
+      <button
+        key={url}
+        type="button"
+        onClick={() => setImageUrl(url)}
+        className={`h-16 w-16 shrink-0 overflow-hidden border ${
+          imageUrl === url ? "border-gold" : "border-ink-700"
+        }`}
+      >
+        <img
+          src={url}
+          alt={`Product ${index + 1}`}
+          className="h-full w-full object-cover"
+        />
+      </button>
+    ))}
+  </div>
+)}
                       <div className="grid h-full w-full place-items-center text-ink-600">
                         <ImageIcon size={28} />
                       </div>

@@ -556,19 +556,18 @@ for (let i = 0; i < validVariants.length; i++) {
                 <div className="mt-2 flex items-center gap-4">
 
 
-                <divclassName="h-8 w-8 shrink-0 overflow-hidden border border-ink-700 bg-black-soft" style={{ width: "48px", height: "48px" }}>
+                <div className="h-8 w-8 shrink-0 overflow-hidden border border-ink-700 bg-black-soft" >
   {imageUrl ? (
-    <img
-      src={imageUrl}
-      alt="Preview"
-      className="h-full w-full object-cover"
-      style={{ width: "48px", height: "48px" }}
-    />
-  ) : (
-    <div className="grid h-full w-full place-items-center text-ink-600">
-      <ImageIcon size={28} />
-    </div>
-  )}
+  <img
+    src={imageUrl}
+    alt="Preview"
+    className="h-full w-full object-cover"
+  />
+) : (
+  <div className="grid h-full w-full place-items-center text-ink-600">
+    <ImageIcon size={20} />
+  </div>
+)}
 </div>
 
 {galleryImages.length > 0 && (

@@ -144,7 +144,14 @@ export default function OrderSuccess() {
 
           <div className="mt-8 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
             {order.pdfBase64 && <button onClick={downloadPdf} disabled={downloading} className="kx-btn-ghost">{downloading ? <Loader2 size={14} className="animate-spin" /> : <Download size={14} />} Download Invoice</button>}
-            <button onClick={() => navigate(`/track-order?order=${encodeURIComponent(order.orderNumber)}`)} className="kx-btn-ghost"><Package size={14} /> Track Order</button>
+            <button
+  onClick={() =>
+    navigate(
+      `/track-order?order=${encodeURIComponent(order.orderNumber)}&email=${encodeURIComponent(order.email)}`
+    )
+  }
+  className="kx-btn-ghost"
+><Package size={14} /> Track Order</button>
             <a href="/shop" className="kx-btn-solid">Continue Shopping <ArrowRight size={14} /></a>
           </div>
         </div>

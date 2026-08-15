@@ -122,46 +122,7 @@ setLoading(false);
       </section>
 
       {/* Featured Collections — large editorial */}
-      {collections.length > 0 && (
-        <section className="kx-section">
-          <div className="kx-container">
-            <SectionTitle eyebrow="Curated Worlds" title="Featured Collections" subtitle="Each a study in restraint and opulence — compositions that transcend the ordinary." />
-            <div className="mt-14 grid gap-5 md:grid-cols-3 lg:gap-6">
-              {collections.map((col, i) => (
-                <motion.div
-                  key={col.id}
-                  initial={{ opacity: 0, y: 40 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: '-40px' }}
-                  transition={{ duration: 0.7, delay: i * 0.12, ease: [0.16, 1, 0.3, 1] }}
-                >
-                  <Link to={`/collections?c=${col.slug}`} className="group block">
-                    <div className="kx-img-frame relative aspect-[3/4] border border-line-soft bg-ivory-2">
-                      {col.image_url ? (
-                        <img src={col.image_url} alt={col.name} className="kx-img-zoom h-full w-full object-cover" />
-                      ) : (
-                        <div className="kx-img-zoom grid h-full w-full place-items-center" style={{ background: 'linear-gradient(160deg,#F3ECE0,#E6DCCB)' }}>
-                          <ImageIcon size={32} className="text-gold/30" />
-                        </div>
-                      )}
-                      <div className="absolute inset-0 bg-gradient-to-t from-charcoal/80 via-charcoal/20 to-transparent" />
-                      <div className="absolute bottom-0 left-0 right-0 p-7">
-                        <p className="text-[9px] uppercase text-gold-light" style={{ letterSpacing: '0.32em' }}>Collection</p>
-                        <h3 className="mt-2 font-display text-2xl text-ivory lg:text-3xl">{col.name}</h3>
-                        <p className="mt-2 line-clamp-2 text-xs font-light text-ivory/65">{col.description}</p>
-                        <span className="mt-5 inline-flex items-center gap-2 text-[10px] uppercase text-gold-light transition-all duration-300 group-hover:gap-4" style={{ letterSpacing: '0.28em' }}>
-                          Discover <ArrowRight size={13} />
-                        </span>
-                      </div>
-                    </div>
-                  </Link>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
-
+      
       {/* Best Sellers */}
       <section className="kx-section bg-ivory-2">
         <div className="kx-container">

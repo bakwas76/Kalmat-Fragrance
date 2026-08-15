@@ -556,7 +556,7 @@ for (let i = 0; i < validVariants.length; i++) {
                 <div className="mt-2 flex items-center gap-4">
 
 
-                  <div className="h-16 w-16 shrink-0 overflow-hidden border border-ink-700 bg-black-soft">
+                  <div className="!h-16 !w-16 shrink-0 overflow-hidden border border-ink-700 bg-black-soft">
   {imageUrl ? (
     <img
       src={imageUrl}

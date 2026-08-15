@@ -557,7 +557,12 @@ for (let i = 0; i < validVariants.length; i++) {
                     {imageUrl ? (
                       <img src={imageUrl} alt="Preview" className="h-full w-full object-cover" />
                     ) : (
-          {galleryImages.length > 0 && (
+          
+                      <div className="grid h-full w-full place-items-center text-ink-600">
+                        <ImageIcon size={28} />
+                      </div>
+                    )}
+                    {galleryImages.length > 0 && (
   <div className="mt-3 flex gap-2 overflow-x-auto">
     {galleryImages.map((url, index) => (
       <button
@@ -577,10 +582,6 @@ for (let i = 0; i < validVariants.length; i++) {
     ))}
   </div>
 )}
-                      <div className="grid h-full w-full place-items-center text-ink-600">
-                        <ImageIcon size={28} />
-                      </div>
-                    )}
                   </div>
                   <div className="flex flex-col gap-2">
                     <input

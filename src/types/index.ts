@@ -64,6 +64,7 @@ export interface Product {
   bottle_label: string;
   sku: string | null;
   image_url: string | null;
+  hover_image_url: string | null;
   created_at: string;
   product_variants?: ProductVariant[];
 }

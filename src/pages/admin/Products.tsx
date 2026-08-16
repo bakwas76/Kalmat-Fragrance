@@ -90,6 +90,8 @@ export default function AdminProducts() {
   const [uploading, setUploading] = useState(false);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [galleryImages, setGalleryImages] = useState<string[]>([]);
+  const [hoverImageUrl, setHoverImageUrl] = useState<string | null>(null);
+  const hoverFileInputRef = useRef<HTMLInputElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [variants, setVariants] = useState<VariantDraft[]>([]);
@@ -122,6 +124,7 @@ export default function AdminProducts() {
     setEditing(null);
     setImageUrl(null);
     setGalleryImages([]);
+    setHoverImageUrl(null);
     setVariants([emptyVariant(0, true)]);
     setExistingVariantIds([]);
     reset({
@@ -137,6 +140,7 @@ export default function AdminProducts() {
   const openEdit = async (p: Product) => {
     setEditing(p);
     setImageUrl(p.image_url);
+    setHoverImageUrl(p.hover_image_url || null);
     // setGalleryImages(p.image_url ? [p.image_url] : []);
     reset({
       name: p.name, description: p.description,
@@ -251,6 +255,62 @@ const handleFileSelect = async (
   }
 };
 
+  const handleHoverImageSelect = async (
+  e: React.ChangeEvent<HTMLInputElement>
+) => {
+  const file = e.target.files?.[0];
+
+  if (!file) return;
+
+  if (!file.type.startsWith('image/')) {
+    toast('Please select an image file only', 'error');
+    return;
+  }
+
+  if (file.size > 5 * 1024 * 1024) {
+    toast('Image must be under 5MB', 'error');
+    return;
+  }
+
+  setUploading(true);
+
+  try {
+    const productName = watch('name');
+
+    const ext = file.name.split('.').pop() || 'jpg';
+
+    const fileName = `${slugify(
+      productName || editing?.name || 'product'
+    )}-hover-${Date.now()}.${ext}`;
+
+    const { error: upErr } = await supabase.storage
+      .from('product-images')
+      .upload(fileName, file, {
+        cacheControl: '3600',
+        upsert: true,
+      });
+
+    if (upErr) {
+      toast(`Upload failed: ${upErr.message}`, 'error');
+      return;
+    }
+
+    const { data: pub } = supabase.storage
+      .from('product-images')
+      .getPublicUrl(fileName);
+
+    setHoverImageUrl(pub.publicUrl);
+
+    toast('Hover image uploaded');
+  } finally {
+    setUploading(false);
+
+    if (hoverFileInputRef.current) {
+      hoverFileInputRef.current.value = '';
+    }
+  }
+};
+
   const removeImage = () => {
     setImageUrl(null);
     if (fileInputRef.current) fileInputRef.current.value = '';
@@ -329,6 +389,7 @@ const handleFileSelect = async (
       bottle_label: data.bottle_label,
       sku: data.sku || null,
       image_url: imageUrl,
+      hover_image_url: hoverImageUrl,
     };
 
     let productId: string;
@@ -615,6 +676,59 @@ for (let i = 0; i < validVariants.length; i++) {
                         Remove image
                       </button>
                     )}
+
+                    <div className="mt-5">
+  <label className="label-luxe">Hover Image</label>
+
+  <div className="mt-2 flex items-center gap-4">
+    <div className="h-16 w-16 overflow-hidden border border-ink-700 bg-black-soft">
+      {hoverImageUrl ? (
+        <img
+          src={hoverImageUrl}
+          alt="Hover Preview"
+          className="h-full w-full object-cover"
+        />
+      ) : (
+        <div className="grid h-full w-full place-items-center text-ink-600">
+          <ImageIcon size={24} />
+        </div>
+      )}
+    </div>
+
+    <div className="flex flex-col gap-2">
+      <input
+        ref={hoverFileInputRef}
+        type="file"
+        accept="image/*"
+        onChange={handleHoverImageSelect}
+        className="hidden"
+      />
+
+      <button
+        type="button"
+        onClick={() => hoverFileInputRef.current?.click()}
+        disabled={uploading}
+        className="btn-outline flex items-center gap-2"
+      >
+        <Upload size={14} />
+        {hoverImageUrl
+          ? 'Replace Hover Image'
+          : 'Upload Hover Image'}
+      </button>
+
+      {hoverImageUrl && (
+        <button
+          type="button"
+          onClick={() => setHoverImageUrl(null)}
+          className="text-xs text-ink-400 hover:text-rose-300"
+        >
+          Remove hover image
+        </button>
+      )}
+    </div>
+  </div>
+</div>
+                    
                   </div>
                 </div>
               </div>

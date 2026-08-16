@@ -72,7 +72,7 @@ const discount = discountPercent(product.price, product.compare_at_price);
       src={product.image_url}
       alt={product.name}
       loading="lazy"
-      className={`kx-img-zoom absolute inset-0 h-full w-full object-cover transition-opacity duration-500 ${
+      className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-500 ${
         product.hover_image_url ? 'group-hover:opacity-0' : 'opacity-100'
       }`}
     />
@@ -89,7 +89,7 @@ const discount = discountPercent(product.price, product.compare_at_price);
   </div>
 ) : (
   <div
-    className="kx-img-zoom h-full w-full grid place-items-center"
+    className=" h-full w-full grid place-items-center"
     style={{
       background: 'linear-gradient(160deg, #F3ECE0 0%, #ECE3D4 100%)',
     }}

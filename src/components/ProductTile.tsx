@@ -66,12 +66,39 @@ const discount = discountPercent(product.price, product.compare_at_price);
         {/* Image */}
         <div className="kx-img-frame relative aspect-[4/5] border border-line-soft bg-ivory-2">
           {product.image_url ? (
-            <img src={product.image_url} alt={product.name} loading="lazy" className="kx-img-zoom h-full w-full object-cover" />
-          ) : (
-            <div className="kx-img-zoom h-full w-full grid place-items-center" style={{ background: 'linear-gradient(160deg, #F3ECE0 0%, #ECE3D4 100%)' }}>
-              <span className="font-display text-4xl italic text-gold/30">{product.brand?.charAt(0) || 'K'}</span>
-            </div>
-          )}
+  <div className="relative h-full w-full overflow-hidden">
+    {/* Main image */}
+    <img
+      src={product.image_url}
+      alt={product.name}
+      loading="lazy"
+      className={`kx-img-zoom absolute inset-0 h-full w-full object-cover transition-opacity duration-500 ${
+        product.hover_image_url ? 'group-hover:opacity-0' : 'opacity-100'
+      }`}
+    />
+
+    {/* Hover image */}
+    {product.hover_image_url && (
+      <img
+        src={product.hover_image_url}
+        alt={`${product.name} alternate`}
+        loading="lazy"
+        className="absolute inset-0 h-full w-full object-cover opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+      />
+    )}
+  </div>
+) : (
+  <div
+    className="kx-img-zoom h-full w-full grid place-items-center"
+    style={{
+      background: 'linear-gradient(160deg, #F3ECE0 0%, #ECE3D4 100%)',
+    }}
+  >
+    <span className="font-display text-4xl italic text-gold/30">
+      {product.brand?.charAt(0) || 'K'}
+    </span>
+  </div>
+)}
 
           {/* Badges — top left */}
           <div className="absolute left-4 top-4 flex flex-col items-start gap-2">

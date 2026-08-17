@@ -56,16 +56,21 @@ export default function Login() {
 export function AuthSplit({ children }: { children: React.ReactNode }) {
   return (
     <div className="grid min-h-screen lg:grid-cols-2">
-      <div className="flex items-center justify-center bg-ivory px-6 py-16 lg:px-12">{children}</div>
-      <div className="relative hidden overflow-hidden bg-charcoal lg:block">
-        <div className="absolute inset-0 kx-grain-dark opacity-40" />
-        <div className="absolute left-1/2 top-1/2 h-[60vh] w-[60vh] -translate-x-1/2 -translate-y-1/2 rounded-full bg-gold/10 blur-[140px]" />
-        <div className="relative flex h-full flex-col items-center justify-center p-20 text-center">
-          <span className="font-display text-9xl italic text-gold/15">K</span>
-          <p className="mt-6 max-w-sm text-sm font-light leading-relaxed text-ivory/55">"A fragrance is a story you wear. Each note a chapter, each wear a new beginning."</p>
-          <div className="mt-8 h-px w-16 bg-gradient-to-r from-transparent via-gold to-transparent" />
-          <p className="mt-8 text-[10px] uppercase text-gold-light/60" style={{ letterSpacing: '0.4em' }}>Kalmat Fragrance</p>
-        </div>
+      {/* Left - Login / Signup */}
+      <div className="flex items-center justify-center bg-ivory px-6 py-16 lg:px-12">
+        {children}
+      </div>
+
+      {/* Right - Image */}
+      <div className="relative hidden overflow-hidden bg-ivory lg:block">
+        <img
+  src="/sign up.png"
+  alt="Kalmat Fragrance"
+  className="h-full w-full object-cover"
+/>
+
+        {/* Soft overlay */}
+        <div className="absolute inset-0 bg-gradient-to-t from-charcoal/20 via-transparent to-ivory/10" />
       </div>
     </div>
   );

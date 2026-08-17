@@ -108,31 +108,16 @@ export default function HeroSection() {
             }}
             className="flex flex-col items-center"
           >
-            {/* <p
-              className="text-[10px] font-medium uppercase text-gold-light"
-              style={{ letterSpacing: '0.5em' }}
-            >
-              {banner?.subtitle || 'The Maison'}
-            </p>
-
-            <h1 className="mt-5 max-w-4xl font-display text-5xl font-light leading-[1.02] text-ivory drop-shadow-lg sm:text-6xl lg:text-7xl xl:text-8xl">
-              {banner?.title || 'Where Scent Becomes Story'}
-            </h1>
-
-            <div className="kx-gold-line mt-7" />
-
-            <p className="mt-7 max-w-xl text-base font-light leading-relaxed text-ivory/85 drop-shadow-md sm:text-lg lg:text-xl">
-              Handcrafted compositions distilled from the rarest essences on earth — each fragrance a journey, a memory, a signature.
-            </p> */}
 
             <Link
-              to={banner?.button_link || '/shop'}
-              className="mt-12 inline-flex items-center gap-3 border-b border-gold pb-1.5 text-[11px] font-medium uppercase text-gold-light transition-all duration-300 hover:gap-5"
-              style={{ letterSpacing: '0.32em' }}
-            >
-              {banner?.button_text || 'Discover the Collection'}
-              <ArrowRight size={15} />
-            </Link>
+  to={banner?.button_link || '/shop'}
+  className="mt-24 inline-flex items-center gap-3 border-b border-gold pb-1.5 text-[11px] font-medium uppercase text-gold-light transition-all duration-300 hover:gap-5"
+  style={{ letterSpacing: '0.32em' }}
+>
+  {banner?.button_text || 'Discover the Collection'}
+  <ArrowRight size={15} />
+</Link>
+            
           </motion.div>
         </div>
       </div>

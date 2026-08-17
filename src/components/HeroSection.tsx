@@ -111,7 +111,7 @@ export default function HeroSection() {
 
             <Link
   to={banner?.button_link || '/shop'}
-  className="inline-flex translate-y-40 items-center gap-3 border-b border-gold pb-1.5 text-[11px] font-medium uppercase text-gold-light transition-all duration-300 hover:gap-5"
+  className="inline-flex translate-y-52 items-center gap-3 border-b border-gold pb-1.5 text-[11px] font-medium uppercase text-gold-light transition-all duration-300 hover:gap-5"
   style={{ letterSpacing: '0.32em' }}
 >
   {banner?.button_text || 'Discover the Collection'}

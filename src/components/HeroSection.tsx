@@ -108,22 +108,22 @@ export default function HeroSection() {
             }}
             className="flex flex-col items-center"
           >
-            <p
+            {/* <p
               className="text-[10px] font-medium uppercase text-gold-light"
               style={{ letterSpacing: '0.5em' }}
             >
               {banner?.subtitle || 'The Maison'}
-            </p>
+            </p> */}
 
-            <h1 className="mt-5 max-w-4xl font-display text-5xl font-light leading-[1.02] text-ivory drop-shadow-lg sm:text-6xl lg:text-7xl xl:text-8xl">
+            {/* <h1 className="mt-5 max-w-4xl font-display text-5xl font-light leading-[1.02] text-ivory drop-shadow-lg sm:text-6xl lg:text-7xl xl:text-8xl">
               {banner?.title || 'Where Scent Becomes Story'}
-            </h1>
+            </h1> */}
 
             <div className="kx-gold-line mt-7" />
 
-            <p className="mt-7 max-w-xl text-base font-light leading-relaxed text-ivory/85 drop-shadow-md sm:text-lg lg:text-xl">
+            {/* <p className="mt-7 max-w-xl text-base font-light leading-relaxed text-ivory/85 drop-shadow-md sm:text-lg lg:text-xl">
               Handcrafted compositions distilled from the rarest essences on earth — each fragrance a journey, a memory, a signature.
-            </p>
+            </p> */}
 
             <Link
               to={banner?.button_link || '/shop'}

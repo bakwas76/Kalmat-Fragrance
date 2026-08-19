@@ -275,10 +275,6 @@ const handlePrev = () => {
   setSelectedImageIndex(0);
 };
 
-console.log("selectedVariantId:", selectedVariantId);
-console.log("selectedVariant:", selectedVariant);
-console.log("activeImage:", activeImage);
-
 const outOfStock = displayStock <= 0;
 const discount = discountPercent(displayPrice, displayCompareAt);
 const wished = isWishlisted(product.id);

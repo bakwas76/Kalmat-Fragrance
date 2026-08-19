@@ -82,9 +82,9 @@ export default function Collections() {
     setSlug(collection.slug);
     setDescription(collection.description || '');
     setImageUrl(collection.image_url || null);
-    setNameColor(collection.name_color || '#FFFFFF');
-    setSlugColor(collection.slug_color || '#948F85');
-    setDescriptionColor(collection.description_color || '#948F85');
+    setNameColor(collection.name_color && collection.name_color.startsWith('#') ? collection.name_color : '#FFFFFF');
+    setSlugColor(collection.slug_color && collection.slug_color.startsWith('#') ? collection.slug_color : '#948F85');
+    setDescriptionColor(collection.description_color && collection.description_color.startsWith('#') ? collection.description_color : '#948F85');
     setShowForm(true);
 
     if (fileInputRef.current) {
@@ -179,9 +179,9 @@ export default function Collections() {
       slug: finalSlug,
       description: description.trim() || null,
       image_url: imageUrl || null,
-      name_color: nameColor,
-      slug_color: slugColor,
-      description_color: descriptionColor,
+      name_color: nameColor && nameColor.startsWith('#') ? nameColor : '#FFFFFF',
+      slug_color: slugColor && slugColor.startsWith('#') ? slugColor : '#948F85',
+      description_color: descriptionColor && descriptionColor.startsWith('#') ? descriptionColor : '#948F85',
     };
 
     const { error } = editing
@@ -305,21 +305,21 @@ export default function Collections() {
 
                   {/* Name */}
                   <td className="p-4 font-medium">
-                    <span style={{ color: collection.name_color || '#FFFFFF' }}>
+                    <span style={{ color: collection.name_color && collection.name_color.startsWith('#') ? collection.name_color : '#FFFFFF' }}>
                       {collection.name}
                     </span>
                   </td>
 
                   {/* Slug */}
                   <td className="p-4">
-                    <span style={{ color: collection.slug_color || '#948F85' }}>
+                    <span style={{ color: collection.slug_color && collection.slug_color.startsWith('#') ? collection.slug_color : '#948F85' }}>
                       {collection.slug}
                     </span>
                   </td>
 
                   {/* Description */}
                   <td className="p-4">
-                    <span style={{ color: collection.description_color || '#948F85' }}>
+                    <span style={{ color: collection.description_color && collection.description_color.startsWith('#') ? collection.description_color : '#948F85' }}>
                       {collection.description || '—'}
                     </span>
                   </td>
@@ -441,9 +441,13 @@ export default function Collections() {
                     <input
                       type="text"
                       value={nameColor}
-                      onChange={(e) => setNameColor(e.target.value)}
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        if (/^#[0-9A-Fa-f]{6}$/.test(val)) setNameColor(val.toUpperCase());
+                      }}
                       className="flex-1 border border-ink-700 bg-black-soft px-3 py-3 text-white placeholder:text-ink-500 focus:border-gold focus:outline-none text-sm font-mono uppercase"
                       placeholder="#FFFFFF"
+                      maxLength={7}
                     />
                   </div>
                 </div>
@@ -463,9 +467,13 @@ export default function Collections() {
                     <input
                       type="text"
                       value={slugColor}
-                      onChange={(e) => setSlugColor(e.target.value)}
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        if (/^#[0-9A-Fa-f]{6}$/.test(val)) setSlugColor(val.toUpperCase());
+                      }}
                       className="flex-1 border border-ink-700 bg-black-soft px-3 py-3 text-white placeholder:text-ink-500 focus:border-gold focus:outline-none text-sm font-mono uppercase"
                       placeholder="#948F85"
+                      maxLength={7}
                     />
                   </div>
                 </div>
@@ -485,9 +493,13 @@ export default function Collections() {
                     <input
                       type="text"
                       value={descriptionColor}
-                      onChange={(e) => setDescriptionColor(e.target.value)}
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        if (/^#[0-9A-Fa-f]{6}$/.test(val)) setDescriptionColor(val.toUpperCase());
+                      }}
                       className="flex-1 border border-ink-700 bg-black-soft px-3 py-3 text-white placeholder:text-ink-500 focus:border-gold focus:outline-none text-sm font-mono uppercase"
                       placeholder="#948F85"
+                      maxLength={7}
                     />
                   </div>
                 </div>

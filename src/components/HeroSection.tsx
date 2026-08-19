@@ -19,9 +19,6 @@ export default function HeroSection() {
         .limit(1)
         .maybeSingle();
 
-      console.log('HERO BANNER:', data);
-      console.log('HERO ERROR:', error);
-
       setBanner((data as HeroBanner) || null);
       setLoading(false);
     };

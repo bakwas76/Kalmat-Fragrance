@@ -43,18 +43,9 @@ export default function Home() {
         supabase.from('collections').select('*').limit(3),
         supabase.from('product_reviews').select('*').order('created_at', { ascending: false }).limit(3),
       ]);
-      // setFeatured((feat.data as Product[]) || []);
-      // setBestSellers((best.data as Product[]) || []);
-      // setNewArrivals((fresh.data as Product[]) || []);
       setFeatured((feat.data as any) || []);
       setBestSellers((best.data as any) || []);
       setNewArrivals((fresh.data as any) || []);
-      console.log("Featured:", feat.data);
-      console.log("Best:", best.data);
-      console.log("New:", fresh.data);
-      console.log("Featured Error:", feat.error);
-      console.log("Best Error:", best.error);
-      console.log("New Error:", fresh.error);
       setCategories((cats.data as Category[]) || []);
       setCollections((cols.data as Collection[]) || []);
       const reviewList = (revs.data as Review[]) || [];

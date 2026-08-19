@@ -9,6 +9,9 @@ interface Collection {
   slug: string;
   description?: string | null;
   image_url?: string | null;
+  name_color?: string;       
+  slug_color?: string;
+  description_color?: string;
 }
 
 export default function Collections() {
@@ -25,6 +28,9 @@ export default function Collections() {
   const [slug, setSlug] = useState('');
   const [description, setDescription] = useState('');
   const [imageUrl, setImageUrl] = useState<string | null>(null);
+  const [nameColor, setNameColor] = useState('#FFFFFF');
+  const [slugColor, setSlugColor] = useState('#948F85');
+  const [descriptionColor, setDescriptionColor] = useState('#948F85');
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -54,6 +60,9 @@ export default function Collections() {
     setSlug('');
     setDescription('');
     setImageUrl(null);
+    setNameColor('#FFFFFF');
+    setSlugColor('#948F85');
+    setDescriptionColor('#948F85');
     setEditing(null);
     setShowForm(false);
 
@@ -73,6 +82,9 @@ export default function Collections() {
     setSlug(collection.slug);
     setDescription(collection.description || '');
     setImageUrl(collection.image_url || null);
+    setNameColor(collection.name_color || '#FFFFFF');
+    setSlugColor(collection.slug_color || '#948F85');
+    setDescriptionColor(collection.description_color || '#948F85');
     setShowForm(true);
 
     if (fileInputRef.current) {
@@ -167,6 +179,9 @@ export default function Collections() {
       slug: finalSlug,
       description: description.trim() || null,
       image_url: imageUrl || null,
+      name_color: nameColor,
+      slug_color: slugColor,
+      description_color: descriptionColor,
     };
 
     const { error } = editing
@@ -289,18 +304,24 @@ export default function Collections() {
                   </td>
 
                   {/* Name */}
-                  <td className="p-4 font-medium text-white">
-                    {collection.name}
+                  <td className="p-4 font-medium">
+                    <span style={{ color: collection.name_color || '#FFFFFF' }}>
+                      {collection.name}
+                    </span>
                   </td>
 
                   {/* Slug */}
-                  <td className="p-4 text-ink-300">
-                    {collection.slug}
+                  <td className="p-4">
+                    <span style={{ color: collection.slug_color || '#948F85' }}>
+                      {collection.slug}
+                    </span>
                   </td>
 
                   {/* Description */}
-                  <td className="p-4 text-ink-300">
-                    {collection.description || '—'}
+                  <td className="p-4">
+                    <span style={{ color: collection.description_color || '#948F85' }}>
+                      {collection.description || '—'}
+                    </span>
                   </td>
 
                   {/* Actions */}
@@ -401,6 +422,75 @@ export default function Collections() {
                   rows={4}
                   className="w-full resize-none border border-ink-700 bg-black-soft px-3 py-3 text-white placeholder:text-ink-500 focus:border-gold focus:outline-none"
                 />
+              </div>
+
+              {/* Color Pickers */}
+              <div className="grid grid-cols-3 gap-4">
+                <div>
+                  <label className="mb-2 block text-xs uppercase tracking-wide-sm text-ink-300">
+                    Name Color
+                  </label>
+                  <div className="flex items-center gap-3">
+                    <input
+                      type="color"
+                      value={nameColor}
+                      onChange={(e) => setNameColor(e.target.value)}
+                      className="h-10 w-12 border-0 bg-transparent cursor-pointer"
+                      aria-label="Name text color"
+                    />
+                    <input
+                      type="text"
+                      value={nameColor}
+                      onChange={(e) => setNameColor(e.target.value)}
+                      className="flex-1 border border-ink-700 bg-black-soft px-3 py-3 text-white placeholder:text-ink-500 focus:border-gold focus:outline-none text-sm font-mono uppercase"
+                      placeholder="#FFFFFF"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="mb-2 block text-xs uppercase tracking-wide-sm text-ink-300">
+                    Slug Color
+                  </label>
+                  <div className="flex items-center gap-3">
+                    <input
+                      type="color"
+                      value={slugColor}
+                      onChange={(e) => setSlugColor(e.target.value)}
+                      className="h-10 w-12 border-0 bg-transparent cursor-pointer"
+                      aria-label="Slug text color"
+                    />
+                    <input
+                      type="text"
+                      value={slugColor}
+                      onChange={(e) => setSlugColor(e.target.value)}
+                      className="flex-1 border border-ink-700 bg-black-soft px-3 py-3 text-white placeholder:text-ink-500 focus:border-gold focus:outline-none text-sm font-mono uppercase"
+                      placeholder="#948F85"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="mb-2 block text-xs uppercase tracking-wide-sm text-ink-300">
+                    Description Color
+                  </label>
+                  <div className="flex items-center gap-3">
+                    <input
+                      type="color"
+                      value={descriptionColor}
+                      onChange={(e) => setDescriptionColor(e.target.value)}
+                      className="h-10 w-12 border-0 bg-transparent cursor-pointer"
+                      aria-label="Description text color"
+                    />
+                    <input
+                      type="text"
+                      value={descriptionColor}
+                      onChange={(e) => setDescriptionColor(e.target.value)}
+                      className="flex-1 border border-ink-700 bg-black-soft px-3 py-3 text-white placeholder:text-ink-500 focus:border-gold focus:outline-none text-sm font-mono uppercase"
+                      placeholder="#948F85"
+                    />
+                  </div>
+                </div>
               </div>
 
               {/* Image Upload */}

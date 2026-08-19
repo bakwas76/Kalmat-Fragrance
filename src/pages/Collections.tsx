@@ -81,9 +81,9 @@ export default function Collections() {
                   </div>
                   <div className="absolute inset-0 bg-gradient-to-t from-charcoal/85 via-charcoal/25 to-transparent" />
                   <div className="absolute bottom-0 left-0 right-0 p-8 lg:p-10">
-                    <p className="text-[9px] uppercase text-gold-light"  style={{ color: col.slug_color || '#C9A961', textShadow: '0 2px 8px rgba(0,0,0,0.3)' }}>Collection</p>
-                    <h3 className="mt-2 font-display text-3xl text-ivory lg:text-4xl" style={{ color: col.name_color || (isDarkBg ? '#FFFFFF' : '#2B2420'), textShadow: '0 2px 8px rgba(0,0,0,0.3)'}}>{col.name}</h3>
-                    <p className="mt-3 line-clamp-2 max-w-md text-sm font-light text-ivory/65" style={{ color: col.description_color || (isDarkBg ? '#E8E4DD' : '#4A4038'), textShadow: '0 2px 8px rgba(0,0,0,0.3)' }}>{col.description}</p>
+                     <p className="text-[9px] uppercase text-gold-light" style={{ letterSpacing: '0.32em', color: col.slug_color || '#C9A961', textShadow: '0 2px 8px rgba(0,0,0,0.3)' }}>Collection</p>
+                    <h3 className="mt-2 font-display text-3xl text-ivory lg:text-4xl" style={{ color: col.name_color || '#FFFFFF', textShadow: '0 2px 8px rgba(0,0,0,0.3)' }}>{col.name}</h3>
+                     <p className="mt-3 line-clamp-2 max-w-md text-sm font-light" style={{ color: col.description_color || '#E8E4DD', textShadow: '0 2px 8px rgba(0,0,0,0.3)' }}>{col.description}</p>
                     <span className={`mt-5 inline-flex items-center gap-2 text-[10px] uppercase text-gold-light transition-all duration-300 group-hover:gap-4 ${isActive ? 'gap-4' : ''}`} style={{ letterSpacing: '0.28em' }}>
                       {isActive ? 'Now Viewing' : 'View Collection'} <ArrowRight size={13} />
                     </span>

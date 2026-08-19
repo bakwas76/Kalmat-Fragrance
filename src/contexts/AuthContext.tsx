@@ -45,7 +45,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             full_name: fullName,
             avatar_url: avatarUrl,
           },
-          { onConflict: 'id', ignoreDuplicates: true }
+          { onConflict: 'id' }
         );
     } catch (err) {
       console.error('ensureProfile upsert failed', err);

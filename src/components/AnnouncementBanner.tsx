@@ -31,8 +31,6 @@ export default function AnnouncementBanner() {
     .eq("id", 1)
     .maybeSingle();
 
-  console.log("DATA:", data);
-  console.log("ERROR:", error);
 
   if (mounted) setSettings((data as BannerSettings) || null);
 };
@@ -53,9 +51,6 @@ export default function AnnouncementBanner() {
     };
   }, []);
 
-  // if (!settings || !settings.enabled || !settings.text.trim()) return null;
-
-  console.log("Banner Data:", settings);
 
 if (!settings) return null;
 

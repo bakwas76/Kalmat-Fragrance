@@ -57,19 +57,12 @@ export default function AnnouncementBanner() {
 
   console.log("Banner Data:", settings);
 
-if (!settings) {
-  return (
-    <div style={{background:"red",color:"white",padding:"10px"}}>
-      Banner not loading
-    </div>
-  );
-}
+if (!settings) return null;
+
+if (!settings.enabled || !settings.text.trim()) return null;
 
 return <BannerView settings={settings} />;
-
   
-
-  return <BannerView settings={settings} />;
 }
 
 export { FALLBACK };

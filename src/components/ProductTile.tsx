@@ -28,13 +28,6 @@ const outOfStock =
     ? product.variants.every((variant) => Number(variant.stock) <= 0)
     : Number(product.stock) <= 0;
 
-console.log(
-  'PRODUCT STOCK:',
-  product.name,
-  product.stock,
-  product.variants
-);
-
 const discount = discountPercent(product.price, product.compare_at_price);
 
   const onAdd = (e: React.MouseEvent) => {

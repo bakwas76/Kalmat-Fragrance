@@ -34,9 +34,6 @@ export default function Profile() {
   (async () => {
     const { data: sessionData } = await supabase.auth.getSession();
 
-    console.log('Browser session:', sessionData.session);
-    console.log('Session user:', sessionData.session?.user?.id);
-
     const { data } = await supabase
       .from('addresses')
       .select('*')
@@ -52,15 +49,10 @@ export default function Profile() {
   const uploadAvatar = async (file: File) => {
   if (!user) return;
 
-    console.log('Current user:', user);
-console.log('Current user id:', user.id);
-
   setUploadingAvatar(true);
 
   const fileExt = file.name.split('.').pop();
   const filePath = `${user.id}/avatar.${fileExt}`;
-
-    console.log('Avatar upload path:', filePath);
 
   const { error: uploadError } = await supabase.storage
     .from('avatars')

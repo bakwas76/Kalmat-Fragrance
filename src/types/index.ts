@@ -18,6 +18,9 @@ export interface Collection {
   description: string | null;
   image_url: string | null;
   created_at: string;
+  name_color?: string;
+  slug_color?: string;
+  description_color?: string;
 }
 
 export interface ProductVariant {

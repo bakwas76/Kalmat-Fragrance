@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import Breadcrumbs from '@/components/Breadcrumbs';
 import { motion } from 'framer-motion';
 import { ArrowRight, Sparkles, HandHeart, Globe2, Award } from 'lucide-react';
 import { BRAND } from '@/lib/constants';
@@ -20,6 +21,7 @@ export default function About() {
   return (
     <div className="w-full max-w-full overflow-x-hidden">
       <Seo title="About" description="The story behind Kalmat Fragrance — the art of luxury perfumery." />
+      <Breadcrumbs items={[{ label: 'About' }]} />
 
       {/* Hero */}
       <section className="relative min-h-[52vh] overflow-hidden bg-charcoal">

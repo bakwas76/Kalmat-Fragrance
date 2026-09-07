@@ -1,5 +1,6 @@
 import { useState, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import Breadcrumbs from '@/components/Breadcrumbs';
 import { motion } from 'framer-motion';
 import { useForm } from 'react-hook-form';
 import { Lock, Banknote, ChevronRight, Loader2, Smartphone, MessageCircle, Upload, X, Copy, Check } from 'lucide-react';
@@ -53,6 +54,7 @@ export default function Checkout() {
     return (
       <>
         <Seo title="Checkout" />
+        <Breadcrumbs items={[{ label: 'Checkout' }]} />
         <div className="kx-container py-32 text-center">
           <h1 className="font-display text-4xl font-light text-charcoal">Your Bag is Empty</h1>
           <p className="mt-4 text-sm text-ink-soft">Add a fragrance before checking out.</p>

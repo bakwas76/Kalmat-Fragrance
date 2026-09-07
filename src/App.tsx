@@ -1,5 +1,6 @@
 import { lazy, Suspense } from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { AuthProvider, useAuth } from '@/contexts/AuthContext';
 import { CartProvider } from '@/contexts/CartContext';
 import { WishlistProvider } from '@/contexts/WishlistContext';
@@ -46,6 +47,20 @@ const AdminInventory = lazy(() => import('@/pages/admin/Inventory'));
 const AdminCollections = lazy(() => import('@/pages/admin/Collections'));
 const AdminAnnouncementBanner = lazy(() => import('@/pages/admin/AnnouncementBanner'));
 const AdminHeroSlider = lazy(() => import('@/pages/admin/HeroSlider'));
+
+function AnalyticsTracker() {
+  const location = useLocation();
+
+  useEffect(() => {
+    if (typeof window.gtag === 'function') {
+      window.gtag('config', 'G-9B30T38RFJ', {
+        page_path: location.pathname + location.search,
+      });
+    }
+  }, [location]);
+
+  return null;
+}
 
 function PageLoader() {
   return (

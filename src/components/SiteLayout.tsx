@@ -22,6 +22,7 @@ export default function SiteLayout() {
         <Outlet />
       </main>
       <SiteFooter />
+      <CookieConsent />
     </div>
   );
 }

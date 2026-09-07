@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import Breadcrumbs from '@/components/Breadcrumbs';
 import { motion } from 'framer-motion';
 import { Mail, MapPin, Phone, MessageCircle, Send, Loader2 } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
@@ -26,6 +27,7 @@ export default function Contact() {
   return (
     <>
       <Seo title="Contact" description="Get in touch with the Kalmat Fragrance concierge." />
+      <Breadcrumbs items={[{ label: 'Contact' }]} />
       <section className="kx-container py-12 lg:py-16">
         <p className="kx-eyebrow">We're Here to Help</p>
         <h1 className="mt-3 font-display text-5xl font-light text-charcoal">Contact Us</h1>

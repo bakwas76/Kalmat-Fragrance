@@ -3,6 +3,7 @@ import { useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { SlidersHorizontal, X, ChevronDown, Search } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
+import Breadcrumbs from '@/components/Breadcrumbs';
 import type { Product, Category, Collection } from '@/types';
 import ProductTile from '@/components/ProductTile';
 import Seo from '@/components/Seo';
@@ -164,10 +165,10 @@ export default function Shop() {
       </div>
     </div>
   );
-
-  return (
+return (
     <>
       <Seo title="Shop" description="Explore the complete collection of luxury fragrances from Kalmat." />
+      <Breadcrumbs items={[{ label: 'Shop' }]} />
 
       {/* Page header */}
       <section className="border-b border-line bg-ivory-2 pt-14 pb-10 lg:pt-20 lg:pb-14">

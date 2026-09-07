@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import Breadcrumbs from '@/components/Breadcrumbs';
+import FaqSection from '@/components/FaqSection';
 import { motion } from 'framer-motion';
 import { Mail, MapPin, Phone, MessageCircle, Send, Loader2 } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
@@ -64,6 +65,8 @@ export default function Contact() {
             </a>
           </motion.div>
         </div>
+
+        <FaqSection />
       </section>
     </>
   );

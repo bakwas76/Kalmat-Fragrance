@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Heart, ArrowRight } from 'lucide-react';
+import Breadcrumbs from '@/components/Breadcrumbs';
 import { supabase } from '@/lib/supabase';
 import type { Product } from '@/types';
 import { useWishlist } from '@/contexts/WishlistContext';
@@ -31,6 +32,7 @@ export default function Wishlist() {
   return (
     <>
       <Seo title="Wishlist" />
+      <Breadcrumbs items={[{ label: 'Wishlist' }]} />
       <section className="kx-container py-12 lg:py-16">
         <p className="kx-eyebrow">Saved For Later</p>
         <h1 className="mt-3 font-display text-5xl font-light text-charcoal">Your Wishlist</h1>

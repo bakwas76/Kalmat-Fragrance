@@ -1,4 +1,5 @@
 import { Outlet, useLocation } from 'react-router-dom';
+import CookieConsent from './CookieConsent';
 import { useEffect } from 'react';
 import SiteHeader from './SiteHeader';
 import SiteFooter from './SiteFooter';

@@ -38,6 +38,7 @@ const Terms = lazy(() => import('@/pages/Terms'));
 const AuthCallback = lazy(() => import('@/pages/AuthCallback'));
 const CompleteProfile = lazy(() => import('@/pages/CompleteProfile'));
 const NotFound = lazy(() => import('@/pages/NotFound'));
+const Waitlist = lazy(() => import('@/pages/Waitlist'));
 
 // Admin
 const AdminDashboard = lazy(() => import('@/pages/admin/Dashboard'));
@@ -126,6 +127,7 @@ export default function App() {
                     <Route path="/checkout" element={<Checkout />} />
                     <Route path="/order-success" element={<OrderSuccess />} />
                     <Route path="/track-order" element={<TrackOrder />} />
+                    <Route path="/waitlist" element={<Waitlist />} />
                     <Route path="/login" element={<Login />} />
                     <Route path="/signup" element={<Signup />} />
                     <Route path="/forgot-password" element={<ForgotPassword />} />

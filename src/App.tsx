@@ -9,6 +9,12 @@ import SiteLayout from '@/components/SiteLayout';
 import AdminLayout from '@/components/AdminLayout';
 import type { ReactNode } from 'react';
 
+declare global {
+  interface Window {
+    gtag?: (...args: any[]) => void;
+  }
+}
+
 const Home = lazy(() => import('@/pages/Home'));
 const Shop = lazy(() => import('@/pages/Shop'));
 const Collections = lazy(() => import('@/pages/Collections'));
@@ -99,6 +105,7 @@ function RequireAdmin({ children }: { children: ReactNode }) {
 export default function App() {
   return (
     <BrowserRouter>
+     <AnalyticsTracker />
       <AuthProvider>
         <ToastProvider>
           <CartProvider>

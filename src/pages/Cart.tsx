@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import Breadcrumbs from '@/components/Breadcrumbs';
 import { Minus, Plus, X, Tag, ArrowRight, Truck, ShoppingBag } from 'lucide-react';
 import { useCart, getCartItemPrice, getCartItemStock } from '@/contexts/CartContext';
 import { useToast } from '@/contexts/ToastContext';
@@ -37,6 +38,7 @@ export default function Cart() {
     return (
       <>
         <Seo title="Your Bag" />
+        <Breadcrumbs items={[{ label: 'Cart' }]} />
         <div className="kx-container py-32 text-center">
           <EmptyGraphic className="mx-auto" />
           <h1 className="mt-8 font-display text-4xl font-light text-charcoal">Your Bag is Empty</h1>

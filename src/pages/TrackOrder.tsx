@@ -8,6 +8,7 @@ import {
   MapPin,
   Phone,
   Check,
+  Truck,
 } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import { useToast } from '@/contexts/ToastContext';
@@ -356,6 +357,21 @@ export default function TrackOrder() {
                   </p>
                 </div>
               </div>
+
+              {/* Courier tracking */}
+              {order.courier_tracking_url && (
+                <div className="mt-6 border-t border-line-soft pt-6">
+                  <a
+                    href={order.courier_tracking_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="kx-btn-solid flex w-full items-center justify-center gap-2"
+                  >
+                    <Truck size={14} />
+                    Track with Courier
+                  </a>
+                </div>
+              )}
             </div>
           </motion.div>
         )}

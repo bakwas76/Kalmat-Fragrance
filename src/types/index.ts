@@ -178,6 +178,7 @@ export interface Order {
   order_status: OrderStatus;
   coupon_code: string | null;
   notes: string | null;
+  courier_tracking_url: string | null;
   created_at: string;
 }
 

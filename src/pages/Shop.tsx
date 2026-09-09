@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { SlidersHorizontal, X, ChevronDown, Search } from 'lucide-react';
+import { SlidersHorizontal, X, ChevronDown, Search, Check } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import type { Product, Category, Collection } from '@/types';
@@ -15,6 +15,26 @@ const FRAGRANCE_FAMILIES = [
   { name: 'Oud', desc: 'A rare, precious wood-derived resin — deep, smoky, and long-lasting. The signature base of luxury Middle Eastern and South Asian perfumery.' },
   { name: 'Rose', desc: 'A rich, romantic floral note prized for centuries. Adds warmth and elegance to both everyday and special-occasion fragrances.' },
   { name: 'Amber', desc: 'A warm, resinous, slightly sweet base note that gives a fragrance depth and lasting power on the skin.' },
+];
+
+const SHOP_AUDIENCE_POINTS = [
+  'Buyers comparing oud, rose, and amber fragrance families before choosing one',
+  'Shoppers in Pakistan who want an authentic, handcrafted perfume delivered nationwide',
+  'Gift buyers looking for an elegant, long-lasting signature scent for someone else',
+];
+
+const HOW_TO_CHOOSE_STEPS = [
+  'Think about the mood you want: oud for deep and smoky, rose for romantic and floral, amber for warm and sweet.',
+  'Consider where you will wear it — office and daily wear suit lighter rose or amber blends, while evenings and special occasions suit stronger oud compositions.',
+  'Check the gender listing (Men, Women, or Unisex) if you are buying for yourself or as a gift.',
+  'Use the price filter to shop within your budget, then sort by Best Sellers or Top Rated to see what other buyers prefer.',
+];
+
+const SHOP_PROOF_POINTS = [
+  'Every fragrance is handcrafted at our own atelier in Karachi, not mass-produced or outsourced.',
+  'Product ratings and reviews on this page come only from verified buyers who purchased directly from us.',
+  'Each order is dispatched with a trackable courier link, visible end-to-end from our Track Order page.',
+  'Not the right fit? Return any unopened, unused bottle within 7 days — no questions asked.',
 ];
 
 const SHOP_FAQS = [
@@ -49,7 +69,7 @@ const SHOP_FAQ_SCHEMA = {
 const SHOP_WEBPAGE_SCHEMA = {
   '@context': 'https://schema.org',
   '@type': 'WebPage',
-  name: 'Shop Oud, Rose & Amber Perfumes Online | Kalmat Fragrance',
+  name: 'Handcrafted Perfume Collection Online in Pakistan | Kalmat Fragrance',
   description:
     "Shop Kalmat Fragrance's full collection of handcrafted luxury perfumes — oud, rose, and amber scents for men, women, and unisex, delivered nationwide in Pakistan.",
   url: 'https://www.kalmatfragrance.store/shop',
@@ -241,7 +261,7 @@ export default function Shop() {
 return (
     <>
       <Seo
-        title="Shop Oud, Rose & Amber Perfumes Online"
+        title="Handcrafted Perfume Collection Online in Pakistan"
         description="Shop Kalmat Fragrance's full collection of handcrafted luxury perfumes — oud, rose, and amber scents for men, women, and unisex, delivered nationwide in Pakistan."
       />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(SHOP_ORGANIZATION_SCHEMA) }} />
@@ -263,15 +283,25 @@ return (
         </div>
       </section>
 
-      {/* Who this is for + fragrance family guide (helps buyers decide, and helps AI/answer engines) */}
+      {/* Who this shop is for + fragrance family guide + buying guide + proof (helps buyers decide, and helps AI/answer engines) */}
       <section className="kx-container py-12 lg:py-14">
-        <p className="max-w-3xl text-sm font-light leading-relaxed text-ink-soft">
-          <strong className="font-medium text-charcoal">Who this page is for:</strong> shoppers in Pakistan comparing
-          fragrance families and deciding which scent to buy — whether for daily wear, gifting, or a special
-          occasion.
+        <p className="kx-eyebrow">Who It's For</p>
+        <h2 className="mt-3 font-display text-2xl font-light text-charcoal">Who This Shop Is For</h2>
+        <div className="kx-gold-line mt-4" />
+        <p className="mt-6 max-w-3xl text-sm font-light leading-relaxed text-ink-soft">
+          This shop page is built for shoppers in Pakistan comparing fragrance families and deciding which
+          scent to buy — whether the use case is daily wear, a special occasion, or gifting.
         </p>
+        <ul className="mt-6 max-w-2xl space-y-3">
+          {SHOP_AUDIENCE_POINTS.map((point) => (
+            <li key={point} className="flex items-start gap-3 text-sm font-light leading-relaxed text-ink-soft">
+              <Check size={15} className="mt-0.5 shrink-0 text-gold" />
+              {point}
+            </li>
+          ))}
+        </ul>
 
-        <h2 className="mt-10 font-display text-2xl font-light text-charcoal">Shop by Fragrance Family</h2>
+        <h2 className="mt-14 font-display text-2xl font-light text-charcoal">Shop by Fragrance Family</h2>
         <div className="kx-gold-line mt-4" />
         <ul className="mt-6 grid gap-6 sm:grid-cols-3">
           {FRAGRANCE_FAMILIES.map((f) => (
@@ -293,6 +323,40 @@ return (
           </a>{' '}
           as used across the global perfumery industry.
         </p>
+
+        <div className="mt-16 grid gap-6 border-t border-line pt-14 md:grid-cols-2 md:gap-8">
+          <div className="border border-line bg-white p-8 sm:p-10">
+            <p className="kx-eyebrow">Buying Guide</p>
+            <h2 className="mt-3 font-display text-2xl font-light text-charcoal">How Do I Choose the Right Fragrance?</h2>
+            <div className="kx-gold-line mt-5" />
+            <p className="mt-6 text-sm font-light leading-relaxed text-ink-soft">
+              What's the difference between oud, rose, and amber, and how do you pick one? Follow these steps:
+            </p>
+            <ol className="mt-6 space-y-5">
+              {HOW_TO_CHOOSE_STEPS.map((step, i) => (
+                <li key={step} className="flex items-start gap-4 text-sm font-light leading-relaxed text-ink-soft">
+                  <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full border border-gold/40 font-display text-xs italic text-gold-deep">
+                    {i + 1}
+                  </span>
+                  <span className="pt-0.5">{step}</span>
+                </li>
+              ))}
+            </ol>
+          </div>
+          <div className="border border-line bg-white p-8 sm:p-10">
+            <p className="kx-eyebrow">Trust & Transparency</p>
+            <h2 className="mt-3 font-display text-2xl font-light text-charcoal">Why Shop With Us</h2>
+            <div className="kx-gold-line mt-5" />
+            <ul className="mt-7 space-y-5">
+              {SHOP_PROOF_POINTS.map((point) => (
+                <li key={point} className="flex items-start gap-3 text-sm font-light leading-relaxed text-ink-soft">
+                  <Check size={15} className="mt-0.5 shrink-0 text-gold" />
+                  <span>{point}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
       </section>
 
       <section className="kx-container py-12 lg:py-16">

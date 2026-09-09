@@ -69,7 +69,7 @@ const SHOP_FAQ_SCHEMA = {
 const SHOP_WEBPAGE_SCHEMA = {
   '@context': 'https://schema.org',
   '@type': 'WebPage',
-  name: 'Handcrafted Perfumes in Pakistan | Kalmat Fragrance',
+  name: 'Handcrafted Oud Perfumes Online | Kalmat Fragrance',
   description:
     "Shop Kalmat Fragrance's full collection of handcrafted luxury perfumes — oud, rose, and amber scents for men, women, and unisex, delivered nationwide in Pakistan.",
   url: 'https://www.kalmatfragrance.store/shop',
@@ -261,7 +261,7 @@ export default function Shop() {
 return (
     <>
       <Seo
-        title="Handcrafted Perfumes in Pakistan"
+        title="Handcrafted Oud Perfumes Online"
         description="Shop Kalmat Fragrance's full collection of handcrafted luxury perfumes — oud, rose, and amber scents for men, women, and unisex, delivered nationwide in Pakistan."
       />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(SHOP_ORGANIZATION_SCHEMA) }} />
@@ -357,6 +357,13 @@ return (
               </a>
               .
             </p>
+            {!loading && (
+              <p className="mt-4 text-sm font-light leading-relaxed text-ink-soft">
+                Right now we have {products.length} fragrance{products.length !== 1 ? 's' : ''} in stock across
+                our oud, rose, and amber collections — curated and written by the Kalmat Fragrance team in
+                Karachi, based on what is actually on our shelves today, not a generic catalog description.
+              </p>
+            )}
             <ul className="mt-7 space-y-5">
               {SHOP_PROOF_POINTS.map((point) => (
                 <li key={point} className="flex items-start gap-3 text-sm font-light leading-relaxed text-ink-soft">

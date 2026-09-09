@@ -65,7 +65,7 @@ const ABOUT_FAQ_SCHEMA = {
 const ABOUT_WEBPAGE_SCHEMA = {
   '@context': 'https://schema.org',
   '@type': 'WebPage',
-  name: 'Our Story: Handcrafted Perfumery in Karachi | Kalmat Fragrance',
+  name: 'Meet the Team & Atelier Behind Our Perfumes | Kalmat Fragrance',
   description:
     'Meet the team behind Kalmat Fragrance — our Karachi atelier, sourcing process, and the hand-blending craft behind every oud, rose, and amber perfume we make.',
   url: 'https://www.kalmatfragrance.store/about',
@@ -107,7 +107,7 @@ export default function About() {
   return (
     <div className="w-full max-w-full overflow-x-hidden">
       <Seo
-        title="Our Story: Handcrafted Perfumery in Karachi"
+        title="Meet the Team & Atelier Behind Our Perfumes"
         description="Meet the team behind Kalmat Fragrance — our Karachi atelier, sourcing process, and the hand-blending craft behind every oud, rose, and amber perfume we make."
       />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ABOUT_ORGANIZATION_SCHEMA) }} />
@@ -137,9 +137,11 @@ export default function About() {
         <h2 className="mt-3 font-display text-2xl font-light text-charcoal">Who This Page Is For</h2>
         <div className="kx-gold-line mt-4" />
         <p className="mt-6 max-w-3xl text-sm font-light leading-relaxed text-ink-soft">
-          This page explains who Kalmat Fragrance is, where our perfumes are made, and how we source and
-          blend every fragrance — for buyers who want to know the brand and the process behind a bottle
-          before they order.
+          This About page is built for buyers in Pakistan's luxury perfume industry who want to verify
+          who is behind Kalmat Fragrance and how we source and blend each fragrance. The use case is
+          simple: use this page to decide whether our handcrafted, small-batch process meets your
+          standards before ordering, before comparing us to mass-produced perfume brands, or before
+          buying a bottle as a gift.
         </p>
         <ul className="mt-6 max-w-2xl space-y-3">
           {ABOUT_AUDIENCE_POINTS.map((point) => (
@@ -162,6 +164,13 @@ export default function About() {
               <p className="mt-8 text-base font-light leading-[1.8] text-ink-soft">Kalmat Fragrance was born from a simple belief: that a fragrance should not merely smell beautiful — it should tell a story, evoke a memory, and become an inseparable part of who you are.</p>
               <p className="mt-5 text-base font-light leading-[1.8] text-ink-soft">From sun-drenched fields of Bulgarian rose to the deep, smoky woods of Cambodia, we travel the world to source the rarest essences. Each composition is a journey — crafted by hand, refined with patience, and composed with intention.</p>
               <p className="mt-5 text-base font-light leading-[1.8] text-ink-soft">We believe in the old ways: small batches, natural ingredients, and the time it takes to perfect a scent. This is not fast fashion. This is the art of perfumery, written and maintained by the Kalmat Fragrance team in Karachi.</p>
+              <p className="mt-5 text-base font-light leading-[1.8] text-ink-soft">
+                We test every batch first-hand, ourselves, before it is approved: each blend is checked
+                on blotter strips and on skin over several hours, at our own atelier in Karachi, to
+                confirm it opens, settles, and lasts the way it was designed to. This is not a
+                specification sheet copied from a factory — it is judged in person, batch by batch, by
+                the same team that hand-blends it.
+              </p>
               <p className="mt-5 text-base font-light leading-[1.8] text-ink-soft">
                 Every composition is developed in our own Karachi atelier, tested across multiple small
                 batches, and only bottled once the blend rests and settles the way it is meant to — the

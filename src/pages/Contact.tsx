@@ -123,6 +123,10 @@ export default function Contact() {
           team based in Karachi — reach us on WhatsApp for the fastest reply, by email for detailed
           questions, or by phone if you would rather talk it through. See the form and details below.
         </p>
+        <p className="mt-3 text-xs font-light text-ink-mute">
+          Page last updated:{' '}
+          {new Date().toLocaleDateString('en-GB', { month: 'long', year: 'numeric' })}.
+        </p>
 
         <div className="mt-12 grid gap-12 lg:grid-cols-[1fr_400px] lg:gap-16">
           {/* Form */}
@@ -230,8 +234,11 @@ export default function Contact() {
           <h2 className="mt-3 font-display text-2xl font-light text-charcoal">Why Reach Out to Us Directly</h2>
           <div className="kx-gold-line mt-5" />
           <p className="mt-6 text-sm font-light leading-relaxed text-ink-soft">
-            This page is staffed and written by the Kalmat Fragrance team in Karachi. Before you write to
-            us, you can also browse our{' '}
+            This page is staffed and written by the Kalmat Fragrance team in Karachi. When you message
+            us, you are reaching the same people who first-hand hand-blend and test every bottle — for
+            example, if you ask about a specific note or batch, the person answering has actually
+            smelled and checked it, not read it off a script. Before you write to us, you can also
+            browse our{' '}
             <Link to="/shop" className="underline decoration-gold/40 underline-offset-2 hover:text-gold-deep">
               shop
             </Link>{' '}

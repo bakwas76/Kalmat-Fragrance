@@ -7,7 +7,7 @@ interface SeoProps {
   type?: string;
 }
 
-const BASE_TITLE = 'Kalmat Fragrance — Luxury Oud, Rose & Amber Perfumes';
+const BASE_TITLE = 'Kalmat Fragrance | Handcrafted Perfumes Online in Pakistan';
 const BASE_DESC =
   'Discover Kalmat Fragrance — handcrafted luxury perfumes with rare oud, rose, and amber. Shop our collections of artisanal fragrances crafted for the connoisseur.';
 

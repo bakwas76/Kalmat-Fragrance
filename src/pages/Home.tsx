@@ -145,61 +145,69 @@ setLoading(false);
       <HeroSection />
 
       {/* Quick summary — who this is for (helps AI/answer engines extract a direct answer) */}
-      <section className="kx-section pb-0">
+      <section className="kx-section bg-ivory-2">
         <div className="kx-container">
-          <p className="max-w-3xl text-base font-light leading-[1.8] text-ink-soft">
-            <strong className="font-medium text-charcoal">In short:</strong> Kalmat Fragrance is a Pakistan-based
-            perfume house that handcrafts luxury fragrances using rare oud, rose, and amber essences — sold online
-            with nationwide delivery.
-          </p>
+          <div className="max-w-3xl border-l-2 border-gold/50 pl-6 sm:pl-8">
+            <p className="text-lg font-light leading-[1.8] text-ink-soft sm:text-xl">
+              <strong className="font-medium text-charcoal">In short:</strong> Kalmat Fragrance is a Pakistan-based
+              perfume house that handcrafts luxury fragrances using rare oud, rose, and amber essences — sold online
+              with nationwide delivery.
+            </p>
+          </div>
 
-          <h2 className="mt-6 font-display text-xl font-light text-charcoal">Who This Page Is For</h2>
-          <p className="mt-2 max-w-3xl text-sm font-light leading-relaxed text-ink-soft">
-            This shop is designed for shoppers in Pakistan who are deciding where to buy an authentic, handcrafted
-            oud, rose, or amber perfume online — whether the use case is personal daily wear, a special occasion,
-            or gifting. If you are comparing local perfume brands for genuine ingredients and reliable delivery,
-            Kalmat Fragrance is built for that exact decision.
-          </p>
-          <ul className="mt-3 max-w-2xl space-y-2">
-            {AUDIENCE_POINTS.map((point) => (
-              <li key={point} className="flex items-start gap-2 text-sm font-light leading-relaxed text-ink-soft">
-                <Check size={15} className="mt-0.5 shrink-0 text-gold" />
-                {point}
-              </li>
-            ))}
-          </ul>
+          <div className="mt-16">
+            <SectionTitle eyebrow="Who It's For" title="Who This Page Is For" align="left" />
+            <p className="mt-6 max-w-3xl text-sm font-light leading-relaxed text-ink-soft">
+              This shop is designed for shoppers in Pakistan who are deciding where to buy an authentic, handcrafted
+              oud, rose, or amber perfume online — whether the use case is personal daily wear, a special occasion,
+              or gifting. If you are comparing local perfume brands for genuine ingredients and reliable delivery,
+              Kalmat Fragrance is built for that exact decision.
+            </p>
+            <ul className="mt-6 max-w-2xl space-y-3">
+              {AUDIENCE_POINTS.map((point) => (
+                <li key={point} className="flex items-start gap-3 text-sm font-light leading-relaxed text-ink-soft">
+                  <Check size={15} className="mt-0.5 shrink-0 text-gold" />
+                  {point}
+                </li>
+              ))}
+            </ul>
+          </div>
 
-          <div className="mt-10 grid gap-10 border-t border-line-soft pt-10 md:grid-cols-2">
-            <div>
-              <p className="text-sm font-light uppercase tracking-wide-sm text-gold-deep">How ordering works</p>
-              <ol className="mt-3 space-y-2">
+          <div className="mt-16 grid gap-6 border-t border-line pt-14 md:grid-cols-2 md:gap-8">
+            <div className="border border-line bg-white p-8 sm:p-10">
+              <p className="kx-eyebrow">Getting Started</p>
+              <h3 className="mt-3 font-display text-2xl font-light text-charcoal">How Ordering Works</h3>
+              <div className="kx-gold-line mt-5" />
+              <ol className="mt-7 space-y-5">
                 {[
                   'Browse fragrances by family — oud, rose, or amber — and pick your signature scent.',
                   'Place your order online with cash on delivery or card payment.',
                   'We handcraft, gift-wrap, and dispatch your order with a trackable courier link.',
                   'Not satisfied? Return it within 7 days, no questions asked.',
                 ].map((step, i) => (
-                  <li key={step} className="flex items-start gap-3 text-sm font-light leading-relaxed text-ink-soft">
-                    <span className="grid h-5 w-5 shrink-0 place-items-center rounded-full border border-gold/40 text-[11px] text-gold-deep">
+                  <li key={step} className="flex items-start gap-4 text-sm font-light leading-relaxed text-ink-soft">
+                    <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full border border-gold/40 font-display text-xs italic text-gold-deep">
                       {i + 1}
                     </span>
-                    {step}
+                    <span className="pt-0.5">{step}</span>
                   </li>
                 ))}
               </ol>
             </div>
-            <div>
-              <p className="text-sm font-light uppercase tracking-wide-sm text-gold-deep">Why shoppers trust us</p>
-              <ul className="mt-3 space-y-2">
+            <div className="border border-line bg-white p-8 sm:p-10">
+              <p className="kx-eyebrow">Trust & Transparency</p>
+              <h3 className="mt-3 font-display text-2xl font-light text-charcoal">Why Shoppers Trust Us</h3>
+              <div className="kx-gold-line mt-5" />
+              <ul className="mt-7 space-y-5">
                 {[
                   '100% authentic guarantee on every bottle we sell.',
                   'Real, verified-buyer reviews from customers who purchased directly from us.',
                   `Reach a real person any time at ${BRAND.phone} or ${BRAND.email}.`,
                   'Every order is trackable end-to-end from our Track Order page.',
                 ].map((point) => (
-                  <li key={point} className="flex items-start gap-2 text-sm font-light leading-relaxed text-ink-soft">
+                  <li key={point} className="flex items-start gap-3 text-sm font-light leading-relaxed text-ink-soft">
                     <Check size={15} className="mt-0.5 shrink-0 text-gold" />
-                    {point}
+                    <span>{point}</span>
                   </li>
                 ))}
               </ul>

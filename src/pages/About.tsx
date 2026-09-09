@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import { motion } from 'framer-motion';
@@ -6,6 +7,7 @@ import { BRAND } from '@/lib/constants';
 import SectionTitle from '@/components/SectionTitle';
 import Seo from '@/components/Seo';
 import { useReveal } from '@/hooks/useReveal';
+import { supabase } from '@/lib/supabase';
 
 const VALUES = [
   { Icon: Sparkles, title: 'Rare Essences', desc: 'We source the world\'s most precious oils and absolutes — from Bulgarian rose to Cambodian oud.' },
@@ -103,6 +105,25 @@ const ABOUT_ORGANIZATION_SCHEMA = {
 export default function About() {
   const storyRef = useReveal<HTMLDivElement>();
   const valuesRef = useReveal<HTMLDivElement>();
+  const [liveStats, setLiveStats] = useState<{ productCount: number; reviewCount: number } | null>(null);
+
+  // Live, real-time counts pulled directly from our own database — not a static or invented figure
+  useEffect(() => {
+    let isMounted = true;
+    (async () => {
+      const [products, reviews] = await Promise.all([
+        supabase.from('products').select('*', { count: 'exact', head: true }),
+        supabase.from('product_reviews').select('*', { count: 'exact', head: true }).eq('status', 'approved'),
+      ]);
+      if (isMounted) {
+        setLiveStats({
+          productCount: products.count || 0,
+          reviewCount: reviews.count || 0,
+        });
+      }
+    })();
+    return () => { isMounted = false; };
+  }, []);
 
   return (
     <div className="w-full max-w-full overflow-x-hidden">
@@ -277,6 +298,14 @@ export default function About() {
             </Link>{' '}
             are curated and written by the Kalmat Fragrance team in Karachi.
           </p>
+          {liveStats && (
+            <p className="mt-4 text-sm font-light leading-relaxed text-ink-soft">
+              As of today, we have {liveStats.productCount} fragrance{liveStats.productCount !== 1 ? 's' : ''} live
+              on the site and {liveStats.reviewCount} verified-buyer review{liveStats.reviewCount !== 1 ? 's' : ''} approved
+              across them — a live count pulled directly from our own order and review records, not a
+              marketing estimate.
+            </p>
+          )}
           <ul className="mt-7 space-y-5">
             {ABOUT_PROOF_POINTS.map((point) => (
               <li key={point} className="flex items-start gap-3 text-sm font-light leading-relaxed text-ink-soft">

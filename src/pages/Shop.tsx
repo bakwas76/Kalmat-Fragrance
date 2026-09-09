@@ -7,8 +7,81 @@ import Breadcrumbs from '@/components/Breadcrumbs';
 import type { Product, Category, Collection } from '@/types';
 import ProductTile from '@/components/ProductTile';
 import Seo from '@/components/Seo';
+import { BRAND } from '@/lib/constants';
 
 const PAGE_SIZE = 12;
+
+const FRAGRANCE_FAMILIES = [
+  { name: 'Oud', desc: 'A rare, precious wood-derived resin — deep, smoky, and long-lasting. The signature base of luxury Middle Eastern and South Asian perfumery.' },
+  { name: 'Rose', desc: 'A rich, romantic floral note prized for centuries. Adds warmth and elegance to both everyday and special-occasion fragrances.' },
+  { name: 'Amber', desc: 'A warm, resinous, slightly sweet base note that gives a fragrance depth and lasting power on the skin.' },
+];
+
+const SHOP_FAQS = [
+  {
+    question: 'How do I choose the right fragrance family?',
+    answer: 'If you prefer deep, smoky, long-lasting scents, start with oud. For a romantic, floral character, choose rose. For warm, sweet, cozy fragrances, amber is a great starting point.',
+  },
+  {
+    question: 'Do you ship nationwide in Pakistan?',
+    answer: 'Yes. We deliver across Pakistan with trackable courier shipping, and complimentary shipping on orders over Rs 5,000.',
+  },
+  {
+    question: "What if I don't like the scent after ordering?",
+    answer: 'You can return any unopened, unused product within 7 days of delivery — no questions asked. See our return policy for details.',
+  },
+  {
+    question: 'Are Kalmat Fragrance perfumes authentic?',
+    answer: 'Yes. Every bottle sold on this site comes with a 100% authentic guarantee and is handcrafted directly by the Kalmat Fragrance atelier.',
+  },
+];
+
+const SHOP_FAQ_SCHEMA = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: SHOP_FAQS.map((faq) => ({
+    '@type': 'Question',
+    name: faq.question,
+    acceptedAnswer: { '@type': 'Answer', text: faq.answer },
+  })),
+};
+
+const SHOP_WEBPAGE_SCHEMA = {
+  '@context': 'https://schema.org',
+  '@type': 'WebPage',
+  name: 'Shop Oud, Rose & Amber Perfumes Online | Kalmat Fragrance',
+  description:
+    "Shop Kalmat Fragrance's full collection of handcrafted luxury perfumes — oud, rose, and amber scents for men, women, and unisex, delivered nationwide in Pakistan.",
+  url: 'https://www.kalmatfragrance.store/shop',
+  isPartOf: {
+    '@type': 'WebSite',
+    name: BRAND.name,
+    url: 'https://www.kalmatfragrance.store/',
+  },
+  about: {
+    '@type': 'Organization',
+    name: BRAND.name,
+  },
+};
+
+const SHOP_ORGANIZATION_SCHEMA = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: BRAND.name,
+  url: 'https://www.kalmatfragrance.store/',
+  logo: 'https://www.kalmatfragrance.store/logo_1.png',
+  email: BRAND.email,
+  telephone: BRAND.phone,
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: 'Karachi',
+    addressRegion: 'Sindh',
+    addressCountry: 'PK',
+  },
+  sameAs: [BRAND.instagram, BRAND.facebook, BRAND.twitter].filter(
+    (url) => url && !url.match(/^https?:\/\/(www\.)?(instagram|facebook|twitter|x)\.com\/?$/),
+  ),
+};
 
 export default function Shop() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -167,16 +240,59 @@ export default function Shop() {
   );
 return (
     <>
-      <Seo title="Shop" description="Explore the complete collection of luxury fragrances from Kalmat." />
+      <Seo
+        title="Shop Oud, Rose & Amber Perfumes Online"
+        description="Shop Kalmat Fragrance's full collection of handcrafted luxury perfumes — oud, rose, and amber scents for men, women, and unisex, delivered nationwide in Pakistan."
+      />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(SHOP_ORGANIZATION_SCHEMA) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(SHOP_WEBPAGE_SCHEMA) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(SHOP_FAQ_SCHEMA) }} />
       <Breadcrumbs items={[{ label: 'Shop' }]} />
 
       {/* Page header */}
       <section className="border-b border-line bg-ivory-2 pt-14 pb-10 lg:pt-20 lg:pb-14">
         <div className="kx-container">
           <p className="kx-eyebrow">The Boutique</p>
-          <h1 className="mt-3 font-display text-5xl font-light text-charcoal sm:text-6xl">{q ? `Results for "${q}"` : 'All Fragrances'}</h1>
+          <h1 className="mt-3 font-display text-5xl font-light text-charcoal sm:text-6xl">{q ? `Results for "${q}"` : 'Shop All Fragrances — Oud, Rose & Amber Perfumes'}</h1>
           <div className="kx-gold-line mt-6" />
+          <p className="mt-6 max-w-2xl text-sm font-light leading-relaxed text-ink-soft">
+            <strong className="font-medium text-charcoal">In short:</strong> Browse our full range of handcrafted
+            oud, rose, and amber perfumes below, filter by category, gender, or price, and every order ships with
+            an authentic guarantee and trackable nationwide delivery in Pakistan.
+          </p>
         </div>
+      </section>
+
+      {/* Who this is for + fragrance family guide (helps buyers decide, and helps AI/answer engines) */}
+      <section className="kx-container py-12 lg:py-14">
+        <p className="max-w-3xl text-sm font-light leading-relaxed text-ink-soft">
+          <strong className="font-medium text-charcoal">Who this page is for:</strong> shoppers in Pakistan comparing
+          fragrance families and deciding which scent to buy — whether for daily wear, gifting, or a special
+          occasion.
+        </p>
+
+        <h2 className="mt-10 font-display text-2xl font-light text-charcoal">Shop by Fragrance Family</h2>
+        <div className="kx-gold-line mt-4" />
+        <ul className="mt-6 grid gap-6 sm:grid-cols-3">
+          {FRAGRANCE_FAMILIES.map((f) => (
+            <li key={f.name} className="border border-line bg-white p-6">
+              <p className="font-display text-lg text-gold-deep">{f.name}</p>
+              <p className="mt-2 text-sm font-light leading-relaxed text-ink-soft">{f.desc}</p>
+            </li>
+          ))}
+        </ul>
+        <p className="mt-6 max-w-3xl text-xs font-light text-ink-mute">
+          Source:{' '}
+          <a
+            href="https://en.wikipedia.org/wiki/Perfume#Classification"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline decoration-gold/40 underline-offset-2 hover:text-gold-deep"
+          >
+            fragrance family classification
+          </a>{' '}
+          as used across the global perfumery industry.
+        </p>
       </section>
 
       <section className="kx-container py-12 lg:py-16">
@@ -229,6 +345,23 @@ return (
                 <button onClick={() => setPage((p) => Math.min(totalPages, p + 1))} disabled={page === totalPages} className="px-4 py-2 text-[10px] uppercase text-ink-soft transition-colors hover:text-gold-deep disabled:opacity-30" style={{ letterSpacing: '0.2em' }}>Next ›</button>
               </div>
             )}
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ — question-style headings + answers for AI/answer-engine visibility */}
+      <section className="kx-section bg-ivory-2">
+        <div className="kx-container">
+          <p className="kx-eyebrow">Questions & Answers</p>
+          <h2 className="mt-3 font-display text-3xl font-light text-charcoal">Frequently Asked Questions</h2>
+          <div className="kx-gold-line mt-5" />
+          <div className="mt-10 grid gap-6 md:grid-cols-2">
+            {SHOP_FAQS.map((faq) => (
+              <div key={faq.question} className="border border-line bg-white p-7">
+                <h3 className="text-sm font-medium text-charcoal">{faq.question}</h3>
+                <p className="mt-2 text-sm font-light leading-relaxed text-ink-mute">{faq.answer}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>

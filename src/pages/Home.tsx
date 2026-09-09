@@ -153,10 +153,12 @@ setLoading(false);
             with nationwide delivery.
           </p>
 
-          <p className="mt-6 max-w-3xl text-sm font-light leading-relaxed text-ink-soft">
-            <strong className="font-medium text-charcoal">This page is for:</strong> anyone in Pakistan who wants to
-            buy an authentic, handcrafted oud, rose, or amber perfume online — whether for personal daily wear,
-            a special occasion, or as a gift.
+          <h2 className="mt-6 font-display text-xl font-light text-charcoal">Who This Page Is For</h2>
+          <p className="mt-2 max-w-3xl text-sm font-light leading-relaxed text-ink-soft">
+            This shop is designed for shoppers in Pakistan who are deciding where to buy an authentic, handcrafted
+            oud, rose, or amber perfume online — whether the use case is personal daily wear, a special occasion,
+            or gifting. If you are comparing local perfume brands for genuine ingredients and reliable delivery,
+            Kalmat Fragrance is built for that exact decision.
           </p>
           <ul className="mt-3 max-w-2xl space-y-2">
             {AUDIENCE_POINTS.map((point) => (

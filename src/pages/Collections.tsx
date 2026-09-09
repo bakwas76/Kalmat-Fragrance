@@ -197,7 +197,7 @@ export default function Collections() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.6, delay: 0.4 }}
-            className="mx-auto mt-6 max-w-xl text-sm font-light leading-relaxed text-ivory/60"
+            className="mx-auto mt-6 max-w-xl text-sm font-light leading-relaxed text-ivory"
           >
             <strong className="font-medium text-ivory">In short:</strong> browse curated, gift-ready
             perfume sets grouped by mood and note family below, open a collection to see what's

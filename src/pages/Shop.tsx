@@ -69,7 +69,7 @@ const SHOP_FAQ_SCHEMA = {
 const SHOP_WEBPAGE_SCHEMA = {
   '@context': 'https://schema.org',
   '@type': 'WebPage',
-  name: 'Handcrafted Perfume Collection Online in Pakistan | Kalmat Fragrance',
+  name: 'Handcrafted Perfumes in Pakistan | Kalmat Fragrance',
   description:
     "Shop Kalmat Fragrance's full collection of handcrafted luxury perfumes — oud, rose, and amber scents for men, women, and unisex, delivered nationwide in Pakistan.",
   url: 'https://www.kalmatfragrance.store/shop',
@@ -261,7 +261,7 @@ export default function Shop() {
 return (
     <>
       <Seo
-        title="Handcrafted Perfume Collection Online in Pakistan"
+        title="Handcrafted Perfumes in Pakistan"
         description="Shop Kalmat Fragrance's full collection of handcrafted luxury perfumes — oud, rose, and amber scents for men, women, and unisex, delivered nationwide in Pakistan."
       />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(SHOP_ORGANIZATION_SCHEMA) }} />
@@ -327,10 +327,10 @@ return (
         <div className="mt-16 grid gap-6 border-t border-line pt-14 md:grid-cols-2 md:gap-8">
           <div className="border border-line bg-white p-8 sm:p-10">
             <p className="kx-eyebrow">Buying Guide</p>
-            <h2 className="mt-3 font-display text-2xl font-light text-charcoal">How Do I Choose the Right Fragrance?</h2>
+            <h2 className="mt-3 font-display text-2xl font-light text-charcoal">How to Choose the Right Fragrance</h2>
             <div className="kx-gold-line mt-5" />
             <p className="mt-6 text-sm font-light leading-relaxed text-ink-soft">
-              What's the difference between oud, rose, and amber, and how do you pick one? Follow these steps:
+              What is the difference between oud, rose, and amber, and how to choose between them? Here is how:
             </p>
             <ol className="mt-6 space-y-5">
               {HOW_TO_CHOOSE_STEPS.map((step, i) => (
@@ -347,6 +347,16 @@ return (
             <p className="kx-eyebrow">Trust & Transparency</p>
             <h2 className="mt-3 font-display text-2xl font-light text-charcoal">Why Shop With Us</h2>
             <div className="kx-gold-line mt-5" />
+            <p className="mt-6 text-sm font-light leading-relaxed text-ink-soft">
+              We hand-blend every fragrance ourselves, in small batches, at our own atelier in Karachi —
+              then let each blend rest before it is bottled, labeled, and gift-wrapped for dispatch. It is
+              the same process behind every single order we send out, not a mass-produced formula relabeled
+              for the shelf. Read more about{' '}
+              <a href="/about" className="underline decoration-gold/40 underline-offset-2 hover:text-gold-deep">
+                our story and process
+              </a>
+              .
+            </p>
             <ul className="mt-7 space-y-5">
               {SHOP_PROOF_POINTS.map((point) => (
                 <li key={point} className="flex items-start gap-3 text-sm font-light leading-relaxed text-ink-soft">

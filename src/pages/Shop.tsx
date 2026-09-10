@@ -56,7 +56,11 @@ const SHOP_FAQS = [
   },
 ];
 
-const SHOP_FAQ_SCHEMA = {
+export const SHOP_SEO_TITLE = 'Handcrafted Oud Perfumes Online';
+export const SHOP_SEO_DESCRIPTION =
+  "Shop Kalmat Fragrance's full collection of handcrafted luxury perfumes — oud, rose, and amber scents for men, women, and unisex, delivered nationwide in Pakistan.";
+
+export const SHOP_FAQ_SCHEMA = {
   '@context': 'https://schema.org',
   '@type': 'FAQPage',
   mainEntity: SHOP_FAQS.map((faq) => ({
@@ -66,7 +70,7 @@ const SHOP_FAQ_SCHEMA = {
   })),
 };
 
-const SHOP_WEBPAGE_SCHEMA = {
+export const SHOP_WEBPAGE_SCHEMA = {
   '@context': 'https://schema.org',
   '@type': 'WebPage',
   name: 'Handcrafted Oud Perfumes Online | Kalmat Fragrance',
@@ -84,7 +88,7 @@ const SHOP_WEBPAGE_SCHEMA = {
   },
 };
 
-const SHOP_ORGANIZATION_SCHEMA = {
+export const SHOP_ORGANIZATION_SCHEMA = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
   name: BRAND.name,
@@ -261,8 +265,8 @@ export default function Shop() {
 return (
     <>
       <Seo
-        title="Handcrafted Oud Perfumes Online"
-        description="Shop Kalmat Fragrance's full collection of handcrafted luxury perfumes — oud, rose, and amber scents for men, women, and unisex, delivered nationwide in Pakistan."
+       title={SHOP_SEO_TITLE}
+       description={SHOP_SEO_DESCRIPTION}
       />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(SHOP_ORGANIZATION_SCHEMA) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(SHOP_WEBPAGE_SCHEMA) }} />

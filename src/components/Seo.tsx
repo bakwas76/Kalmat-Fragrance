@@ -7,8 +7,8 @@ interface SeoProps {
   type?: string;
 }
 
-const BASE_TITLE = 'Kalmat Fragrance | Handcrafted Perfumes Online in Pakistan';
-const BASE_DESC =
+export const BASE_TITLE = 'Kalmat Fragrance | Handcrafted Perfumes Online in Pakistan';
+export const BASE_DESC =
   'Discover Kalmat Fragrance — handcrafted luxury perfumes with rare oud, rose, and amber. Shop our collections of artisanal fragrances crafted for the connoisseur.';
 
 export default function Seo({ title, description, image, type = 'website' }: SeoProps) {

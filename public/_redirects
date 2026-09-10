@@ -1,1 +1,5 @@
-/*    /index.html   200
+/shop           /shop/index.html          200
+/collections    /collections/index.html   200
+/about          /about/index.html         200
+/contact        /contact/index.html       200
+/*              /index.html               200

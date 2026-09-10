@@ -25,7 +25,7 @@ const AUDIENCE_POINTS = [
   'Gift buyers looking for an elegant, long-lasting signature scent',
 ];
 
-const ORGANIZATION_SCHEMA = {
+export const ORGANIZATION_SCHEMA = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
   name: BRAND.name,
@@ -44,7 +44,7 @@ const ORGANIZATION_SCHEMA = {
   ),
 };
 
-const WEBSITE_SCHEMA = {
+export const WEBSITE_SCHEMA = {
   '@context': 'https://schema.org',
   '@type': 'WebPage',
   name: 'Kalmat Fragrance — The Art of Luxury Perfumery',
@@ -62,7 +62,7 @@ const WEBSITE_SCHEMA = {
   },
 };
 
-const BREADCRUMB_SCHEMA = {
+export const BREADCRUMB_SCHEMA = {
   '@context': 'https://schema.org',
   '@type': 'BreadcrumbList',
   itemListElement: [

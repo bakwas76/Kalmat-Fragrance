@@ -49,7 +49,7 @@ const COLLECTIONS_FAQS = [
   },
 ];
 
-const COLLECTIONS_FAQ_SCHEMA = {
+export const COLLECTIONS_FAQ_SCHEMA = {
   '@context': 'https://schema.org',
   '@type': 'FAQPage',
   mainEntity: COLLECTIONS_FAQS.map((faq) => ({
@@ -59,7 +59,7 @@ const COLLECTIONS_FAQ_SCHEMA = {
   })),
 };
 
-const COLLECTIONS_WEBPAGE_SCHEMA = {
+export const COLLECTIONS_WEBPAGE_SCHEMA = {
   '@context': 'https://schema.org',
   '@type': 'WebPage',
   name: 'Gift-Ready Perfume Collections in Pakistan | Kalmat Fragrance',
@@ -78,7 +78,11 @@ const COLLECTIONS_WEBPAGE_SCHEMA = {
   },
 };
 
-const COLLECTIONS_ORGANIZATION_SCHEMA = {
+export const COLLECTIONS_SEO_TITLE = 'Gift-Ready Perfume Collections in Pakistan';
+export const COLLECTIONS_SEO_DESCRIPTION =
+  "Shop Kalmat Fragrance's curated perfume collections in Pakistan — signature oud, rose and amber gift sets, boxed with a clear story and occasion in mind.";
+
+export const COLLECTIONS_ORGANIZATION_SCHEMA = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
   name: BRAND.name,
@@ -161,8 +165,8 @@ export default function Collections() {
   return (
     <>
       <Seo
-        title="Gift-Ready Perfume Collections in Pakistan"
-        description="Shop Kalmat Fragrance's curated perfume collections in Pakistan — signature oud, rose and amber gift sets, boxed with a clear story and occasion in mind."
+        title={COLLECTIONS_SEO_TITLE}
+        description={COLLECTIONS_SEO_DESCRIPTION}
       />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(COLLECTIONS_ORGANIZATION_SCHEMA) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(COLLECTIONS_WEBPAGE_SCHEMA) }} />

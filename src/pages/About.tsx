@@ -54,7 +54,7 @@ const ABOUT_FAQS = [
   },
 ];
 
-const ABOUT_FAQ_SCHEMA = {
+export const ABOUT_FAQ_SCHEMA = {
   '@context': 'https://schema.org',
   '@type': 'FAQPage',
   mainEntity: ABOUT_FAQS.map((faq) => ({
@@ -64,7 +64,7 @@ const ABOUT_FAQ_SCHEMA = {
   })),
 };
 
-const ABOUT_WEBPAGE_SCHEMA = {
+export const ABOUT_WEBPAGE_SCHEMA = {
   '@context': 'https://schema.org',
   '@type': 'WebPage',
   name: 'Meet the Team & Atelier Behind Our Perfumes | Kalmat Fragrance',
@@ -83,7 +83,11 @@ const ABOUT_WEBPAGE_SCHEMA = {
   },
 };
 
-const ABOUT_ORGANIZATION_SCHEMA = {
+export const ABOUT_SEO_TITLE = 'Meet the Team & Atelier Behind Our Perfumes';
+export const ABOUT_SEO_DESCRIPTION =
+  'Meet the team behind Kalmat Fragrance — our Karachi atelier, sourcing process, and the hand-blending craft behind every oud, rose, and amber perfume we make.';
+
+export const ABOUT_ORGANIZATION_SCHEMA = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
   name: BRAND.name,
@@ -127,9 +131,9 @@ export default function About() {
 
   return (
     <div className="w-full max-w-full overflow-x-hidden">
-      <Seo
-        title="Meet the Team & Atelier Behind Our Perfumes"
-        description="Meet the team behind Kalmat Fragrance — our Karachi atelier, sourcing process, and the hand-blending craft behind every oud, rose, and amber perfume we make."
+     <Seo
+        title={ABOUT_SEO_TITLE}
+        description={ABOUT_SEO_DESCRIPTION}
       />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ABOUT_ORGANIZATION_SCHEMA) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ABOUT_WEBPAGE_SCHEMA) }} />

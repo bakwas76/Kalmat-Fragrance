@@ -39,7 +39,7 @@ const CONTACT_PROOF_POINTS = [
   'Every order ships with a trackable courier link, visible end-to-end from our Track Order page.',
 ];
 
-const CONTACT_WEBPAGE_SCHEMA = {
+export const CONTACT_WEBPAGE_SCHEMA = {
   '@context': 'https://schema.org',
   '@type': 'WebPage',
   name: 'How to Reach Kalmat Fragrance Support | Kalmat Fragrance',
@@ -58,7 +58,11 @@ const CONTACT_WEBPAGE_SCHEMA = {
   },
 };
 
-const CONTACT_ORGANIZATION_SCHEMA = {
+export const CONTACT_SEO_TITLE = 'How to Reach Kalmat Fragrance Support';
+export const CONTACT_SEO_DESCRIPTION =
+  "Reach Kalmat Fragrance's concierge team in Karachi by phone, WhatsApp, or email — for order help, returns, and product questions across Pakistan.";
+
+export const CONTACT_ORGANIZATION_SCHEMA = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
   name: BRAND.name,
@@ -108,8 +112,8 @@ export default function Contact() {
   return (
     <>
       <Seo
-        title="How to Reach Kalmat Fragrance Support"
-        description="Reach Kalmat Fragrance's concierge team in Karachi by phone, WhatsApp, or email — for order help, returns, and product questions across Pakistan."
+       title={CONTACT_SEO_TITLE}
+       description={CONTACT_SEO_DESCRIPTION}
       />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(CONTACT_ORGANIZATION_SCHEMA) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(CONTACT_WEBPAGE_SCHEMA) }} />

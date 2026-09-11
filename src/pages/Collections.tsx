@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import { motion } from 'framer-motion';
-import { ArrowRight, Image as ImageIcon, Check } from 'lucide-react';
+import { ArrowRight, Image as ImageIcon } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import type { Collection, Product } from '@/types';
 import ProductTile from '@/components/ProductTile';
@@ -21,13 +21,6 @@ const HOW_TO_CHOOSE_COLLECTION_STEPS = [
   'Pick a lead note family — oud, rose, or amber — and choose the collection built around it, since each collection groups scents that share a mood.',
   'Check whether the set is for one person or for gifting; some collections are boxed specifically as gift sets with presentation packaging.',
   'Open a collection below and use featured/best-seller sorting on its product grid to see which items inside it buyers pick most.',
-];
-
-const COLLECTIONS_PROOF_POINTS = [
-  'Every collection is grouped and hand-blended at our own atelier in Karachi, not assembled from third-party stock.',
-  'Products inside each collection carry the same verified-buyer ratings and reviews shown across the rest of the site.',
-  'Orders from any collection ship with a trackable courier link via our Track Order page.',
-  'Not the right fit? Return any unopened, unused bottle within 7 days — no questions asked.',
 ];
 
 const COLLECTIONS_FAQS = [
@@ -210,79 +203,6 @@ export default function Collections() {
         </div>
       </section>
 
-      {/* Who these collections are for + how to choose (helps buyers decide, and helps AI/answer engines) */}
-      <section className="kx-container py-14 lg:py-16">
-        <p className="kx-eyebrow">Who It's For</p>
-        <h2 className="mt-3 font-display text-2xl font-light text-charcoal">Who These Collections Are For</h2>
-        <div className="kx-gold-line mt-4" />
-        <p className="mt-6 max-w-3xl text-sm font-light leading-relaxed text-ink-soft">
-          A fragrance collection is a curated group of perfumes assembled around a shared mood, note
-          family, or occasion — built for shoppers who want a theme, not just a single bottle.
-        </p>
-        <ul className="mt-6 max-w-2xl space-y-3">
-          {COLLECTIONS_AUDIENCE_POINTS.map((point) => (
-            <li key={point} className="flex items-start gap-3 text-sm font-light leading-relaxed text-ink-soft">
-              <Check size={15} className="mt-0.5 shrink-0 text-gold" />
-              {point}
-            </li>
-          ))}
-        </ul>
-
-        <h2 className="mt-14 font-display text-2xl font-light text-charcoal">How Do I Choose the Right Collection?</h2>
-        <div className="kx-gold-line mt-4" />
-        <p className="mt-6 max-w-3xl text-sm font-light leading-relaxed text-ink-soft">
-          What is the difference between our collections, and how do you pick one? Here is how:
-        </p>
-        <ol className="mt-6 max-w-3xl space-y-5">
-          {HOW_TO_CHOOSE_COLLECTION_STEPS.map((step, i) => (
-            <li key={step} className="flex items-start gap-4 text-sm font-light leading-relaxed text-ink-soft">
-              <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full border border-gold/40 font-display text-xs italic text-gold-deep">
-                {i + 1}
-              </span>
-              <span className="pt-0.5">{step}</span>
-            </li>
-          ))}
-        </ol>
-
-        <div className="mt-10 max-w-3xl overflow-hidden border border-line">
-          <table className="w-full text-left text-sm">
-            <thead className="bg-ivory-2">
-              <tr>
-                <th className="p-4 font-display text-charcoal">Use Case</th>
-                <th className="p-4 font-display text-charcoal">What to Look For</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-line">
-              <tr>
-                <td className="p-4 font-light text-ink-soft">Everyday signature scent</td>
-                <td className="p-4 font-light text-ink-soft">Lighter rose or amber-forward collections you can wear daily</td>
-              </tr>
-              <tr>
-                <td className="p-4 font-light text-ink-soft">Gifting someone else</td>
-                <td className="p-4 font-light text-ink-soft">Boxed sets with complementary scents and gift-ready packaging</td>
-              </tr>
-              <tr>
-                <td className="p-4 font-light text-ink-soft">Special occasion / evening</td>
-                <td className="p-4 font-light text-ink-soft">Stronger oud-forward collections with more longevity</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <p className="mt-6 max-w-3xl text-xs font-light text-ink-mute">
-          Source:{' '}
-          <a
-            href="https://en.wikipedia.org/wiki/Perfume#Classification"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="underline decoration-gold/40 underline-offset-2 hover:text-gold-deep"
-          >
-            fragrance family classification
-          </a>{' '}
-          as used across the global perfumery industry, applied to how we group each collection.
-        </p>
-      </section>
-
       {/* Editorial Collection Cards */}
       {collections.length > 0 && (
         <section className="kx-container py-16 lg:py-24">
@@ -387,41 +307,79 @@ export default function Collections() {
         </section>
       )}
 
-      {/* Why shop our collections — proof, ownership, and live data (helps GEO trust signals) */}
-      <section className="kx-container py-14 lg:py-16">
-        <div className="border border-line bg-white p-8 sm:p-10">
-          <p className="kx-eyebrow">Trust & Transparency</p>
-          <h2 className="mt-3 font-display text-2xl font-light text-charcoal">Why Shop Our Collections</h2>
-          <div className="kx-gold-line mt-5" />
-          <p className="mt-6 text-sm font-light leading-relaxed text-ink-soft">
-            Every collection on this page is grouped and hand-blended by the Kalmat Fragrance team at
-            our own atelier in Karachi — not assembled from third-party stock or a generic supplier
-            catalog. Read more about{' '}
-            <a href="/about" className="underline decoration-gold/40 underline-offset-2 hover:text-gold-deep">
-              our story and process
-            </a>
-            , or browse the{' '}
-            <a href="/shop" className="underline decoration-gold/40 underline-offset-2 hover:text-gold-deep">
-              full shop
-            </a>{' '}
-            if you would rather choose one fragrance at a time.
-          </p>
-          {collectionsLoaded && (
-            <p className="mt-4 text-sm font-light leading-relaxed text-ink-soft">
-              Right now we have {collections.length} curated collection{collections.length !== 1 ? 's' : ''}{' '}
-              live on the site, each typically grouping several complementary scents around one mood or
-              note family — curated and written by the Kalmat Fragrance team in Karachi, based on what
-              is actually available today, not a generic catalog description.
+      {/* Who these collections are for / how to choose / why shop them (compact — helps AI/answer engines extract a direct answer) */}
+      <section className="kx-section-sm bg-ivory-2">
+        <div className="kx-container">
+          <div className="max-w-3xl border-l-2 border-gold/50 pl-6 sm:pl-8">
+            <p className="text-base font-light leading-relaxed text-ink-soft sm:text-lg">
+              <strong className="font-medium text-charcoal">Who these are for:</strong> a fragrance
+              collection is a curated group of perfumes assembled around a shared mood, note family,
+              or occasion — built for shoppers who want a theme, not just a single bottle.
             </p>
-          )}
-          <ul className="mt-7 space-y-5">
-            {COLLECTIONS_PROOF_POINTS.map((point) => (
-              <li key={point} className="flex items-start gap-3 text-sm font-light leading-relaxed text-ink-soft">
-                <Check size={15} className="mt-0.5 shrink-0 text-gold" />
-                <span>{point}</span>
-              </li>
-            ))}
-          </ul>
+            <div className="mt-6 grid gap-x-8 gap-y-3 sm:grid-cols-3">
+              {COLLECTIONS_AUDIENCE_POINTS.map((point) => (
+                <p key={point} className="border-t border-line pt-3 text-xs font-light leading-relaxed text-ink-soft">
+                  {point}
+                </p>
+              ))}
+            </div>
+          </div>
+
+          <div className="mt-14 grid gap-8 border-t border-line pt-12 sm:grid-cols-2 sm:gap-12">
+            <div>
+              <h3 className="font-display text-lg font-light text-charcoal">How Do I Choose the Right Collection?</h3>
+              <p className="mt-3 text-sm font-light leading-relaxed text-ink-soft">
+                What is the difference between our collections, and how do you pick one? Here is how:
+              </p>
+              <ol className="mt-4 space-y-2.5">
+                {HOW_TO_CHOOSE_COLLECTION_STEPS.map((step, i) => (
+                  <li key={step} className="flex gap-3 text-sm font-light leading-relaxed text-ink-soft">
+                    <span className="shrink-0 font-display text-xs italic text-gold-deep">{i + 1}.</span>
+                    <span>{step}</span>
+                  </li>
+                ))}
+              </ol>
+              <p className="mt-6 text-xs font-light text-ink-mute">
+                Source:{' '}
+                <a
+                  href="https://en.wikipedia.org/wiki/Perfume#Classification"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline decoration-gold/40 underline-offset-2 hover:text-gold-deep"
+                >
+                  fragrance family classification
+                </a>{' '}
+                as used across the global perfumery industry, applied to how we group each collection.
+              </p>
+            </div>
+            <div>
+              <h3 className="font-display text-lg font-light text-charcoal">Why Shop Our Collections</h3>
+              <p className="mt-4 text-sm font-light leading-relaxed text-ink-soft">
+                Every collection on this page is grouped and hand-blended by the Kalmat Fragrance team
+                at our own atelier in Karachi — not assembled from third-party stock or a generic
+                supplier catalog. Read more about{' '}
+                <a href="/about" className="underline decoration-gold/40 underline-offset-2 hover:text-gold-deep">
+                  our story and process
+                </a>
+                , or browse the{' '}
+                <a href="/shop" className="underline decoration-gold/40 underline-offset-2 hover:text-gold-deep">
+                  full shop
+                </a>{' '}
+                if you would rather choose one fragrance at a time.
+              </p>
+              {collectionsLoaded && (
+                <p className="mt-3 text-sm font-light leading-relaxed text-ink-soft">
+                  Right now we have {collections.length} curated collection{collections.length !== 1 ? 's' : ''}{' '}
+                  live on the site — curated and written by the Kalmat Fragrance team in Karachi, based
+                  on what is actually available today.
+                </p>
+              )}
+              <p className="mt-3 text-sm font-light leading-relaxed text-ink-soft">
+                Every order ships nationwide with a trackable courier link, and any unopened, unused
+                bottle can be returned within 7 days, no questions asked.
+              </p>
+            </div>
+          </div>
         </div>
       </section>
 

@@ -10,6 +10,7 @@ export const BRAND = {
   instagram: 'https://instagram.com',
   facebook: 'https://facebook.com',
   twitter: 'https://twitter.com',
+  tiktok: 'https://tiktok.com',
 };
 
 // Admin email where order PDF invoices are sent

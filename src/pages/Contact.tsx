@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import FaqSection from '@/components/FaqSection';
 import { motion } from 'framer-motion';
-import { Mail, MapPin, Phone, MessageCircle, Send, Loader2, Check } from 'lucide-react';
+import { Mail, MapPin, Phone, MessageCircle, Send, Loader2 } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import { useToast } from '@/contexts/ToastContext';
 import { BRAND } from '@/lib/constants';
@@ -23,20 +23,6 @@ const HOW_TO_CONTACT_STEPS = [
   'For detailed questions, attachments, or documentation, email us and we will reply as soon as possible.',
   "If your question is about a specific order, have your order number ready — find it in your order confirmation email or on our Track Order page.",
   'If you would rather talk it through, call us directly using the number below.',
-];
-
-const CONTACT_CHANNELS = [
-  { channel: 'WhatsApp', bestFor: 'Urgent order, shipping, or delivery questions' },
-  { channel: 'Phone', bestFor: 'Speaking directly with our concierge team' },
-  { channel: 'Email', bestFor: 'Detailed questions, attachments, or documentation' },
-  { channel: 'Contact form', bestFor: 'General inquiries, product advice, or feedback' },
-];
-
-const CONTACT_PROOF_POINTS = [
-  'Every message is answered personally by our own team in Karachi — not an outsourced call center.',
-  'Orders ship nationwide across Pakistan and typically arrive within 3–5 business days.',
-  'Unopened, unused products can be returned within 7 days of delivery — no questions asked.',
-  'Every order ships with a trackable courier link, visible end-to-end from our Track Order page.',
 ];
 
 export const CONTACT_WEBPAGE_SCHEMA = {
@@ -164,109 +150,69 @@ export default function Contact() {
           </motion.div>
         </div>
 
-        {/* Who this page is for + how to contact us (audience clarity + AEO steps) */}
+        {/* Who this page is for / how to contact / why reach out (compact — helps AI/answer engines extract a direct answer) */}
         <div className="mt-16 border-t border-line pt-14">
-          <p className="kx-eyebrow">Who It's For</p>
-          <h2 className="mt-3 font-display text-2xl font-light text-charcoal">Who Should Use This Page</h2>
-          <div className="kx-gold-line mt-4" />
-          <p className="mt-6 max-w-3xl text-sm font-light leading-relaxed text-ink-soft">
-            This contact page is for anyone in Pakistan's luxury perfume market who needs to reach the
-            Kalmat Fragrance team directly — whether that means resolving an order, asking a product
-            question, or getting in touch for another reason.
-          </p>
-          <ul className="mt-6 max-w-2xl space-y-3">
-            {CONTACT_AUDIENCE_POINTS.map((point) => (
-              <li key={point} className="flex items-start gap-3 text-sm font-light leading-relaxed text-ink-soft">
-                <Check size={15} className="mt-0.5 shrink-0 text-gold" />
-                {point}
-              </li>
-            ))}
-          </ul>
-
-          <h2 className="mt-14 font-display text-2xl font-light text-charcoal">How Do I Contact Kalmat Fragrance?</h2>
-          <div className="kx-gold-line mt-4" />
-          <p className="mt-6 max-w-3xl text-sm font-light leading-relaxed text-ink-soft">
-            What is the quickest way to reach us, and when should you use each channel? Here is how:
-          </p>
-          <ol className="mt-6 max-w-3xl space-y-5">
-            {HOW_TO_CONTACT_STEPS.map((step, i) => (
-              <li key={step} className="flex items-start gap-4 text-sm font-light leading-relaxed text-ink-soft">
-                <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full border border-gold/40 font-display text-xs italic text-gold-deep">
-                  {i + 1}
-                </span>
-                <span className="pt-0.5">{step}</span>
-              </li>
-            ))}
-          </ol>
-
-          <div className="mt-10 max-w-3xl overflow-hidden border border-line">
-            <table className="w-full text-left text-sm">
-              <thead className="bg-ivory-2">
-                <tr>
-                  <th className="p-4 font-display text-charcoal">Channel</th>
-                  <th className="p-4 font-display text-charcoal">Best For</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-line">
-                {CONTACT_CHANNELS.map((row) => (
-                  <tr key={row.channel}>
-                    <td className="p-4 font-light text-ink-soft">{row.channel}</td>
-                    <td className="p-4 font-light text-ink-soft">{row.bestFor}</td>
-                  </tr>
+          <div className="grid gap-10 sm:grid-cols-2 sm:gap-14">
+            <div>
+              <h3 className="font-display text-lg font-light text-charcoal">Who Should Use This Page</h3>
+              <p className="mt-4 text-sm font-light leading-relaxed text-ink-soft">
+                Anyone in Pakistan's luxury perfume market who needs to reach the Kalmat Fragrance team
+                directly — whether that means resolving an order, asking a product question, or getting
+                in touch for another reason.
+              </p>
+              <div className="mt-6 space-y-3">
+                {CONTACT_AUDIENCE_POINTS.map((point) => (
+                  <p key={point} className="border-t border-line pt-3 text-xs font-light leading-relaxed text-ink-soft">
+                    {point}
+                  </p>
                 ))}
-              </tbody>
-            </table>
+              </div>
+            </div>
+            <div>
+              <h3 className="font-display text-lg font-light text-charcoal">How Do I Contact Kalmat Fragrance?</h3>
+              <p className="mt-3 text-sm font-light leading-relaxed text-ink-soft">
+                What is the quickest way to reach us, and when should you use each channel? Here is how:
+              </p>
+              <ol className="mt-4 space-y-2.5">
+                {HOW_TO_CONTACT_STEPS.map((step, i) => (
+                  <li key={step} className="flex gap-3 text-sm font-light leading-relaxed text-ink-soft">
+                    <span className="shrink-0 font-display text-xs italic text-gold-deep">{i + 1}.</span>
+                    <span>{step}</span>
+                  </li>
+                ))}
+              </ol>
+            </div>
           </div>
 
-          <p className="mt-6 max-w-3xl text-xs font-light text-ink-mute">
-            Source:{' '}
-            <a
-              href="https://en.wikipedia.org/wiki/Customer_service"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="underline decoration-gold/40 underline-offset-2 hover:text-gold-deep"
-            >
-              customer service channel best practices
-            </a>{' '}
-            informed how we route urgent questions to WhatsApp and detailed questions to email.
-          </p>
-        </div>
-
-        {/* Why contact us — ownership, proof, and live data (GEO trust signals) */}
-        <div className="mt-16 border border-line bg-white p-8 sm:p-10">
-          <p className="kx-eyebrow">Trust & Transparency</p>
-          <h2 className="mt-3 font-display text-2xl font-light text-charcoal">Why Reach Out to Us Directly</h2>
-          <div className="kx-gold-line mt-5" />
-          <p className="mt-6 text-sm font-light leading-relaxed text-ink-soft">
-            This page is staffed and written by the Kalmat Fragrance team in Karachi. When you message
-            us, you are reaching the same people who first-hand hand-blend and test every bottle — for
-            example, if you ask about a specific note or batch, the person answering has actually
-            smelled and checked it, not read it off a script. Before you write to us, you can also
-            browse our{' '}
-            <Link to="/shop" className="underline decoration-gold/40 underline-offset-2 hover:text-gold-deep">
-              shop
-            </Link>{' '}
-            or read{' '}
-            <Link to="/about" className="underline decoration-gold/40 underline-offset-2 hover:text-gold-deep">
-              our story
-            </Link>{' '}
-            to see who you would be talking to.
-          </p>
-          {reviewCount !== null && (
-            <p className="mt-4 text-sm font-light leading-relaxed text-ink-soft">
-              Our concierge team stands behind {reviewCount} verified-buyer review{reviewCount !== 1 ? 's' : ''}{' '}
-              approved across the site — a live count pulled directly from our own review records, not a
-              marketing estimate.
+          <div className="mt-14 border-t border-line pt-12">
+            <h3 className="font-display text-lg font-light text-charcoal">Why Reach Out to Us Directly</h3>
+            <p className="mt-4 max-w-3xl text-sm font-light leading-relaxed text-ink-soft">
+              This page is staffed and written by the Kalmat Fragrance team in Karachi. When you message
+              us, you are reaching the same people who first-hand hand-blend and test every bottle — for
+              example, if you ask about a specific note or batch, the person answering has actually
+              smelled and checked it, not read it off a script. Before you write to us, you can also
+              browse our{' '}
+              <Link to="/shop" className="underline decoration-gold/40 underline-offset-2 hover:text-gold-deep">
+                shop
+              </Link>{' '}
+              or read{' '}
+              <Link to="/about" className="underline decoration-gold/40 underline-offset-2 hover:text-gold-deep">
+                our story
+              </Link>{' '}
+              to see who you would be talking to.
             </p>
-          )}
-          <ul className="mt-7 space-y-5">
-            {CONTACT_PROOF_POINTS.map((point) => (
-              <li key={point} className="flex items-start gap-3 text-sm font-light leading-relaxed text-ink-soft">
-                <Check size={15} className="mt-0.5 shrink-0 text-gold" />
-                <span>{point}</span>
-              </li>
-            ))}
-          </ul>
+            {reviewCount !== null && (
+              <p className="mt-3 max-w-3xl text-sm font-light leading-relaxed text-ink-soft">
+                Our concierge team stands behind {reviewCount} verified-buyer review{reviewCount !== 1 ? 's' : ''}{' '}
+                approved across the site — a live count pulled directly from our own review records.
+              </p>
+            )}
+            <p className="mt-3 max-w-3xl text-sm font-light leading-relaxed text-ink-soft">
+              Every order ships nationwide across Pakistan (typically within 3–5 business days) with a
+              trackable courier link, and any unopened, unused product can be returned within 7 days, no
+              questions asked.
+            </p>
+          </div>
         </div>
 
         <FaqSection />

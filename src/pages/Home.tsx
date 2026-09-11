@@ -136,6 +136,14 @@ setLoading(false);
     })();
   }, []);
 
+  const galleryImages = Array.from(
+    new Map(
+      [...bestSellers, ...newArrivals, ...featured]
+        .filter((p) => p.image_url)
+        .map((p) => [p.image_url, p]),
+    ).values(),
+  ).slice(0, 6);
+
   return (
     <div className="w-full max-w-full overflow-x-hidden">
       <Seo />
@@ -143,77 +151,6 @@ setLoading(false);
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(WEBSITE_SCHEMA) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(BREADCRUMB_SCHEMA) }} />
       <HeroSection />
-
-      {/* Quick summary — who this is for (helps AI/answer engines extract a direct answer) */}
-      <section className="kx-section bg-ivory-2">
-        <div className="kx-container">
-          <div className="max-w-3xl border-l-2 border-gold/50 pl-6 sm:pl-8">
-            <p className="text-lg font-light leading-[1.8] text-ink-soft sm:text-xl">
-              <strong className="font-medium text-charcoal">In short:</strong> Kalmat Fragrance is a Pakistan-based
-              perfume house that handcrafts luxury fragrances using rare oud, rose, and amber essences — sold online
-              with nationwide delivery.
-            </p>
-          </div>
-
-          <div className="mt-16">
-            <SectionTitle eyebrow="Who It's For" title="Who This Page Is For" align="left" />
-            <p className="mt-6 max-w-3xl text-sm font-light leading-relaxed text-ink-soft">
-              This shop is designed for shoppers in Pakistan who are deciding where to buy an authentic, handcrafted
-              oud, rose, or amber perfume online — whether the use case is personal daily wear, a special occasion,
-              or gifting. If you are comparing local perfume brands for genuine ingredients and reliable delivery,
-              Kalmat Fragrance is built for that exact decision.
-            </p>
-            <div className="mt-10 grid gap-x-10 gap-y-6 sm:grid-cols-3">
-              {AUDIENCE_POINTS.map((point) => (
-                <p key={point} className="border-t border-line pt-5 text-sm font-light leading-relaxed text-ink-soft">
-                  {point}
-                </p>
-              ))}
-            </div>
-          </div>
-
-          {/* Ordering process + trust, told as one editorial moment instead of two matching boxes */}
-          <div className="mt-20 grid items-center gap-10 border-t border-line pt-16 lg:grid-cols-2 lg:gap-16">
-            <div className="kx-img-frame order-2 aspect-[4/5] lg:order-1">
-              <img
-                src="/atelier.png"
-                alt="Inside the Kalmat Fragrance atelier in Karachi"
-                className="kx-img-zoom h-full w-full object-cover"
-              />
-            </div>
-
-            <div className="order-1 lg:order-2">
-              <p className="kx-eyebrow">Getting Started</p>
-              <h3 className="mt-3 font-display text-2xl font-light text-charcoal">How Ordering Works</h3>
-              <ol className="mt-8">
-                {[
-                  'Browse fragrances by family — oud, rose, or amber — and pick your signature scent.',
-                  'Place your order online with cash on delivery or card payment.',
-                  'We handcraft, gift-wrap, and dispatch your order with a trackable courier link.',
-                  'Not satisfied? Return it within 7 days, no questions asked.',
-                ].map((step, i, steps) => (
-                  <li
-                    key={step}
-                    className={`flex gap-5 py-4 ${i !== steps.length - 1 ? 'border-b border-line' : ''}`}
-                  >
-                    <span className="font-display text-sm italic text-gold-deep">{String(i + 1).padStart(2, '0')}</span>
-                    <span className="text-sm font-light leading-relaxed text-ink-soft">{step}</span>
-                  </li>
-                ))}
-              </ol>
-              <p className="mt-8 text-xs font-light leading-relaxed text-ink-mute">
-                Every bottle carries a 100% authentic guarantee, backed by real, verified-buyer reviews. Reach a
-                real person any time at {BRAND.phone} or {BRAND.email} — every order is trackable end-to-end from
-                our{' '}
-                <Link to="/track-order" className="underline decoration-gold/40 underline-offset-2 hover:text-gold-deep">
-                  Track Order
-                </Link>{' '}
-                page.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* Trust bar */}
       <section className="border-y border-line bg-ivory-2">
@@ -453,9 +390,9 @@ setLoading(false);
         <div className="kx-container">
           <SectionTitle eyebrow="@kalmatfragrance" title="Follow Our World" subtitle="A glimpse into the Kalmat atelier — bottles, notes, and the craft behind each composition." />
           <div className="mt-14 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
-            {Array.from({ length: 6 }).map((_, i) => (
+            {(galleryImages.length > 0 ? galleryImages : Array.from({ length: 6 })).map((p, i) => (
               <motion.a
-                key={i}
+                key={p?.id ?? i}
                 href={BRAND.instagram}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -465,9 +402,17 @@ setLoading(false);
                 transition={{ duration: 0.4, delay: i * 0.05 }}
                 className="group kx-img-frame relative aspect-square border border-line bg-ivory-2"
               >
-                <div className="grid h-full w-full place-items-center" style={{ background: 'linear-gradient(160deg,#F3ECE0,#E6DCCB)' }}>
-                  <ImageIcon size={28} className="text-gold/20" />
-                </div>
+                {p?.image_url ? (
+                  <img
+                    src={p.image_url}
+                    alt={p.name || 'Kalmat Fragrance'}
+                    className="kx-img-zoom h-full w-full object-cover"
+                  />
+                ) : (
+                  <div className="grid h-full w-full place-items-center" style={{ background: 'linear-gradient(160deg,#F3ECE0,#E6DCCB)' }}>
+                    <ImageIcon size={28} className="text-gold/20" />
+                  </div>
+                )}
                 <div className="absolute inset-0 grid place-items-center bg-charcoal/0 transition-colors duration-500 group-hover:bg-charcoal/40">
                   <Instagram className="h-7 w-7 text-gold-light opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
                 </div>
@@ -491,6 +436,49 @@ setLoading(false);
           </div>
         </section>
       )}
+
+      {/* Who this is for / how ordering works (compact — helps AI/answer engines extract a direct answer) */}
+      <section className="kx-section-sm bg-ivory-2">
+        <div className="kx-container">
+          <div className="max-w-3xl border-l-2 border-gold/50 pl-6 sm:pl-8">
+            <p className="text-base font-light leading-relaxed text-ink-soft sm:text-lg">
+              <strong className="font-medium text-charcoal">In short:</strong> Kalmat Fragrance is a Pakistan-based
+              perfume house that handcrafts oud, rose, and amber perfumes for shoppers deciding on daily wear, a
+              special occasion, or a gift — delivered nationwide with cash on delivery or card payment.
+            </p>
+          </div>
+
+          <div className="mt-10 grid gap-8 sm:grid-cols-2 sm:gap-12">
+            <div>
+              <h3 className="font-display text-lg font-light text-charcoal">How Ordering Works</h3>
+              <ol className="mt-4 space-y-2.5">
+                {[
+                  'Browse by fragrance family — oud, rose, or amber — and pick your scent.',
+                  'Order online with cash on delivery or card payment.',
+                  'We handcraft, gift-wrap, and dispatch with a trackable courier link.',
+                  'Not satisfied? Return within 7 days, no questions asked.',
+                ].map((step, i) => (
+                  <li key={step} className="flex gap-3 text-sm font-light leading-relaxed text-ink-soft">
+                    <span className="shrink-0 font-display text-xs italic text-gold-deep">{i + 1}.</span>
+                    <span>{step}</span>
+                  </li>
+                ))}
+              </ol>
+            </div>
+            <div>
+              <h3 className="font-display text-lg font-light text-charcoal">Why Shoppers Trust Us</h3>
+              <p className="mt-4 text-sm font-light leading-relaxed text-ink-soft">
+                A 100% authentic guarantee on every bottle, backed by real verified-buyer reviews. Reach a real
+                person any time at {BRAND.phone} or {BRAND.email} — every order is trackable end-to-end from our{' '}
+                <Link to="/track-order" className="underline decoration-gold/40 underline-offset-2 hover:text-gold-deep">
+                  Track Order
+                </Link>{' '}
+                page.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* FAQ — question-style headings + answers help AI/answer-engine visibility */}
       <section className="kx-section bg-ivory-2">

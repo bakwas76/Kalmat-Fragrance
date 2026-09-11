@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import { motion } from 'framer-motion';
-import { ArrowRight, Sparkles, HandHeart, Globe2, Award, Check } from 'lucide-react';
+import { ArrowRight, Sparkles, HandHeart, Globe2, Award } from 'lucide-react';
 import { BRAND } from '@/lib/constants';
 import SectionTitle from '@/components/SectionTitle';
 import Seo from '@/components/Seo';
@@ -26,13 +26,6 @@ const CONCENTRATION_FACTS = [
   { type: 'Eau de Parfum (EDP)', concentration: '15–20%', longevity: '6–8 hours on skin' },
   { type: 'Eau de Toilette (EDT)', concentration: '5–15%', longevity: '3–5 hours on skin' },
   { type: 'Parfum / Extrait', concentration: '20–30%', longevity: '8+ hours on skin' },
-];
-
-const ABOUT_PROOF_POINTS = [
-  'Every fragrance is hand-blended in small batches at our own atelier in Karachi — never outsourced to a third-party filler.',
-  'Each batch rests before bottling, so the notes settle and blend the way they are meant to before it reaches a customer.',
-  'Product ratings and reviews across the site come only from verified buyers who purchased directly from us.',
-  'Every order ships with a trackable courier link and a 7-day, no-questions-asked return on unopened bottles.',
 ];
 
 const ABOUT_FAQS = [
@@ -156,28 +149,6 @@ export default function About() {
         </div>
       </section>
 
-      {/* Who this page is for (audience clarity for AEO/GEO) */}
-      <section className="kx-container py-14 lg:py-16">
-        <p className="kx-eyebrow">Who It's For</p>
-        <h2 className="mt-3 font-display text-2xl font-light text-charcoal">Who This Page Is For</h2>
-        <div className="kx-gold-line mt-4" />
-        <p className="mt-6 max-w-3xl text-sm font-light leading-relaxed text-ink-soft">
-          This About page is built for buyers in Pakistan's luxury perfume industry who want to verify
-          who is behind Kalmat Fragrance and how we source and blend each fragrance. The use case is
-          simple: use this page to decide whether our handcrafted, small-batch process meets your
-          standards before ordering, before comparing us to mass-produced perfume brands, or before
-          buying a bottle as a gift.
-        </p>
-        <ul className="mt-6 max-w-2xl space-y-3">
-          {ABOUT_AUDIENCE_POINTS.map((point) => (
-            <li key={point} className="flex items-start gap-3 text-sm font-light leading-relaxed text-ink-soft">
-              <Check size={15} className="mt-0.5 shrink-0 text-gold" />
-              {point}
-            </li>
-          ))}
-        </ul>
-      </section>
-
       {/* Story */}
       <section className="kx-section">
         <div ref={storyRef} className="reveal-hidden kx-container">
@@ -288,36 +259,46 @@ export default function About() {
         </p>
       </section>
 
-      {/* Why trust us — proof, ownership, and first-hand process (GEO trust signals) */}
-      <section className="kx-container py-14 lg:py-16">
-        <div className="border border-line bg-white p-8 sm:p-10">
-          <p className="kx-eyebrow">Trust & Transparency</p>
-          <h2 className="mt-3 font-display text-2xl font-light text-charcoal">Why Buyers Trust Kalmat Fragrance</h2>
-          <div className="kx-gold-line mt-5" />
-          <p className="mt-6 text-sm font-light leading-relaxed text-ink-soft">
-            Kalmat Fragrance is a Karachi-based, Pakistan-owned perfume house — every bottle is composed
-            and hand-blended in-house, not relabeled from a third-party manufacturer. This page and our{' '}
-            <Link to="/shop" className="underline decoration-gold/40 underline-offset-2 hover:text-gold-deep">
-              full shop
-            </Link>{' '}
-            are curated and written by the Kalmat Fragrance team in Karachi.
-          </p>
-          {liveStats && (
-            <p className="mt-4 text-sm font-light leading-relaxed text-ink-soft">
-              As of today, we have {liveStats.productCount} fragrance{liveStats.productCount !== 1 ? 's' : ''} live
-              on the site and {liveStats.reviewCount} verified-buyer review{liveStats.reviewCount !== 1 ? 's' : ''} approved
-              across them — a live count pulled directly from our own order and review records, not a
-              marketing estimate.
-            </p>
-          )}
-          <ul className="mt-7 space-y-5">
-            {ABOUT_PROOF_POINTS.map((point) => (
-              <li key={point} className="flex items-start gap-3 text-sm font-light leading-relaxed text-ink-soft">
-                <Check size={15} className="mt-0.5 shrink-0 text-gold" />
-                <span>{point}</span>
-              </li>
-            ))}
-          </ul>
+      {/* Who this page is for / why buyers trust us (compact — helps AI/answer engines extract a direct answer) */}
+      <section className="kx-section-sm bg-ivory-2">
+        <div className="kx-container">
+          <div className="grid gap-10 sm:grid-cols-2 sm:gap-14">
+            <div>
+              <h3 className="font-display text-lg font-light text-charcoal">Who This Page Is For</h3>
+              <p className="mt-4 text-sm font-light leading-relaxed text-ink-soft">
+                Buyers in Pakistan's luxury perfume industry who want to verify who is behind Kalmat
+                Fragrance and how we source and blend each fragrance — before ordering, before
+                comparing us to mass-produced brands, or before buying a bottle as a gift.
+              </p>
+              <div className="mt-6 space-y-3">
+                {ABOUT_AUDIENCE_POINTS.map((point) => (
+                  <p key={point} className="border-t border-line pt-3 text-xs font-light leading-relaxed text-ink-soft">
+                    {point}
+                  </p>
+                ))}
+              </div>
+            </div>
+            <div>
+              <h3 className="font-display text-lg font-light text-charcoal">Why Buyers Trust Kalmat Fragrance</h3>
+              <p className="mt-4 text-sm font-light leading-relaxed text-ink-soft">
+                Kalmat Fragrance is a Karachi-based, Pakistan-owned perfume house — every bottle is
+                composed and hand-blended in-house, never relabeled from a third-party manufacturer,
+                and every order ships with a trackable courier link and a 7-day, no-questions-asked
+                return on unopened bottles. This page and our{' '}
+                <Link to="/shop" className="underline decoration-gold/40 underline-offset-2 hover:text-gold-deep">
+                  full shop
+                </Link>{' '}
+                are curated and written by the Kalmat Fragrance team in Karachi.
+              </p>
+              {liveStats && (
+                <p className="mt-3 text-sm font-light leading-relaxed text-ink-soft">
+                  As of today, we have {liveStats.productCount} fragrance{liveStats.productCount !== 1 ? 's' : ''} live
+                  on the site and {liveStats.reviewCount} verified-buyer review{liveStats.reviewCount !== 1 ? 's' : ''} approved
+                  across them — a live count pulled directly from our own order and review records.
+                </p>
+              )}
+            </div>
+          </div>
         </div>
       </section>
 

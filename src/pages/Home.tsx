@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowRight, Truck, ShieldCheck, Sparkles, Gift, Quote, Instagram, Image as ImageIcon, Check } from 'lucide-react';
+import { ArrowRight, Truck, ShieldCheck, Sparkles, Gift, Quote, Instagram, Image as ImageIcon } from 'lucide-react';
 import HeroSection from '@/components/HeroSection';
 import ProductTile from '@/components/ProductTile';
 import SectionTitle from '@/components/SectionTitle';
@@ -163,54 +163,53 @@ setLoading(false);
               or gifting. If you are comparing local perfume brands for genuine ingredients and reliable delivery,
               Kalmat Fragrance is built for that exact decision.
             </p>
-            <ul className="mt-6 max-w-2xl space-y-3">
+            <div className="mt-10 grid gap-x-10 gap-y-6 sm:grid-cols-3">
               {AUDIENCE_POINTS.map((point) => (
-                <li key={point} className="flex items-start gap-3 text-sm font-light leading-relaxed text-ink-soft">
-                  <Check size={15} className="mt-0.5 shrink-0 text-gold" />
+                <p key={point} className="border-t border-line pt-5 text-sm font-light leading-relaxed text-ink-soft">
                   {point}
-                </li>
+                </p>
               ))}
-            </ul>
+            </div>
           </div>
 
-          <div className="mt-16 grid gap-6 border-t border-line pt-14 md:grid-cols-2 md:gap-8">
-            <div className="border border-line bg-white p-8 sm:p-10">
+          {/* Ordering process + trust, told as one editorial moment instead of two matching boxes */}
+          <div className="mt-20 grid items-center gap-10 border-t border-line pt-16 lg:grid-cols-2 lg:gap-16">
+            <div className="kx-img-frame order-2 aspect-[4/5] lg:order-1">
+              <img
+                src="/atelier.png"
+                alt="Inside the Kalmat Fragrance atelier in Karachi"
+                className="kx-img-zoom h-full w-full object-cover"
+              />
+            </div>
+
+            <div className="order-1 lg:order-2">
               <p className="kx-eyebrow">Getting Started</p>
               <h3 className="mt-3 font-display text-2xl font-light text-charcoal">How Ordering Works</h3>
-              <div className="kx-gold-line mt-5" />
-              <ol className="mt-7 space-y-5">
+              <ol className="mt-8">
                 {[
                   'Browse fragrances by family — oud, rose, or amber — and pick your signature scent.',
                   'Place your order online with cash on delivery or card payment.',
                   'We handcraft, gift-wrap, and dispatch your order with a trackable courier link.',
                   'Not satisfied? Return it within 7 days, no questions asked.',
-                ].map((step, i) => (
-                  <li key={step} className="flex items-start gap-4 text-sm font-light leading-relaxed text-ink-soft">
-                    <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full border border-gold/40 font-display text-xs italic text-gold-deep">
-                      {i + 1}
-                    </span>
-                    <span className="pt-0.5">{step}</span>
+                ].map((step, i, steps) => (
+                  <li
+                    key={step}
+                    className={`flex gap-5 py-4 ${i !== steps.length - 1 ? 'border-b border-line' : ''}`}
+                  >
+                    <span className="font-display text-sm italic text-gold-deep">{String(i + 1).padStart(2, '0')}</span>
+                    <span className="text-sm font-light leading-relaxed text-ink-soft">{step}</span>
                   </li>
                 ))}
               </ol>
-            </div>
-            <div className="border border-line bg-white p-8 sm:p-10">
-              <p className="kx-eyebrow">Trust & Transparency</p>
-              <h3 className="mt-3 font-display text-2xl font-light text-charcoal">Why Shoppers Trust Us</h3>
-              <div className="kx-gold-line mt-5" />
-              <ul className="mt-7 space-y-5">
-                {[
-                  '100% authentic guarantee on every bottle we sell.',
-                  'Real, verified-buyer reviews from customers who purchased directly from us.',
-                  `Reach a real person any time at ${BRAND.phone} or ${BRAND.email}.`,
-                  'Every order is trackable end-to-end from our Track Order page.',
-                ].map((point) => (
-                  <li key={point} className="flex items-start gap-3 text-sm font-light leading-relaxed text-ink-soft">
-                    <Check size={15} className="mt-0.5 shrink-0 text-gold" />
-                    <span>{point}</span>
-                  </li>
-                ))}
-              </ul>
+              <p className="mt-8 text-xs font-light leading-relaxed text-ink-mute">
+                Every bottle carries a 100% authentic guarantee, backed by real, verified-buyer reviews. Reach a
+                real person any time at {BRAND.phone} or {BRAND.email} — every order is trackable end-to-end from
+                our{' '}
+                <Link to="/track-order" className="underline decoration-gold/40 underline-offset-2 hover:text-gold-deep">
+                  Track Order
+                </Link>{' '}
+                page.
+              </p>
             </div>
           </div>
         </div>

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowRight, Truck, ShieldCheck, Sparkles, Gift, Quote, Instagram, Image as ImageIcon } from 'lucide-react';
+import { ArrowRight, Truck, ShieldCheck, Sparkles, Gift, Quote, Instagram, Facebook } from 'lucide-react';
 import HeroSection from '@/components/HeroSection';
 import ProductTile from '@/components/ProductTile';
 import SectionTitle from '@/components/SectionTitle';
@@ -12,6 +12,20 @@ import { BRAND } from '@/lib/constants';
 import type { Product, Category, Collection, Review } from '@/types';
 import { useReveal } from '@/hooks/useReveal';
 import Seo from '@/components/Seo';
+
+function TikTokIcon({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" className={className} aria-hidden="true">
+      <path d="M16.6 3h-3.2v12.4a3.1 3.1 0 1 1-2.2-2.97V9.1a6.3 6.3 0 1 0 5.4 6.24V9.6a8.2 8.2 0 0 0 4.6 1.4V7.9a5 5 0 0 1-4.6-4.9Z" />
+    </svg>
+  );
+}
+
+const SOCIAL_LINKS = [
+  { name: 'Instagram', handle: '@kalmatfragrance', href: BRAND.instagram, Icon: Instagram },
+  { name: 'TikTok', handle: '@kalmatfragrance', href: BRAND.tiktok, Icon: TikTokIcon },
+  { name: 'Facebook', handle: 'Kalmat Fragrance', href: BRAND.facebook, Icon: Facebook },
+];
 
 const NOTES = [
   { name: 'Top', desc: 'The first impression — bright citrus and spice that opens the composition.', examples: 'Bergamot · Saffron · Pink Pepper' },
@@ -136,14 +150,6 @@ setLoading(false);
     })();
   }, []);
 
-  const galleryImages = Array.from(
-    new Map(
-      [...bestSellers, ...newArrivals, ...featured]
-        .filter((p) => p.image_url)
-        .map((p) => [p.image_url, p]),
-    ).values(),
-  ).slice(0, 6);
-
   return (
     <div className="w-full max-w-full overflow-x-hidden">
       <Seo />
@@ -200,58 +206,6 @@ setLoading(false);
           <div className="mt-12 text-center sm:hidden">
             <Link to="/shop?sort=best" className="kx-arrow-link">View All <ArrowRight size={14} /></Link>
           </div>
-        </div>
-      </section>
-
-      {/* Categories */}
-      {categories.length > 0 && (
-        <section className="kx-section">
-          <div className="kx-container">
-            <SectionTitle eyebrow="Find Your Signature" title="Shop by Category" subtitle="From radiant florals to deep, smoky woods — find the family that speaks to you." />
-            <div className="mt-14 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6 lg:gap-4">
-              {categories.map((cat, i) => (
-                <motion.div
-                  key={cat.id}
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.4, delay: i * 0.06 }}
-                >
-                  <Link to={`/shop?category=${cat.slug}`} className="group flex flex-col items-center gap-4 py-6 text-center">
-                    <div className="kx-img-frame h-20 w-20 rounded-full border border-line bg-ivory-2">
-                      {cat.image_url ? (
-                        <img src={cat.image_url} alt={cat.name} className="kx-img-zoom h-full w-full rounded-full object-cover" />
-                      ) : (
-                        <div className="grid h-full w-full place-items-center rounded-full" style={{ background: 'var(--ivory-3)' }}>
-                          <ImageIcon size={22} className="text-gold/30" />
-                        </div>
-                      )}
-                    </div>
-                    <p className="font-display text-base text-charcoal transition-colors duration-300 group-hover:text-gold-deep">{cat.name}</p>
-                  </Link>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* New Arrivals */}
-      <section className="kx-section bg-charcoal">
-        <div className="kx-container">
-          <div className="flex items-end justify-between">
-            <SectionTitle eyebrow="Just Arrived" title="New Arrivals" align="left" tone="light" />
-            <Link to="/shop?sort=new" className="kx-arrow-link hidden text-gold-light sm:inline-flex">View All <ArrowRight size={14} /></Link>
-          </div>
-          {loading ? (
-            <div className="mt-14 grid grid-cols-2 gap-5 sm:gap-6 lg:grid-cols-4 lg:gap-7">
-              {Array.from({ length: 4 }).map((_, i) => <div key={i} className="aspect-[4/5] animate-pulse bg-charcoal-2" />)}
-            </div>
-          ) : (
-            <div className="mt-14 grid grid-cols-2 gap-5 sm:gap-6 lg:grid-cols-4 lg:gap-7">
-              {(newArrivals.length > 0 ? newArrivals : featured.slice(0, 4)).map((p, i) => <ProductTile key={p.id} product={p} index={i} />)}
-            </div>
-          )}
         </div>
       </section>
 
@@ -385,57 +339,35 @@ setLoading(false);
         </section>
       )}
 
-      {/* Instagram Gallery */}
+      {/* Follow Our World — social links */}
       <section className="kx-section bg-ivory-2">
         <div className="kx-container">
-          <SectionTitle eyebrow="@kalmatfragrance" title="Follow Our World" subtitle="A glimpse into the Kalmat atelier — bottles, notes, and the craft behind each composition." />
-          <div className="mt-14 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
-            {(galleryImages.length > 0 ? galleryImages : Array.from({ length: 6 })).map((p, i) => (
+          <SectionTitle eyebrow="Stay Connected" title="Follow Our World" subtitle="Behind-the-scenes from the Kalmat atelier — new launches, notes, and the craft behind each composition." />
+          <div className="mx-auto mt-14 grid max-w-3xl gap-5 sm:grid-cols-3 sm:gap-6">
+            {SOCIAL_LINKS.map((social, i) => (
               <motion.a
-                key={p?.id ?? i}
-                href={BRAND.instagram}
+                key={social.name}
+                href={social.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                initial={{ opacity: 0, scale: 0.95 }}
-                whileInView={{ opacity: 1, scale: 1 }}
+                initial={{ opacity: 0, y: 12 }}
+                whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: i * 0.05 }}
-                className="group kx-img-frame relative aspect-square border border-line bg-ivory-2"
+                transition={{ duration: 0.4, delay: i * 0.08 }}
+                className="group flex flex-col items-center gap-4 border border-line bg-white px-6 py-10 text-center transition-colors duration-300 hover:border-gold/50"
               >
-                {p?.image_url ? (
-                  <img
-                    src={p.image_url}
-                    alt={p.name || 'Kalmat Fragrance'}
-                    className="kx-img-zoom h-full w-full object-cover"
-                  />
-                ) : (
-                  <div className="grid h-full w-full place-items-center" style={{ background: 'linear-gradient(160deg,#F3ECE0,#E6DCCB)' }}>
-                    <ImageIcon size={28} className="text-gold/20" />
-                  </div>
-                )}
-                <div className="absolute inset-0 grid place-items-center bg-charcoal/0 transition-colors duration-500 group-hover:bg-charcoal/40">
-                  <Instagram className="h-7 w-7 text-gold-light opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-                </div>
+                <span className="grid h-14 w-14 place-items-center rounded-full border border-gold/30 text-gold-deep transition-transform duration-300 group-hover:scale-110">
+                  <social.Icon className="h-6 w-6" strokeWidth={1.4} />
+                </span>
+                <span>
+                  <p className="font-display text-lg text-charcoal">{social.name}</p>
+                  <p className="mt-1 text-xs font-light text-ink-mute">{social.handle}</p>
+                </span>
               </motion.a>
             ))}
           </div>
         </div>
       </section>
-
-      {/* Featured Fragrances */}
-      {featured.length > 0 && (
-        <section className="kx-section">
-          <div className="kx-container">
-            <div className="flex items-end justify-between">
-              <SectionTitle eyebrow="Signature Pieces" title="Featured Fragrances" align="left" />
-              <Link to="/shop" className="kx-arrow-link hidden sm:inline-flex">Shop All <ArrowRight size={14} /></Link>
-            </div>
-            <div className="mt-14 grid grid-cols-2 gap-5 sm:gap-6 lg:grid-cols-4 lg:gap-7">
-              {featured.map((p, i) => <ProductTile key={p.id} product={p} index={i} />)}
-            </div>
-          </div>
-        </section>
-      )}
 
       {/* Who this is for / how ordering works (compact — helps AI/answer engines extract a direct answer) */}
       <section className="kx-section-sm bg-ivory-2">
